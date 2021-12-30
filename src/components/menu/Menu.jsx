@@ -28,7 +28,7 @@ export default function Menu(){
     return(
         <ul className="menu-1">
             { menuArray.map((p) =>
-                <MenuItem id={p.id} title={p.title} entries={p.entries} menuOpen={menuOpen} setMenuOpen={setMenuOpen}/>
+                <MenuItem  key={p.id} id={p.id} title={p.title} entries={p.entries} menuOpen={menuOpen} setMenuOpen={setMenuOpen}/>
             )}
 
         </ul>

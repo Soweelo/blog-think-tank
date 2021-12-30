@@ -6,7 +6,7 @@ export default function ThinkTankItem ({id, image,message,tags,url}){
             <img src={"assets/"+image} alt=""/>
            <div className="thinktankItem__tags">
                {tags.map((p, index)=>(
-                   <p>
+                   <p key={index}>
                        #{tags[index].name}
                    </p>
                ))}

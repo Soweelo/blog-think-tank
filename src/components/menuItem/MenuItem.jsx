@@ -10,14 +10,14 @@ export default function MenuItem({id, title, entries, menuOpen, setMenuOpen}){
 
     return(
         <li ref={ref} className={"menu__item btn btn--dropdown " + (isCurrent && "active")} onClick={(e)=> isCurrent ? setMenuOpen(0): setMenuOpen(id) } >
-            <div className="menu__item-title">
+            <div className="menu__item-title" onClick={(e)=> isCurrent ? setMenuOpen(0): setMenuOpen(id) }>
                 <a href="#">{title}</a> <div className="seeMore">{isCurrent ? "-": "+"}</div>
             </div>
 
 
                 <ul>
                     {entries.map((entry, index) =>
-                        <li>{entries[index]}</li>)}
+                        <li key={index}>{entries[index]}</li>)}
 
                 </ul>
 

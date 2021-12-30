@@ -5,7 +5,7 @@ export default function Topbar() {
         <div className="topbar">
             <div className="wrapper">
                 <div className="heading">
-                    <a href="#intro" className="heading__item"><EmojiObjects classname="icon"/></a>
+                    <a href="#intro" className="heading__item"><EmojiObjects className="icon"/></a>
                     <div className=" heading__item siteName">BLOG</div>
                     <div className="heading__item foster"> Read your favorite think tanks  <span>Create yours</span> </div>
                 </div>

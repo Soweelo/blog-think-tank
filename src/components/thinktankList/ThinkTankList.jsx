@@ -44,11 +44,11 @@ import {useEffect, useState, memo} from "react"
 
     return(
         <div className="big_container">
-            {randomizedPacks.map((randomized) => (
-                <div className="thinktanklist__container container">
+            {randomizedPacks.map((randomized, index) => (
+                <div key={index} className="thinktanklist__container container">
                     {randomized.map((p,index) => (
 
-                        <div className={`areas area${index + 1}`}>
+                        <div key={index} className={`areas area${index + 1}`}>
                             <ThinkTankItem
                                 id={p.id}
                                 message={p.message}
@@ -60,6 +60,7 @@ import {useEffect, useState, memo} from "react"
                 </div>
             ))}
         </div>
+
 
 
     )
