@@ -1,0 +1,42 @@
+@import "../../global.scss";
+.intro{
+height: unset!important;
+  min-height: calc(100vh - 90px);
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+
+  .intro__welcome{
+    margin-top:4%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
+    min-width: 45%;
+    @include mobile{
+      min-width: 300px;
+    }
+    h1{
+      letter-spacing: 2px;
+      word-spacing: 0.5rem;
+      font-weight: 800;
+      font-size: 2.5rem;
+      .ityped-cursor{
+        animation:blink 1s infinite;
+      }
+      @keyframes blink {
+        50%{
+          opacity:1;
+        }
+        100%{
+          opacity:0;
+        }
+      }
+      @include mobile{
+        font-size: 1.7rem;
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+@import "../../global.scss";
+.menu-1{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0;
+
+
+
+  @include mobile{
+    flex-direction: column;
+    }
+}

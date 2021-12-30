@@ -1,0 +1,33 @@
+@import "./global.scss";
+.app{
+  height: 100vh;
+  font-family: 'Roboto Mono', monospace;
+  background-image: url("../public/assets/fond-bleu.jpg");
+  background-repeat: no-repeat;
+  background-position: 15% 50.5%;
+  background-attachment: fixed;
+background-size: cover;
+  .sections{
+    width: 100%;
+    height: calc(100vh - 85px) ;
+    background-color: transparent;
+    position: relative;
+    top: 40px;
+    scroll-behavior:smooth;
+    scroll-snap-type: y mandatory;
+    scrollbar-width: none;// for firefox
+    overflow-x: hidden;
+    color: $primary;
+    &::-webkit-scrollbar{
+      display:none;    }
+
+
+    > *{
+      width: 100vw;
+      //height/: 100vh;
+      height: calc(100vh - 85px);
+      scroll-snap-align: start;
+    }
+
+  }
+}

@@ -1,0 +1,55 @@
+@import "../../global.scss";
+.topbar{
+  background-color: $primary ;
+  height: 40px;
+  width: 100%;
+  color: $tertiary;
+  position: fixed;
+  top: 0;
+  z-index: 3;
+  transition: all 1s ease;
+  .wrapper {
+    //padding: 10px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+
+    .heading{
+      display: flex;
+      align-items: center;
+
+       .heading__item{
+          text-decoration: none;
+         color: inherit;
+         margin-right: 15px;
+
+         .icon {
+           font-size: 70px;
+           margin-right:50px;
+           text-decoration: none;
+        }
+         &.foster{
+
+           @include mobile{
+             display: none;
+           }
+         }
+       }
+
+    }
+    .nav{
+      display: flex;
+      margin-right: 15px;
+      .nav__link{
+        margin-right: 15px;
+        font-size: 18px;
+        cursor: pointer;
+      }
+    }
+
+
+  }
+
+
+}

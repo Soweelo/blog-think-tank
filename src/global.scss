@@ -1,0 +1,18 @@
+$primary: #ffffff;
+$secondary: #383534;
+$tertiary: #5f534a;
+$complementary:#24272e;
+$width:768px;
+
+.btn{
+  background-color: transparent;
+  padding: 5px 5px;
+  border: 1px solid $primary;
+  border-radius: 20px;
+}
+
+@mixin mobile{
+  @media (max-width: #{$width}) {
+    @content
+  }
+}
