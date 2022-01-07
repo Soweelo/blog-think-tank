@@ -4,13 +4,13 @@ export default function Bottombar({mainMenuOpen, setMainMenuOpen}) {
     return (
         <div className={"bottombar " + (mainMenuOpen && " active")}>
             <div className="bottombar__item">
-                <a href="#moreabout">more about us</a>
+                <a href="#moreabout">More about us</a>
             </div>
             <div className="bottombar__item">
                 <a href="#privacy">Privacy</a>
             </div>
             <div className="bottombar__item">
-                <a href="#faq">faq</a>
+                <a href="#faq">FAQ</a>
             </div>
             <div className="bottombar__item">
                 <a href="#bepart">Join the project</a>

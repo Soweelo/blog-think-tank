@@ -1,1 +1,13 @@
 @import "../../global.scss";
+
+#moreabout{
+  h1{
+    padding-top: calc(45px + 2rem);
+    text-align: center;
+  }
+  @include mobile{
+    h1{
+      padding-top: calc(45px + 1rem);
+    }
+  }
+}
