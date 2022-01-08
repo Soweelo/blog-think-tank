@@ -3,9 +3,9 @@
   margin-bottom:150px;
   .thinktanklist__container{
     &.and0{
-      margin: 1rem 0;
+      margin-top: 0;
     }
-  margin: -205px 0;
+  margin-top: calc(-205px + 1rem);
     display: grid;
     gap:1rem;
     max-width:1500px;
@@ -55,7 +55,7 @@
       }
     }
     @include pad{
-      margin: -45px 0;
+      margin-top: -45px;
       padding:0.5rem;
       grid-template-areas:
     "area1 area1 area1  . . area3 area3 area3"

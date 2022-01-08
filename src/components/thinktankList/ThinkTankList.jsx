@@ -42,6 +42,7 @@ import {useEffect, useState, memo} from "react"
     // console.log(randomizedPacks)
 
 
+
     return(
         <div className="big_container">
             {randomizedPacks.map((randomized, index) => (
