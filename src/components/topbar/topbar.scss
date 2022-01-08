@@ -15,28 +15,29 @@
     justify-content: space-between;
     height: 100%;
 
-    .heading{
+    .heading-left{
       display: flex;
       align-items: center;
 
-       .heading__item{
+       .heading-left__item{
           text-decoration: none;
          color: inherit;
-         margin-right: 15px;
+         margin-left: 20px;
 
          .icon {
            font-size: 30px;
            margin-right:50px;
            text-decoration: none;
         }
-         &.foster{
 
-           @include mobile{
-             display: none;
-           }
-         }
        }
 
+    }
+    .foster{
+
+      @include mobile{
+        display: none;
+      }
     }
     .nav{
       display: flex;

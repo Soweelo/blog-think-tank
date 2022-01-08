@@ -1,0 +1,59 @@
+@import "../../global.scss";
+.big_container{
+  margin-bottom:100px;
+  .thinktanklist__container{
+    margin: 1rem 0;
+    display: grid;
+    gap:1rem;
+    max-width:1200px;
+    grid-template-columns: 1.2fr 0.5fr 0.6fr 1.3fr;
+    grid-template-rows: 40px 150px 100px 70px 60px 110px 120px 90px 90px;
+    //grid-auto-flow: row;
+    grid-template-areas:
+    "area1 area1 area2 area3"
+    "area1 area1 area2 area3"
+    "area4 . area2 area3"
+    "area4 area5 area5 area6"
+    "area4 area5 area5 area6"
+    "area7 area5 area5 area6"
+    "area7 area9 area9 area10"
+    "area8 area9 area9 area10"
+    "area8 area9 area9 area10";
+
+
+    .area1 { grid-area: area1; }
+
+    .area2 { grid-area: area2; }
+
+    .area5 { grid-area: area5; }
+
+    .area3 { grid-area: area3; }
+
+    .area4 { grid-area: area4; }
+
+    .area6 { grid-area: area6; }
+
+    .area7 { grid-area: area7; }
+
+    .area8 { grid-area: area8; }
+
+    .area9 { grid-area: area9; }
+
+    .area10 { grid-area: area10; }
+
+    .areas{
+      @include mobile{
+        margin-bottom: 1rem;
+      }
+    }
+    @include mobile{
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      padding: 5px;
+    }
+
+  }
+
+}

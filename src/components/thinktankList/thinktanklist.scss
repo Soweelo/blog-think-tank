@@ -1,24 +1,30 @@
 @import "../../global.scss";
 .big_container{
-  margin-bottom:100px;
+  margin-bottom:150px;
   .thinktanklist__container{
-    margin: 1rem 0;
+    &.and0{
+      margin: 1rem 0;
+    }
+  margin: -205px 0;
     display: grid;
     gap:1rem;
-    max-width:1200px;
-    grid-template-columns: 1.2fr 0.5fr 0.6fr 1.3fr;
-    grid-template-rows: 40px 150px 100px 70px 60px 110px 120px 90px 90px;
+    max-width:1500px;
+    grid-template-columns: 0.3fr 0.4fr 2.1fr 2fr 2fr 2.7fr 0.3fr 0.3fr;
+    grid-template-rows: 30px 30px 100px 240px 90px 130px 110px 100px 100px 190px 100px 105px;
     //grid-auto-flow: row;
     grid-template-areas:
-    "area1 area1 area2 area3"
-    "area1 area1 area2 area3"
-    "area4 . area2 area3"
-    "area4 area5 area5 area6"
-    "area4 area5 area5 area6"
-    "area7 area5 area5 area6"
-    "area7 area9 area9 area10"
-    "area8 area9 area9 area10"
-    "area8 area9 area9 area10";
+    ". . . . . area4 area4 area4"
+    ". . area1 . . area4 area4 area4"
+    ". . area1 . area3 area4 area4 area4"
+    ". . area1 area2 area3 area4 area4 area4"
+    "area6 area6 area6 area2 area5 area4 area4 area4"
+    "area6 area6 area6 area2 area5 area8 . ."
+    "area6 area6 area6 area7 area7 area8 . ."
+    "area6 area6 area6 area7 area7 area12 area12 ."
+    ". area9 area9 area7 area7 area12 area12 ."
+    ". area9 area9 area10 area11 area12 area12 ."
+    ". . . area10 area11. . ."
+    ". . . area10 . . . .";
 
 
     .area1 { grid-area: area1; }
@@ -40,11 +46,32 @@
     .area9 { grid-area: area9; }
 
     .area10 { grid-area: area10; }
+    .area11 { grid-area: area11; }
+    .area12 { grid-area: area12; }
 
     .areas{
       @include mobile{
         margin-bottom: 1rem;
       }
+    }
+    @include pad{
+      margin: -45px 0;
+      padding:0.5rem;
+      grid-template-areas:
+    "area1 area1 area1  . . area3 area3 area3"
+    "area1 area1 area1  area2 area2 area3 area3 area3"
+    "area1 area1 area1 area2 area2 area3 area3 area3"
+    "area1 area1 area1  area2 area2 area3 area3 area3"
+      ". area4 area4 area5 area5 area3 area3 area3"
+      ". area4 area4 area5 area5 area3 area3 area3"
+      ". area4 area4 area5 area5 area6 area6 area6"
+      "area7 area7 area7 area8 area8 area6 area6 area6"
+      "area7 area7 area7 area8 area8 area9 area9 ."
+      "area7 area7 area7 area8 area8 area9 area9 ."
+      "area10 area10 area10 area11 area11 area12 area12 area12"
+      "area10 area10 area10 area11 area11 area12 area12 area12"
+      ". . . area11 area11 . . .";
+
     }
     @include mobile{
       display: flex;

@@ -7,6 +7,9 @@
   background-position: 15% 50.5%;
   background-attachment: fixed;
 background-size: cover;
+  @include mobile{
+    background-image: url("../public/assets/fond-bleu-mobile.jpg");
+  }
   .sections{
     width: 100%;
     height: calc(100vh - 85px) ;

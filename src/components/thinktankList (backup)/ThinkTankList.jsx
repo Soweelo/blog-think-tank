@@ -33,8 +33,8 @@ import {useEffect, useState, memo} from "react"
     //now let's create a fonction to slice randomized in array of numGroup
     let randomizedPacks = [];
     let remainToSplice = randomized
-    while(remainToSplice.length > 12){
-        let b = remainToSplice.splice(0,12)
+    while(remainToSplice.length > 10){
+        let b = remainToSplice.splice(0,10)
         // console.log(b)
         randomizedPacks.push(b)
     }
@@ -45,7 +45,7 @@ import {useEffect, useState, memo} from "react"
     return(
         <div className="big_container">
             {randomizedPacks.map((randomized, index) => (
-                <div key={index} className={`thinktanklist__container container and${index}`}>
+                <div key={index} className="thinktanklist__container container">
                     {randomized.map((p,index) => (
 
                         <div key={index} className={`areas area${index + 1}`}>

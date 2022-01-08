@@ -2,7 +2,8 @@ $primary: #ffffff;
 $secondary: #383534;
 $tertiary: #5f534a;
 $complementary:#24272e;
-$width:768px;
+$mobilebreak:768px;
+$padbreak:1300px;
 
 .btn{
   background-color: transparent;
@@ -12,7 +13,12 @@ $width:768px;
 }
 
 @mixin mobile{
-  @media (max-width: #{$width}) {
+  @media (max-width: #{$mobilebreak}) {
+    @content
+  }
+}
+@mixin pad{
+  @media (max-width: #{$padbreak}) {
     @content
   }
 }

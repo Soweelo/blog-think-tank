@@ -8,7 +8,7 @@ height: unset!important;
   align-items: center;
 
   .intro__welcome{
-    margin-top:4%;
+    margin-top:9rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -22,7 +22,9 @@ height: unset!important;
       letter-spacing: 2px;
       word-spacing: 0.5rem;
       font-weight: 800;
-      font-size: 2.5rem;
+      font-size: 2.7rem;
+      font-family: 'Inconsolata', monospace;
+      margin-bottom: 6rem;
       .ityped-cursor{
         animation:blink 1s infinite;
       }

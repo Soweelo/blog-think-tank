@@ -4,10 +4,11 @@
   display: flex;
   justify-content: space-between;
   padding: 0;
-
+  margin-bottom: 5rem;
 
 
   @include mobile{
     flex-direction: column;
+    margin-bottom: 0;
     }
 }
