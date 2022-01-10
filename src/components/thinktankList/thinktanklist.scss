@@ -74,6 +74,7 @@
 
     }
     @include mobile{
+      margin-top: 0px;
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
