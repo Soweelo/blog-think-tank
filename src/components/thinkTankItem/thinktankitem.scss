@@ -29,8 +29,10 @@ position: relative;
     object-fit: cover;
     transition: all 0.2s ease-in;
     opacity: 0.3;
+
     @include mobile{
       max-height: calc(100vh - 70px);
+      max-width: calc(100vw - 30px);
     }
   }
   .thinktankItem__tags{
@@ -64,24 +66,32 @@ position: relative;
     padding: 1rem;
   }
   &:hover{
-
+    //color: black;
+    text-shadow: -5px 5px 7px rgb(0, 0, 0);
     img{
-      opacity: 0.6;
+      opacity: 0.9;
+      transform:scale(1.01);
+      z-index:10;
+      box-shadow: 3px 3px 3px rgba(0 , 0 ,0 , 0.3);
     }
     .thinktankItem__tags{
       top: unset;
       bottom:0;
+      z-index:11;
 
       color: rgba(255, 255, 255, 0.73);
     }
     .thinktankItem__message{
       opacity: 1;
+      z-index:11;
     }
     .thinktankItem__url{
       opacity: 0;
+      z-index:11;
     }
     .thinktankItem__icons{
       opacity: 1;
+      z-index:11;
     }
   }
 }

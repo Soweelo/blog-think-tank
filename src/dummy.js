@@ -336,7 +336,7 @@ tags: [
                 name: "ensemble"
             },
             {
-                name: "inclusive"
+                name: "others"
             }
         ]
 
@@ -348,7 +348,7 @@ tags: [
         message: "message",
         tags: [
             {
-                name: "ensemble"
+                name: "new"
             },
             {
                 name: "inclusive"
@@ -378,7 +378,7 @@ tags: [
         message: "message",
         tags: [
             {
-                name: "ensemble"
+                name: "new"
             },
             {
                 name: "inclusive"
@@ -438,7 +438,7 @@ tags: [
         message: "message",
         tags: [
             {
-                name: "ensemble"
+                name: "new"
             },
             {
                 name: "inclusive"

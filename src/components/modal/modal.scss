@@ -1,0 +1,43 @@
+@import "../../global";
+.animated-div{
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  .modal-wrapper{
+    .modal-content{
+      //scrollbar-width: none;
+      //scrollbar-color: #fff0 #fff0;
+      @include mobile{
+        margin-top: 0;
+        h1{
+          margin: 0;
+        }
+      }
+    }
+    .modal-content::-webkit-scrollbar{
+      width: 10px;
+
+    }
+    .modal-content::-webkit-scrollbar-thumb {
+      background-color: rgba(255, 255, 255, 0);
+    }
+    .modal-content::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0);
+    }
+
+    @include mobile{
+      height: 90vh;
+      grid-template-columns: 1fr;
+      grid-template-rows: 0.5fr 1fr;
+      .modal-img-wrapper{
+        border-radius: 10px 10px 0 0 ;
+        img{
+          border-radius: 10px 10px 0 0 ;
+        }
+      }
+
+    }
+  }
+
+}
+

@@ -19,16 +19,18 @@ export default function Intro(){
             strings: ['WORLD 1.0', 'WORLD 1.7','WORLD 2.0' ]
         })    },[])
 
+
  
     return(
-        <div  ref={scrollRef} className = "intro" id="intro" onScroll={  console.log("hello")}>
+        <div  ref={scrollRef} className = "intro" id="intro" >
             <div className="intro__welcome">
                 <h1>YOUR <span ref={textRef}></span></h1>
                 <Menu/>
             </div>
 
-            <ThinkTankList props={false}/>
+            <ThinkTankList props={false} />
             <ScrollBar scrollRef={scrollRef}></ScrollBar>
+
         </div>
     )
 }
