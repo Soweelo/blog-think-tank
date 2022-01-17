@@ -19,6 +19,7 @@ export default function Intro(){
             strings: ['WORLD 1.0', 'WORLD 1.7','WORLD 2.0' ]
         })    },[])
 
+    let favorites = ["new","others","fashion"];
 
  
     return(
@@ -28,7 +29,7 @@ export default function Intro(){
                 <Menu/>
             </div>
 
-            <ThinkTankList props={false} />
+            <ThinkTankList props={false} favorites={favorites} />
             <ScrollBar scrollRef={scrollRef}></ScrollBar>
 
         </div>

@@ -4,9 +4,9 @@ import ThinkTankItem from "../thinkTankItem/ThinkTankItem"
 import {useEffect, useState, memo, useMemo} from "react"
 import Modal from "../modal/Modal";
 
-  export default memo(function ThinkTankList({props}) {
+  export default memo(function ThinkTankList({props, favorites}) {
 
-      let favorites = ["new","others","fashion"];
+
 
       //fonction shuffle
       function shuffleArray(array) {
@@ -52,7 +52,7 @@ import Modal from "../modal/Modal";
       // console.log(modalVar)
 
 
-//ESSAI ESSAI ESSAI ESSAI
+
 
 function pickAndShuffle(datas,favs=[]){
     let datasLength = datas.length
@@ -86,19 +86,19 @@ function pickAndShuffle(datas,favs=[]){
             pickedAndShuffledPacks.push(b)
         }
     pickedAndShuffledPacks.push(remainToSplice)
-    console.log(pickedAndShuffledPacks)
+    // console.log(pickedAndShuffledPacks)
     return pickedAndShuffledPacks
 
 }
 // pickAndShuffle(Object.entries(thinkTanks),favorites)
 
-      const randomizedPacks = useMemo( () =>
-          pickAndShuffle(Object.entries(thinkTanks), favorites),[Object.entries(thinkTanks), favorites])
+      const finalData = useMemo( () =>
+          pickAndShuffle(Object.entries(thinkTanks), favorites),[favorites])
   // FIN ESSAI ESSAI ESSAI ESSAI
 
     return(
         <div className="big_container">
-            {randomizedPacks.map((randomized, index) => (
+            {finalData.map((randomized, index) => (
                 <div key={index} className={`thinktanklist__container container and${index}`}>
 
                     {randomized.map((p,index) => (
