@@ -71,27 +71,27 @@ position: relative;
     img{
       opacity: 0.9;
       transform:scale(1.01);
-      z-index:10;
+      z-index:9;
       box-shadow: 3px 3px 3px rgba(0 , 0 ,0 , 0.3);
     }
     .thinktankItem__tags{
       top: unset;
       bottom:0;
-      z-index:11;
+      z-index:9;
 
       color: rgba(255, 255, 255, 0.73);
     }
     .thinktankItem__message{
       opacity: 1;
-      z-index:11;
+      z-index:9;
     }
     .thinktankItem__url{
       opacity: 0;
-      z-index:11;
+      z-index:9;
     }
     .thinktankItem__icons{
       opacity: 1;
-      z-index:11;
+      z-index:9;
     }
   }
 }

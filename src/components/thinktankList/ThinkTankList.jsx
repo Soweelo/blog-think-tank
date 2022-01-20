@@ -1,13 +1,14 @@
 import "./thinktanklist.scss"
 import {thinkTanks} from "../../dummy"
+
 import ThinkTankItem from "../thinkTankItem/ThinkTankItem"
 import {useEffect, useState, memo, useMemo} from "react"
 import Modal from "../modal/Modal";
 
-  export default memo(function ThinkTankList({props, favorites}) {
+  export default memo(function ThinkTankList({props, favorites, selectedTags ,allTags}) {
 
-
-
+      let tagsToDisplay = (selectedTags.length === 0) ? allTags : selectedTags;
+// const [tagsToDisplay,setTagsToDisplay]
       //fonction shuffle
       function shuffleArray(array) {
           let curId = array.length;
@@ -24,13 +25,13 @@ import Modal from "../modal/Modal";
           return array;
       }
 
-      //fonction isFav, return true or false, prends un parametre un tableau de thinktankdata (correspond à un thinktank avec ses caracteristiques) et un tableau de favoris
-      function isFav(data, favs=[]) {
+      //fonction isFav, return true or false, prends un parametre un tableau de thinktankdata (correspond à un thinktank avec ses caracteristiques) et un tableau de selection
+      function isSelected(data, selection=[]) {
           let result = false
           let curDataTagsLength = data[1]["tags"].length;
 
           while(curDataTagsLength >0){
-              const curThinktankTag = favs.find((tag) => data[1]["tags"][curDataTagsLength -1].name === tag)
+              const curThinktankTag = selection.find((tag) => data[1]["tags"][curDataTagsLength -1].name === tag)
               if(curThinktankTag){
                   result = true
                   return result
@@ -54,13 +55,13 @@ import Modal from "../modal/Modal";
 
 
 
-function pickAndShuffle(datas,favs=[]){
+function pickAndShuffle(datas,selected=[]){
     let datasLength = datas.length
     let selectedDatas = []
 
     //select the favorites thinkTanks
         while(datasLength > 0){
-            if( isFav(datas[datasLength - 1],favs)){
+            if( isSelected(datas[datasLength - 1],selected)){
                 selectedDatas.push(datas[datasLength - 1])
             }
     // console.log(datas[datasLength - 1])
@@ -93,7 +94,7 @@ function pickAndShuffle(datas,favs=[]){
 // pickAndShuffle(Object.entries(thinkTanks),favorites)
 
       const finalData = useMemo( () =>
-          pickAndShuffle(Object.entries(thinkTanks), favorites),[favorites])
+          pickAndShuffle(Object.entries(thinkTanks), tagsToDisplay),[tagsToDisplay])
   // FIN ESSAI ESSAI ESSAI ESSAI
 
     return(

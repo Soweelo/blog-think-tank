@@ -507,3 +507,4 @@ tags: [
 
     }
 ]
+export const userFav = ["new","others","fashion"]

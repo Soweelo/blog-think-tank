@@ -150,10 +150,10 @@ export default function Modal({showModal , setShowModal, image, tags, message, u
     const modalRef  = useRef()
     const animation = useSpring({
         config: {
-            duration: 550
+            duration: 150
         },
         opacity: showModal ? 1 :0,
-        tranform: showModal ? `translate(0%)` : 'translateY(-100%)',
+        transform: showModal ? `translateY(0%)` : 'translateY(-100%)',
      
     })
 

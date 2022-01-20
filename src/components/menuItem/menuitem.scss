@@ -1,7 +1,7 @@
 @import "../../global.scss";
 
   .menu__item{
-    display: flex;
+    display: grid;
     flex-direction: column;
     align-items: center;
     list-style: none;
@@ -16,6 +16,7 @@ overflow: hidden;
 
     @include mobile{
       margin-bottom:1rem;
+      margin-left:1rem ;
     }
 
     .menu__item-title{
@@ -51,7 +52,7 @@ overflow: hidden;
       flex-direction: column;
       align-items: start;
       //height: max-content;
-      overflow: hidden;
+      //overflow: hidden;
       transition: all 0.4s ease;
       transition: opacity 0.3s ease;
       transform:translateY(-1000%);
@@ -67,7 +68,135 @@ overflow: hidden;
       border-radius: 0 0 20px 20px;
       border:1px solid $primary;
       opacity: 0;
+    &.menu-how{
 
+    }
+    &.menu-read{
+    li{
+      width: 80%;
+      margin: 0 auto;
+      @include mobile{
+        width: 100%;
+      }
+     .tag-container{
+
+       display: flex;
+       flex-wrap: wrap;
+       min-height: 30px;
+       border: 1px solid gray;
+       border-radius: 5px;
+       padding: 10px;
+       .tag{
+         display: flex;
+         align-items: center;
+         padding: 5px;
+         border: 1px solid gray;
+         border-radius: 5px;
+         height: 25px;
+         margin: 2px 5px 2px 0px;
+         //color: white;
+        span{
+          position:relative;
+          margin-left: 5px;
+          padding: 5px;
+          cursor:pointer;
+          border: 1px solid #838383;
+          border-radius: 50%;
+          //text-align: center;
+          height: 10px;
+          width: 10px;
+
+         .mdClose{
+           position: absolute;
+           top: 23%;
+           right: 10%
+         }
+        }
+       }
+       input {
+         border: none;
+         flex: 1;
+         outline: none;
+         padding: 5px;
+         min-width: 30px;
+         //background: black;
+         //color: white;
+       }
+     }
+      .suggestion{
+        display: none;
+        position: absolute;
+        background-color: white;
+        width: 75%;
+        padding: 0;
+        margin: 0;
+        @include mobile{
+          width: 92%;
+        }
+        .suggestion-select-item{
+          padding: 0.5rem;
+          &:hover{
+            background-color: lightgrey;
+            font-weight: bold;
+          }
+        }
+        &.active{
+          display: block;
+        }
+      }
+      .message{
+        color: #cc623a;
+        height: 20px;
+        margin-bottom: 10px;
+      }
+    }
+    }
+    &.menu-fav{
+      .tag-container {
+
+        display: flex;
+        flex-wrap: wrap;
+        min-height: 30px;
+        //border: 1px solid gray;
+        border-radius: 5px;
+        padding: 10px;
+
+        .tag {
+          display: flex;
+          align-items: center;
+          padding: 5px;
+          border: 1px solid gray;
+          border-radius: 5px;
+          height: 25px;
+          margin: 2px 5px 2px 0px;
+          span{
+            position:relative;
+            margin-left: 5px;
+            padding: 5px;
+            cursor:pointer;
+            border: 1px solid #838383;
+            border-radius: 50%;
+            //text-align: center;
+            height: 10px;
+            width: 10px;
+
+            .mdClose{
+              position: absolute;
+              top: 23%;
+              right: 10%
+            }
+          }
+        }
+      }
+      .favMessage{
+        color: #cc623a;
+        height: 20px;
+        margin-top: 10px;
+      }
+    }
+    &.menu-addYours{
+
+    }
       @include mobile{
         position: relative;
         transform: unset;
@@ -84,8 +213,12 @@ overflow: hidden;
       color: $complementary;
       border-radius: 20px 20px 0 0;
       overflow: unset;
+      margin:3px;
+      height: 35px;
+
       @include mobile{
         border-radius: 20px;
+        height: auto;
       }
 
       .menu__item-title{
@@ -99,6 +232,24 @@ overflow: hidden;
         height: auto;
         top: unset;
         opacity: 1;
+        width: min(500px,85vw);
+        left: -1px;
+        border-top-right-radius: 20px;
+        padding: 1rem;
+        //margin-top:2rem;
+        &.menu-read, &.menu-fav{
+          left: -103%;
+          border-radius: 20px;
+          @include mobile{
+            left:unset
+          }
+        }
+
+        &.menu-addYours{
+          border-radius: 20px 0 20px 20px;
+          right: -1px;
+          left: unset;
+        }
         @include mobile{
                    transform: unset;
           height: auto;
@@ -108,7 +259,7 @@ overflow: hidden;
         li {
 
           &:hover {
-            font-weight: bold;
+            //font-weight: bold;
 
           }
 
