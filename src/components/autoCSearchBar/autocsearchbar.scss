@@ -1,0 +1,74 @@
+@import "../../global.scss";
+.message{
+  color: #cc623a;
+  height: 20px;
+  margin-bottom: 10px;
+}
+.tag-container{
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 30px;
+  border: 1px solid gray;
+  border-radius: 5px;
+  padding: 10px;
+  width: 90%;
+  .tag{
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    height: 25px;
+    margin: 2px 5px 2px 0px;
+    //color: white;
+    span{
+      position:relative;
+      margin-left: 5px;
+      padding: 5px;
+      cursor:pointer;
+      border: 1px solid #838383;
+      border-radius: 50%;
+      //text-align: center;
+      height: 10px;
+      width: 10px;
+
+      .mdClose{
+        position: absolute;
+        top: 23%;
+        right: 10%
+      }
+    }
+  }
+  input {
+    border: none;
+    flex: 1;
+    outline: none;
+    padding: 5px;
+    min-width: 30px;
+    //background: black;
+    //color: white;
+  }
+}
+.suggestion{
+  display: none;
+  position: absolute;
+  background-color: white;
+  width: 89%;
+  padding: 0;
+  margin: 0;
+  //bottom: 0;
+  @include mobile{
+    width: 92%;
+  }
+  .suggestion-select-item{
+    padding: 0.5rem;
+    &:hover{
+      background-color: lightgrey;
+      font-weight: bold;
+    }
+  }
+  &.active{
+    display: block;
+  }
+}
+

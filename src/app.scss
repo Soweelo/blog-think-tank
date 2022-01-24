@@ -2,13 +2,13 @@
 .app{
   height: 100vh;
   font-family: 'Roboto Mono', monospace;
-  background-image: url("../public/assets/fond-bleu.jpg");
+  background-image: url("../public/assets/nouveau-fond-2022.jpg");
   background-repeat: no-repeat;
   background-position: 15% 50.5%;
   background-attachment: fixed;
 background-size: cover;
   @include mobile{
-    background-image: url("../public/assets/fond-bleu-mobile.jpg");
+    background-image: url("../public/assets/nouveau-fond-2022-mobile.jpg");
   }
   .sections{
     width: 100%;
