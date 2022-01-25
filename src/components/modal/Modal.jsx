@@ -191,7 +191,7 @@ export default function Modal({showModal , setShowModal, image, tags, message, u
                     <animated.div style={animation}  ref={modalRef} className="animated-div">
                         <ModalWrapper  showModal={showModal} className="modal-wrapper">
                             <ModalImgWrapper className="modal-img-wrapper">
-                                <img src={"assets/"+image} alt={message}/>
+                                <img src={"assets/mobile-"+image} srcSet={`${"assets/mobile-"+image} 768w, ${"assets/"+image} 3200w`} alt={message}/>
                                 <div className="tags">
                                         {tags.map((p, index)=>(
                                             <p key={index}>

@@ -52,10 +52,14 @@
     .areas{
       @include mobile{
         margin-bottom: 1rem;
+        width: calc(100vw - 30px);
+        img{
+          width: 100%;
+        }
       }
     }
     @include pad{
-      margin-top: -45px;
+      margin-top: -4px;
       padding:0.5rem;
       grid-template-areas:
     "area1 area1 area1  . . area3 area3 area3"

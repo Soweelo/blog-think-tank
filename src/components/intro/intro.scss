@@ -16,7 +16,8 @@ height: unset!important;
 
     min-width: 45%;
     @include mobile{
-      min-width: 300px;
+      //min-width: 300px;
+      width: max(300px,90%)
     }
     h1{
       letter-spacing: 2px;

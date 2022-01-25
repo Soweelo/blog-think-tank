@@ -6,12 +6,26 @@ import AutoCSearchbar from "../autoCSearchBar/AutoCSearchbar";
 export default function MenuItem({id, title, menuOpen, setMenuOpen,favorites, setFavorites,allTags,selectedTags, setSelectedTags}){
 
     const isCurrent =  id === menuOpen ? true :false
+    const setOpenToCenter = (e) =>{
+        // console.log(e.nativeEvent.target)
+        var el = e.nativeEvent.target
+        el.scrollIntoView({block: "center"})
+    }
+    if(/Android [4-6]/.test(navigator.appVersion)) {
+        window.addEventListener("resize", function() {
+            if(document.activeElement.tagName=="INPUT" || document.activeElement.tagName=="TEXTAREA") {
+                window.setTimeout(function() {
+                    document.activeElement.scrollIntoViewIfNeeded();
+                },0);
+            }
+        })
+    }
 
     return(
 
-            <li  className={"menu__item btn btn--dropdown " + (isCurrent && "active")}  >
+            <li  className={"menu__item btn btn--dropdown " + (isCurrent && "active")} onClick={ (e) => setOpenToCenter(e)}  >
 
-            <div className="menu__item-title" onClick={(e)=> isCurrent ? setMenuOpen(0): setMenuOpen(id) }>
+            <div className="menu__item-title" onClick={(e)=> isCurrent ? setMenuOpen(0) : setMenuOpen(id)  }>
                 <a href="#" >{title}</a> <div className="seeMore"onClick={(e)=> isCurrent ? setMenuOpen(0): setMenuOpen(id) }>{isCurrent ? "-": "+"}</div>
             </div>
                 {(() => {switch(id){

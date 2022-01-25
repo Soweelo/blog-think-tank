@@ -14,7 +14,7 @@ export default memo(function ThinkTankItem ({id, image,message,tags,url,showModa
     return(
         <>
             <div  className="thinktankItem" onClick={(e) => updateModalVar()}>
-                <img src={"assets/"+image} alt=""/>
+                    <img src={"assets/mobile-"+image}  srcSet={`${"assets/mobile-"+image} 768w, ${"assets/"+image} 3200w`} alt={message}/>
                 <div className="thinktankItem__tags">
                     {tags.map((p, index)=>(
                         <p key={index}>

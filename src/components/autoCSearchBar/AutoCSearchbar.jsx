@@ -65,6 +65,24 @@ export default function AutoCSearchbar({selectedItems, setSelectedItems,allItems
 
     }
 
+    const setOpenToCenter = (e) =>{
+
+        // console.log(e.nativeEvent.target)
+        var el = e.nativeEvent.target
+
+        el.scrollIntoView({block: "center"})
+    }
+
+    if(/Android [4-6]/.test(navigator.appVersion)) {
+        window.addEventListener("resize", function() {
+            if(document.activeElement.tagName=="INPUT" || document.activeElement.tagName=="TEXTAREA") {
+                window.setTimeout(function() {
+                    document.activeElement.scrollIntoViewIfNeeded();
+                },0);
+            }
+        })
+    }
+
     return(
     <>
         <div className="message">{eMessage}</div>
@@ -79,13 +97,13 @@ export default function AutoCSearchbar({selectedItems, setSelectedItems,allItems
                 )}
             )}
 
-            <input className={"tagcontainer--input"+ id} onKeyDown={addItem} type="text"  onChange={ (e) => updateSuggestion(e)} />
+            <input className={"tagcontainer--input"+ id} onKeyDown={addItem} type="text"  onChange={ (e) => updateSuggestion(e)} onFocus={(e) => setOpenToCenter(e)} />
         </div>
 
         <div className={"suggestion " + (isSuggestion && "active")}>
             { options.filter(({name}) => name.indexOf(searchText.toLowerCase()) > -1)
                 .map((option , i) => {
-                    return <div  key={i} className="suggestion-select-item" tagSuggest={option.name} onClick={addItem}> #{option.name} </div>
+                    return <div  key={i} className="suggestion-select-item" tagsuggest={option.name} onClick={addItem}> #{option.name} </div>
                 })}
         </div>
     </>
