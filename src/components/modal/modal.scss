@@ -7,6 +7,19 @@
     .modal-content{
       //scrollbar-width: none;
       //scrollbar-color: #fff0 #fff0;
+      .modal__date{
+        display: flex;
+        align-items: center;
+        color: $secondary;
+        background-color: rgba(0,0,0,0.1);
+        width: max-content;
+        padding: 0.2rem 0.5rem;
+        svg{
+          margin-right: 0.5rem;
+          margin-top: 0;
+        }
+      }
+
       @include mobile{
         margin-top: 0;
         h1{

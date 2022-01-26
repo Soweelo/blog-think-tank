@@ -12,12 +12,12 @@ export default function Menu({favorites, setFavorites, allTags, selectedTags, se
         },
         {
             id:2,
-            title:'Read for free',
+            title:'Read by tag',
 
         },
         {
             id:3,
-            title:'my favorite tags'
+            title:'My favorite tags'
         },
         {
             id:4,

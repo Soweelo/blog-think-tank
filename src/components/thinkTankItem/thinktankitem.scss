@@ -40,6 +40,8 @@ position: relative;
     position: absolute;
     top:0;
     padding: 1rem;
+    overflow: hidden;
+    max-width: 70%;
     p{
       margin: 0;
     }
@@ -64,6 +66,9 @@ position: relative;
     font-size: 1.3rem;
     font-weight: bold;
     padding: 1rem;
+    max-width: 80%;
+    overflow: hidden;
+    word-wrap: break-word;
   }
   &:hover{
     //color: black;
@@ -78,8 +83,9 @@ position: relative;
       top: unset;
       bottom:0;
       z-index:9;
-
       color: rgba(255, 255, 255, 0.73);
+      overflow: hidden;
+      max-width: 70%;
     }
     .thinktankItem__message{
       opacity: 1;

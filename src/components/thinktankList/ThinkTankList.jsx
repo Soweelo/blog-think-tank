@@ -111,6 +111,8 @@ function pickAndShuffle(datas,selected=[]){
                                 url={p.url}
                                 image={p.image}
                                 tags ={p.tags}
+                                text={p.text}
+                                date={p.date}
                                 showModal={showModal}
                                 setShowModal={setShowModal}
                                 modalVar={modalVar}
@@ -122,8 +124,8 @@ function pickAndShuffle(datas,selected=[]){
                     ))}
                 </div>
             ))}
-            <Modal showModal={showModal}  setShowModal={setShowModal} image={modalVar[0]} message={modalVar[1]} url={modalVar[3]} tags={modalVar[2]}></Modal>
-            {/*{console.log(modalVar[2])}*/}
+            <Modal showModal={showModal}  setShowModal={setShowModal} image={modalVar[0]} message={modalVar[1]} url={modalVar[3]} tags={modalVar[2]} text={modalVar[4]} date={modalVar[5]}></Modal>
+            {console.log(modalVar)}
         </div>
 
 

@@ -3,10 +3,10 @@ import { Favorite, Share, Create } from "@material-ui/icons";
 import {useState, memo, useMemo} from 'react';
 // import Modal from "../modal/Modal"
 
-export default memo(function ThinkTankItem ({id, image,message,tags,url,showModal, setShowModal,modalVar,setModalVar}){
+export default memo(function ThinkTankItem ({id, image,message,tags,url,text, date,showModal, setShowModal,modalVar,setModalVar}){
 
     const updateModalVar =  e => {
-        setModalVar([image,message,tags,url])
+        setModalVar([image,message,tags,url,text,date])
         setShowModal(true)
         // console.log("show Modal vaut "+showModal)
     }

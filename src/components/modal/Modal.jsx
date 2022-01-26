@@ -3,7 +3,8 @@ import styled from "styled-components";
 import { MdClose } from 'react-icons/md';
 import {useRef, useEffect, useCallback} from 'react';
 import {useSpring, animated} from 'react-spring'
-import { Favorite, Share, Create } from "@material-ui/icons";
+import { Favorite, Share, Create} from "@material-ui/icons";
+import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 
 const Background = styled.div`
   width: 100%;
@@ -146,7 +147,7 @@ const ModalFloat= styled.div`
     top:0;
 `
 ;
-export default function Modal({showModal , setShowModal, image, tags, message, url}) {
+export default function Modal({showModal , setShowModal, image, tags, message, url, text, date}) {
     const modalRef  = useRef()
     const animation = useSpring({
         config: {
@@ -171,7 +172,7 @@ export default function Modal({showModal , setShowModal, image, tags, message, u
         e => {
             if (e.key === 'Escape' && showModal) {
                 setShowModal(false);
-                // console.log('I pressed');
+                // console.log(text);
             }
         },
         [setShowModal, showModal]
@@ -209,7 +210,8 @@ export default function Modal({showModal , setShowModal, image, tags, message, u
 
                             <ModalContent className="modal-content">
                                 <h1>{message}</h1>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+                                <p className="modal__date"><CalendarTodayIcon/>{date}</p>
+                                <p>{text}
                                 </p>
                                 <a href={"https://"+url} target="blank" >See website</a>
                                 <CloseModalButton aria-label='Close modal' onClick={() => setShowModal(prev =>!prev)}></CloseModalButton>
