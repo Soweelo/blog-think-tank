@@ -17,7 +17,7 @@ background-size: cover;
     position: relative;
     top: 40px;
     scroll-behavior:smooth;
-    scroll-snap-type: y mandatory;
+    scroll-snap-type: y proximity;
     scrollbar-width: none;// for firefox
     overflow-x: hidden;
     color: $primary;

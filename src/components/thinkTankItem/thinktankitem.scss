@@ -68,7 +68,8 @@ position: relative;
     padding: 1rem;
     max-width: 80%;
     overflow: hidden;
-    word-wrap: break-word;
+    //word-wrap: break-word;
+    display: ruby;
   }
   &:hover{
     //color: black;

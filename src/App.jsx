@@ -22,7 +22,6 @@ function App() {
         <Topbar />
         <div className="sections" >
             <Intro/>
-
             <MoreAbout/>
             <Privacy/>
             <Faq/>
