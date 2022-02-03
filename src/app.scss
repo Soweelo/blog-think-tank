@@ -22,9 +22,13 @@ background-size: cover;
     scrollbar-width: none;// for firefox
     overflow-x: hidden;
     color: $complementary;
+    h1{
+      text-shadow: 2px 2px  white;
+    }
     @include mobile{
       h1{
         color: $primary;
+        text-shadow: 1px 1px  $complementary;
       }
     }
     &::-webkit-scrollbar{

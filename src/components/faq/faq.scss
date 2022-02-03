@@ -22,6 +22,9 @@
     scrollbar-width:none;
     p{
       margin-bottom: 3rem;
+      br{
+        margin-bottom: 10px;
+      }
     }
   }
   @include mobile{

@@ -39,7 +39,7 @@ export default function MenuItem({id, title, menuOpen, setMenuOpen,favorites, se
                             </li>
 
                         <li className="hoverable">
-                            <a href="#"> More about how to create your subject.</a>
+                            <a href="#bepart"> More about how to create your subject.</a>
                         </li>
 
                     </ul>
