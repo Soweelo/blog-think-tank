@@ -35,9 +35,10 @@
   }
     .bottombar__item{
       margin-right: 15px;
-      a{
+      p{
         text-decoration: none;
         color: inherit;
+        cursor:pointer;
       }
       @include mobile{
         display: none;

@@ -1,10 +1,10 @@
 import "./thinktankitem.scss"
-import { Favorite, Share, Create } from "@material-ui/icons";
+import { Favorite, Share, Create, Comment } from "@material-ui/icons";
 import {useState, memo, useMemo} from 'react';
 // import Modal from "../modal/Modal"
 
 export default memo(function ThinkTankItem ({id, image,message,tags,url,text, date,showModal, setShowModal,modalVar,setModalVar}){
-
+    const PF = process.env.REACT_APP_PUBLIC_FOLDER
     const updateModalVar =  e => {
         setModalVar([image,message,tags,url,text,date])
         setShowModal(true)
@@ -14,7 +14,7 @@ export default memo(function ThinkTankItem ({id, image,message,tags,url,text, da
     return(
         <>
             <div  className="thinktankItem" onClick={(e) => updateModalVar()}>
-                    <img src={"assets/mobile-"+image}  srcSet={`${"assets/mobile-"+image} 768w, ${"assets/"+image} 3200w`} alt={message}/>
+                    <img src={PF +"/uploads/thumbs/mobile-"+image}  srcSet={`${PF +"/uploads/thumbs/mobile-"+image} 768w, ${PF +"/uploads/"+image} 3200w`} alt={message}/>
                 <div className="thinktankItem__tags">
                     {tags.map((p, index)=>(
                         <p key={index}>
@@ -27,7 +27,7 @@ export default memo(function ThinkTankItem ({id, image,message,tags,url,text, da
                 <div className="thinktankItem__icons">
                     <div className="icon1"><Favorite/></div>
                     <div className="icon2"><Share/></div>
-                    <div className="icon3"><Create/></div>
+                    <div className="icon3"><Comment/></div>
                 </div>
             </div>
 

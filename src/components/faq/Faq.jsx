@@ -1,8 +1,10 @@
 import "./faq.scss"
+import BackHomeButton from "../backHomeButton/BackHomeButton"
 
 export default function Faq(){
     return(
         <div id="faq">
+            <BackHomeButton/>
             <h1>FAQ</h1>
             <div className="faq__para-container">
                 <h2>Who can post ?</h2>

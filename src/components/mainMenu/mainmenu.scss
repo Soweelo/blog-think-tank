@@ -29,10 +29,11 @@
     li{
       margin-bottom: 1rem;
       transition: all 0.3s ease;
-      a{
+      p{
         text-decoration: none;
         color:inherit;
         width: 100%;
+        cursor: pointer;
       }
 
       &:hover{

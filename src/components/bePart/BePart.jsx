@@ -1,8 +1,10 @@
 import "./bepart.scss"
+import BackHomeButton from "../backHomeButton/BackHomeButton"
 
 export default function BePart(){
     return(
         <div id="bepart">
+            <BackHomeButton/>
             <h1>Join <span>this project</span></h1>
             <div className="bepart__para-container">
                 <h2>Read for free</h2>

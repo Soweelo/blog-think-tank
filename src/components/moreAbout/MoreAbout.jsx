@@ -1,8 +1,9 @@
 import "./moreabout.scss"
-
+import BackHomeButton from "../backHomeButton/BackHomeButton"
 export default function MoreAbout(){
     return(
         <div id="moreabout">
+            <BackHomeButton/>
             <h1>More about</h1>
             <div className="moreabout__para-container">
                 <p>

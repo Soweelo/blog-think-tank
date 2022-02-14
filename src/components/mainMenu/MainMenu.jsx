@@ -1,19 +1,25 @@
 import "./mainmenu.scss"
-export default function MainMenu({mainMenuOpen, setMainMenuOpen}){
+export default function MainMenu({mainMenuOpen, setMainMenuOpen, homeContent, setHomeContent}){
+    const changeContent = (e) => {
+
+        setHomeContent(e.target.id)
+        console.log(e.target);
+        setMainMenuOpen(false)
+    }
     return(
         <div className={"menu " + (mainMenuOpen && "active")}>
             <ul>
-                <li onClick={()=>setMainMenuOpen(false)}>
-                    <a href="#moreabout">more about us</a>
+                <li >
+                    <p onClick={ (e) => changeContent(e)} id="1"> more about us</p>
                 </li>
-                <li onClick={()=>setMainMenuOpen(false)}>
-                    <a href="#privacy">Privacy</a>
+                <li >
+                    <p onClick={ (e) => changeContent(e)} id="2"> Privacy</p>
                 </li>
-                <li onClick={()=>setMainMenuOpen(false)}>
-                    <a href="#faq">faq</a>
+                <li >
+                    <p onClick={ (e) => changeContent(e)} id="3"> faq</p>
                 </li>
-                <li onClick={()=>setMainMenuOpen(false)}>
-                    <a href="#bepart">Join project</a>
+                <li >
+                    <p onClick={ (e) => changeContent(e)} id="4">Join project</p>
                 </li>
             </ul>
         </div>

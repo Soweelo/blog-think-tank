@@ -5,32 +5,56 @@ import Bottombar from "./components/bottomBar/Bottombar";
 import MoreAbout from "./components/moreAbout/MoreAbout";
 import Privacy from "./components/privacy/Privacy";
 import Faq from "./components/faq/Faq";
-// import ScrollBar from "./components/scrollBar/Scrollbar";
+
 import BePart from "./components/bePart/BePart";
 import {useState, useRef, useEffect} from 'react'
 import MainMenu from "./components/mainMenu/MainMenu"
 
-
+import styled from "styled-components";
 
 
 function App() {
 
-    const[mainMenuOpen, setMainMenuOpen, useEffect] = useState(false)
+    const[mainMenuOpen, setMainMenuOpen] = useState(false)
+    const[homeContent,setHomeContent] = useState("0")
+    const PF = process.env.REACT_APP_PUBLIC_FOLDER
+   
+    const SectionMain = styled.div`
+background-image: url("${PF}/app/public/4.jpg");
+`
+    useEffect(() =>{
 
+    },[mainMenuOpen,homeContent, setHomeContent]
+)
+
+  
   return (
     <div className="app">
-        <Topbar />
-        <div className="sections" >
-            <Intro/>
-            <MoreAbout/>
-            <Privacy/>
-            <Faq/>
-            <BePart/>
-        </div>
-        {/*{ true && <ScrollBar></ScrollBar>}*/}
+        <Topbar homeContent={homeContent} setHomeContent={setHomeContent}/>
+        <SectionMain className="sections" >
 
-        <MainMenu mainMenuOpen={mainMenuOpen} setMainMenuOpen={setMainMenuOpen} />
-        <Bottombar mainMenuOpen={mainMenuOpen} setMainMenuOpen={setMainMenuOpen} />
+            {/*<OnePageContent omeContent={homeContent} setHomeContent={setHomeContent}/>*/}
+            {(() => {switch(homeContent){
+            case "1":
+                return <MoreAbout/>
+            case "2":
+                return <Privacy />
+
+            case "3":
+                return  <Faq />
+           case "4":
+                return    <BePart />
+
+            default:
+                return <Intro/>
+        }
+        })()}
+
+        </SectionMain>
+
+
+        <MainMenu mainMenuOpen={mainMenuOpen} setMainMenuOpen={setMainMenuOpen} homeContent={homeContent} setHomeContent={setHomeContent} />
+        <Bottombar mainMenuOpen={mainMenuOpen} setMainMenuOpen={setMainMenuOpen} homeContent={homeContent} setHomeContent={setHomeContent}/>
     </div>
   );
 }

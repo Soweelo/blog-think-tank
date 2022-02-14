@@ -4,6 +4,35 @@
   align-items: center;
   justify-items: center;
   .modal-wrapper{
+    .icon3{
+      transition: all 0.3s ease;
+      &.false{
+        .icon--tocome{
+          display: none;
+        }
+      }
+      &.expand{
+        width: 7rem;
+        //height: 3rem;
+        background-color: white;
+        border: 1px solid $complementary;
+        text-align: center;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        svg{
+          display: none;
+        }
+      }
+        .icon--tocome{
+          display: flex;
+          color: $complementary;
+
+        }
+    }
+
     .modal-content{
       //scrollbar-width: none;
       //scrollbar-color: #fff0 #fff0;

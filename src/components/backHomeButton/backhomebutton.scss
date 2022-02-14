@@ -1,0 +1,18 @@
+@import "../../global.scss";
+.bckHome{
+
+  z-index:50;
+  position :fixed !important;
+  bottom:10vh;
+  background-color: white!important;
+  border-radius: 50%;
+  border: 1px solid $secondary;
+padding: 1rem;
+  color: black !important;
+  right:5%;
+  cursor: pointer;
+  a{
+    text-decoration: none;
+    color: $complementary;
+  }
+}

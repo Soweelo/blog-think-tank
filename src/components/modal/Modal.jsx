@@ -1,10 +1,12 @@
 import "./modal.scss";
 import styled from "styled-components";
 import { MdClose } from 'react-icons/md';
-import {useRef, useEffect, useCallback} from 'react';
+import {useRef, useEffect, useCallback, useState} from 'react';
 import {useSpring, animated} from 'react-spring'
-import { Favorite, Share, Create} from "@material-ui/icons";
+import { Favorite, Share, Comment} from "@material-ui/icons";
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
+
+
 
 const Background = styled.div`
   width: 100%;
@@ -148,6 +150,8 @@ const ModalFloat= styled.div`
 `
 ;
 export default function Modal({showModal , setShowModal, image, tags, message, url, text, date}) {
+    const PF = process.env.REACT_APP_PUBLIC_FOLDER
+
     const modalRef  = useRef()
     const animation = useSpring({
         config: {
@@ -157,7 +161,7 @@ export default function Modal({showModal , setShowModal, image, tags, message, u
         transform: showModal ? `translateY(0%)` : 'translateY(-100%)',
      
     })
-
+    const[isClicked, setIsClicked] = useState(false)
     const closeModal = e => {
         if (modalRef.current === e.target) {
             setShowModal(false);
@@ -173,9 +177,11 @@ export default function Modal({showModal , setShowModal, image, tags, message, u
             if (e.key === 'Escape' && showModal) {
                 setShowModal(false);
                 // console.log(text);
+               setIsClicked(false)
+
             }
         },
-        [setShowModal, showModal]
+        [setShowModal, showModal, setIsClicked,isClicked]
     );
 
     useEffect(
@@ -185,6 +191,10 @@ export default function Modal({showModal , setShowModal, image, tags, message, u
         },
         [keyPress]
     );
+
+
+
+
     return (
         <>
             {showModal ? (
@@ -192,7 +202,7 @@ export default function Modal({showModal , setShowModal, image, tags, message, u
                     <animated.div style={animation}  ref={modalRef} className="animated-div">
                         <ModalWrapper  showModal={showModal} className="modal-wrapper">
                             <ModalImgWrapper className="modal-img-wrapper">
-                                <img src={"assets/mobile-"+image} srcSet={`${"assets/mobile-"+image} 768w, ${"assets/"+image} 3200w`} alt={message}/>
+                                <img src={PF +"/uploads/thumbs/mobile-"+image} srcSet={`${PF + "/uploads/thumbs/mobile-"+image} 768w, ${PF + "/uploads/"+image} 3200w`} alt={message}/>
                                 <div className="tags">
                                         {tags.map((p, index)=>(
                                             <p key={index}>
@@ -203,7 +213,10 @@ export default function Modal({showModal , setShowModal, image, tags, message, u
                                 <div className="icons">
                                     <div className="icon1"><Favorite/></div>
                                     <div className="icon2"><Share/></div>
-                                    <div className="icon3"><Create/></div>
+                                    <div  onClick={() => setIsClicked(!isClicked) } className={"icon3  "+ (isClicked && "expand")}>
+                                        <Comment/>
+                                        <div    className="icon--tocome">...coming soon!</div>
+                                    </div>
                                 </div>
 
                             </ModalImgWrapper>
@@ -211,7 +224,7 @@ export default function Modal({showModal , setShowModal, image, tags, message, u
                             <ModalContent className="modal-content">
                                 <h1>{message}</h1>
                                 <p className="modal__date"><CalendarTodayIcon/>{date}</p>
-                                <p>{text}
+                                <p dangerouslySetInnerHTML={{ __html: text }}>
                                 </p>
                                 <a href={"https://"+url} target="blank" >See website</a>
                                 <CloseModalButton aria-label='Close modal' onClick={() => setShowModal(prev =>!prev)}></CloseModalButton>
