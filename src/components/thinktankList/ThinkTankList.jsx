@@ -117,8 +117,9 @@ export default memo(function ThinkTankList({props, favorites, selectedTags ,allT
                     lang: "fr",
                 }
                 try {
-                    const res = await axios.post("posts/find", request)
-                    setThinkTanks(res.data)
+                    const answer = await axios.post("https://api.yourworld20.com/api/posts/find", request)
+                    setThinkTanks(answer.data)
+                    console.log(answer.data)
                 }
                 catch (e) {
 
