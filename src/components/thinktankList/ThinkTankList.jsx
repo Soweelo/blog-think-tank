@@ -99,23 +99,10 @@ const [tagsToDisplay, setTagsToDisplay]=  useState(allTags)
         return pickedAndShuffledPacks
 
     }
-// pickAndShuffle(Object.entries(thinkTanks),favorites)
-//
-//     const finalData = useMemo( () =>
-//         pickAndShuffle(Object.entries(thinkTanks), tagsToDisplay),[tagsToDisplay])
-    // FIN ESSAI ESSAI ESSAI ESSAI
-
-
-
-
-
-
 
     //get data with post request on api
 
         const  [thinkTanks, setThinkTanks] = useState({})
-        const  [entier, setEntier] = useState(0)
-
         useEffect(() => {
             const getData = async () =>{
                 const request = {
@@ -124,94 +111,43 @@ const [tagsToDisplay, setTagsToDisplay]=  useState(allTags)
                     tags:["fashion", "IA"],
                     lang: "fr",
                 }
-                const headers = {
-                    'Content-Type': 'text/plain',
-                    // 'Accept': 'text/html',
-                }
-                try {
-                    // essai1
-                    // const answ = await axios
-                    //     .get(PF +"/api/posts/find")
-                    //     // .then((response) => {
-                    //     //     dispatch({
-                    //     //         data: response.data.d
-                    //     //     })
-                    //     // })
-                    // setThinkTanks(answ.data.data)
-                    // // // console.log(answ.data.data)
-                    // console.log(thinkTanks)
-                    // // const answer = await axios
-                    // //     .get(PF +"/api/posts/26/getById?lang=fr")
-                    // //     .then((response) => {
-                    // //         console.log(response.status);
-                    // //         console.log(response.config.method)
-                    // //         console.log(response.data.data);
-                    // //         setThinkTanks(["essai"])
-                    // //         console.log(thinkTanks)
-                    //         setEntier(1)
-                    //         console.log(entier)
-                    //
-                    //
-                    //     })
-                    //essai 2
-                await axios
+                   try {
+                    await axios
                         .post(PF +"/api/posts/find", request)
                         .then((response) => {
-                            console.log(response.status);
-                            console.log(response.config.method)
-                            console.log(response.data.data);
                             setThinkTanks(response.data.data)
-                            console.log(thinkTanks)
-                            setEntier(1)
-                            console.log(entier)
-
-
                         })
-
-                    // console.log(answ.data.data)
-                    // console.log(thinkTanks)
-
                 }
                 catch (e) {
-
                 }
-                // axios
-                //     .post(PF +"/api/posts/find")
-                //     .then(function (response) {
-                //         console.log(response);
-                //         setThinkTanks(response.data.data)
-                //     })
-                //     .catch(function (error) {
-                //         console.log(error);
-                //     });
             }
 
             getData()
-        },[allTags])
+
+        },[])
 
     //
 
-        const finalData = useMemo( () =>
-            pickAndShuffle(Object.entries(thinkTanks), tagsToDisplay),[tagsToDisplay])
+    const finalData = useMemo( () =>
+        pickAndShuffle(Object.entries(thinkTanks), tagsToDisplay),[allTags])
 
-
-const allData = pickAndShuffle(Object.entries(thinkTanks), tagsToDisplay)
+// const allData = pickAndShuffle(Object.entries(thinkTanks), tagsToDisplay)
     //end get data with post request on api
 
-console.log(allData)//Object.entries(data) : turns an Object formatted data to array formatted data
+// console.log(finalData)//Object.entries(data) : turns an Object formatted data to array formatted data
 
 
 
 
     return(
         <div className="big_container">
-            {allData.map((randomized, index) => (
+            {finalData.map((randomized, index) => (
                 <div key={index} className={`thinktanklist__container container and${index}`}>
 
                     {randomized.map((p,index) => (
 
                         <div key={index} className={`areas area${index + 1}`} >
-                            {console.log(p)}
+                            {/*{console.log(p)}*/}
                             <ThinkTankItem
                                 id={p.id}
                                 title={p.member.pseudo}
@@ -233,7 +169,7 @@ console.log(allData)//Object.entries(data) : turns an Object formatted data to a
                 </div>
             ))}
             <Modal showModal={showModal}  setShowModal={setShowModal} images={modalVar[0]} title={modalVar[1]} url={modalVar[3]} tags={modalVar[2]} text={modalVar[4]} date={modalVar[5]}></Modal>
-            {console.log(modalVar)}
+            {/*{console.log(modalVar)}*/}
         </div>
 
 

@@ -9,10 +9,10 @@ export default function AutoCSearchbar({selectedItems, setSelectedItems,allItems
     const [searchText,setSearchText] = useState("")
 
 
-    const options = [];
-    for (let i = 0;i <allItems.length; i++){
-        options[i]={name:allItems[i].toLowerCase()};
-    }
+    // const options = [];
+    // for (let i = 0;i <allItems.length; i++){
+    //     options[i]={name:allItems[i].toLowerCase()};
+    // }
 
     const updateSuggestion = (e) => {
         setIsSuggestion(false)
@@ -101,7 +101,7 @@ export default function AutoCSearchbar({selectedItems, setSelectedItems,allItems
         </div>
 
         <div className={"suggestion " + (isSuggestion && "active")}>
-            { options.filter(({name}) => name.indexOf(searchText.toLowerCase()) > -1)
+            { allItems.filter(({name}) => name.indexOf(searchText.toLowerCase()) > -1)
                 .map((option , i) => {
                     return <div  key={i} className="suggestion-select-item" tagsuggest={option.name} onClick={addItem}> #{option.name} </div>
                 })}

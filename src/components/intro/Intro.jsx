@@ -11,6 +11,7 @@ import axios from "axios"
 
 
 export default function Intro(){
+    const PF = process.env.REACT_APP_PUBLIC_FOLDER
     const[selectedTags, setSelectedTags] = useState([])
     const textRef = useRef();
     const scrollRef = useRef();
@@ -28,28 +29,42 @@ export default function Intro(){
     //backup localhost dummies
 
         // function return all existing tags
-       function allTags(datas){
-            let allTags = [];
-            let dataLength = datas.length;
-            // console.log(datas)
-            while(dataLength > 0){
-                let curThinktankTagLength = datas[dataLength-1][1]["tags"].length;
-                // console.log(curThinktankTagLength );
-                while(curThinktankTagLength > 0){
-                    // console.log("le tag courant est " );
-                 let curThinktankTag = allTags.find((tag) => datas[dataLength-1][1]["tags"][curThinktankTagLength -1].name === tag)
-                if(!curThinktankTag){
-                   allTags.push(datas[dataLength-1][1]["tags"][curThinktankTagLength -1].name )
-                }
-                    curThinktankTagLength -= 1;
-                }
-                dataLength -= 1;
-            }
-        return allTags
+       // function allTags(datas){
+       //      let allTags = [];
+       //      let dataLength = datas.length;
+       //      // console.log(datas)
+       //      while(dataLength > 0){
+       //          let curThinktankTagLength = datas[dataLength-1][1]["tags"].length;
+       //          // console.log(curThinktankTagLength );
+       //          while(curThinktankTagLength > 0){
+       //              // console.log("le tag courant est " );
+       //           let curThinktankTag = allTags.find((tag) => datas[dataLength-1][1]["tags"][curThinktankTagLength -1].name === tag)
+       //          if(!curThinktankTag){
+       //             allTags.push(datas[dataLength-1][1]["tags"][curThinktankTagLength -1].name )
+       //          }
+       //              curThinktankTagLength -= 1;
+       //          }
+       //          dataLength -= 1;
+       //      }
+       //  return allTags
+       //  }
+
+    //get tags with get request on api
+
+
+
+
+    const  [allTags, setAllTags] = useState([])
+    useEffect(() => {
+        const getTags = async () =>{
+                const answ = await axios
+                    .get(PF +"/api/tags")
+                    setAllTags(answ.data.data)
+                    console.log(answ.data.data)
         }
+        getTags()
+    },[])
 
-
-    const  resultAllTags = useMemo(() => allTags(Object.entries(thinkTanks)),[thinkTanks]);
 
 
     // end backup localhost dummies
@@ -114,12 +129,12 @@ export default function Intro(){
             <div className="intro__welcome" id="topIntro">
                 <h2>Hi welcome to</h2>
                 <h1>YOUR <span ref={textRef}></span></h1>
-                <Menu favorites={favorites} setFavorites={setFavorites} allTags={[ "inclusive", "ensemble", "noplastic", "ecologie", "zerodechet", "artisanat", "new", "others", "regulateur", "entreprisepharmaceutique","web","mode","fibre de pin","consigne","recyclage","politique","droit","reforme","medecine","bigpharma","IA", "food","agriculture"]} selectedTags={selectedTags} setSelectedTags={setSelectedTags}/>
+                <Menu favorites={favorites} setFavorites={setFavorites} allTags={allTags} selectedTags={selectedTags} setSelectedTags={setSelectedTags}/>
                 {/*<Menu favorites={favorites} setFavorites={setFavorites} allTags={resultAllTags} selectedTags={selectedTags} setSelectedTags={setSelectedTags}/>*/}
-                {console.log(resultAllTags)}
+                {console.log(allTags)}
             </div>
 
-            <ThinkTankList props={false} favorites={favorites} selectedTags={selectedTags}  allTags={[ "inclusive", "ensemble", "noplastic", "ecologie", "zerodechet", "artisanat", "new", "others", "regulateur", "entreprisepharmaceutique","web","mode","fibre de pin","consigne","recyclage","politique","droit","reforme","medecine","bigpharma","IA", "food","agriculture"]}/>
+            <ThinkTankList props={false} favorites={favorites} selectedTags={selectedTags}  allTags={allTags}/>
             {/*<ThinkTankList props={false} favorites={favorites} selectedTags={selectedTags}  allTags={resultAllTags}/>*/}
 
 
