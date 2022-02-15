@@ -149,7 +149,7 @@ const ModalFloat= styled.div`
     top:0;
 `
 ;
-export default function Modal({showModal , setShowModal, image, tags, message, url, text, date}) {
+export default function Modal({showModal , setShowModal, images, tags, title, url, text, date}) {
     const PF = process.env.REACT_APP_PUBLIC_FOLDER
 
     const modalRef  = useRef()
@@ -159,7 +159,7 @@ export default function Modal({showModal , setShowModal, image, tags, message, u
         },
         opacity: showModal ? 1 :0,
         transform: showModal ? `translateY(0%)` : 'translateY(-100%)',
-     
+
     })
     const[isClicked, setIsClicked] = useState(false)
     const closeModal = e => {
@@ -202,11 +202,16 @@ export default function Modal({showModal , setShowModal, image, tags, message, u
                     <animated.div style={animation}  ref={modalRef} className="animated-div">
                         <ModalWrapper  showModal={showModal} className="modal-wrapper">
                             <ModalImgWrapper className="modal-img-wrapper">
-                                <img src={PF +"/uploads/thumbs/mobile-"+image} srcSet={`${PF + "/uploads/thumbs/mobile-"+image} 768w, ${PF + "/uploads/"+image} 3200w`} alt={message}/>
+                                {
+                                    images ?
+                                        <img src={PF +"/"+images.small}  srcSet={`${PF +"/"+images.thumb} 768w, ${PF +"/"+images.small} 3200w`} alt={title}/>
+                                        :
+                                        <img src={PF +"/storage/app/public/4.jpg"}  alt={title}/>
+                                }
                                 <div className="tags">
                                         {tags.map((p, index)=>(
                                             <p key={index}>
-                                                #{tags[index].name}
+                                                #{tags[index]}
                                             </p>
                                         ))}
                                 </div>
@@ -222,12 +227,15 @@ export default function Modal({showModal , setShowModal, image, tags, message, u
                             </ModalImgWrapper>
 
                             <ModalContent className="modal-content">
-                                <h1>{message}</h1>
+                                <h1>{title}</h1>
                                 <p className="modal__date"><CalendarTodayIcon/>{date}</p>
                                 <p dangerouslySetInnerHTML={{ __html: text }}>
                                 </p>
                                 <a href={"https://"+url} target="blank" >See website</a>
-                                <CloseModalButton aria-label='Close modal' onClick={() => setShowModal(prev =>!prev)}></CloseModalButton>
+                                {
+                                    url && <CloseModalButton aria-label='Close modal' onClick={() => setShowModal(prev =>!prev)}></CloseModalButton>
+                                }
+
 
                             </ModalContent>
                       </ModalWrapper>

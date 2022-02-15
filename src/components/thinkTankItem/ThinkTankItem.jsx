@@ -3,26 +3,33 @@ import { Favorite, Share, Create, Comment } from "@material-ui/icons";
 import {useState, memo, useMemo} from 'react';
 // import Modal from "../modal/Modal"
 
-export default memo(function ThinkTankItem ({id, image,message,tags,url,text, date,showModal, setShowModal,modalVar,setModalVar}){
+export default memo(function ThinkTankItem ({id, images,title,tags,url,text, date,showModal, setShowModal,modalVar,setModalVar, brand}){
     const PF = process.env.REACT_APP_PUBLIC_FOLDER
     const updateModalVar =  e => {
-        setModalVar([image,message,tags,url,text,date])
+        setModalVar([images,title,tags,url,text,date, brand])
         setShowModal(true)
-        // console.log("show Modal vaut "+showModal)
+        console.log([images,title,tags,url,text,date])
     }
 
     return(
         <>
             <div  className="thinktankItem" onClick={(e) => updateModalVar()}>
-                    <img src={PF +image.thumb}  srcSet={`${PF +image.small} 768w, ${PF +image.thumb} 3200w`} alt={message}/>
+                {
+                    images ?
+                        <img src={PF +"/"+images.small}  srcSet={`${PF +"/"+images.thumb} 768w, ${PF +"/"+images.small} 3200w`} alt={title}/>
+                        :
+                        <img src={PF +"/storage/app/public/4.jpg"}  alt={title}/>
+                }
+
+
                 <div className="thinktankItem__tags">
                     {tags.map((p, index)=>(
                         <p key={index}>
-                            #{tags[index].name}
+                            #{tags[index]}
                         </p>
                     ))}
                 </div>
-                <div className="thinktankItem__message">{message}</div>
+                <div className="thinktankItem__message">{title}</div>
                 <div className="thinktankItem__url">{url}</div>
                 <div className="thinktankItem__icons">
                     <div className="icon1"><Favorite/></div>

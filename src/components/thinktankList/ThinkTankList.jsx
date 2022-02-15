@@ -1,16 +1,16 @@
 
 import "./thinktanklist.scss"
-import {thinkTanks} from "../../dummy"
+// import {thinkTanks} from "../../dummy"
 import axios from 'axios';
-
 import ThinkTankItem from "../thinkTankItem/ThinkTankItem"
 import {useEffect, useState, memo, useMemo} from "react"
 import Modal from "../modal/Modal";
 
 export default memo(function ThinkTankList({props, favorites, selectedTags ,allTags}) {
     const PF = process.env.REACT_APP_PUBLIC_FOLDER
-
-    let tagsToDisplay = (selectedTags.length === 0) ? allTags : selectedTags;
+const [tagsToDisplay, setTagsToDisplay]=  useState(allTags)
+    // console.log(allTags)
+    // let tagsToDisplay = (selectedTags.length === 0) ? allTags : selectedTags;
 // const [tagsToDisplay,setTagsToDisplay]
     //fonction shuffle
     function shuffleArray(array) {
@@ -114,6 +114,8 @@ export default memo(function ThinkTankList({props, favorites, selectedTags ,allT
     //get data with post request on api
 
         const  [thinkTanks, setThinkTanks] = useState({})
+        const  [entier, setEntier] = useState(0)
+
         useEffect(() => {
             const getData = async () =>{
                 const request = {
@@ -122,47 +124,103 @@ export default memo(function ThinkTankList({props, favorites, selectedTags ,allT
                     tags:["fashion", "IA"],
                     lang: "fr",
                 }
+                const headers = {
+                    'Content-Type': 'text/plain',
+                    // 'Accept': 'text/html',
+                }
                 try {
-                    const answ = await axios.post(PF +"/api/posts/find", request)
-                    setThinkTanks(answ.data.data)
-                    console.log(answ.data.data)
+                    // essai1
+                    // const answ = await axios
+                    //     .get(PF +"/api/posts/find")
+                    //     // .then((response) => {
+                    //     //     dispatch({
+                    //     //         data: response.data.d
+                    //     //     })
+                    //     // })
+                    // setThinkTanks(answ.data.data)
+                    // // // console.log(answ.data.data)
+                    // console.log(thinkTanks)
+                    // // const answer = await axios
+                    // //     .get(PF +"/api/posts/26/getById?lang=fr")
+                    // //     .then((response) => {
+                    // //         console.log(response.status);
+                    // //         console.log(response.config.method)
+                    // //         console.log(response.data.data);
+                    // //         setThinkTanks(["essai"])
+                    // //         console.log(thinkTanks)
+                    //         setEntier(1)
+                    //         console.log(entier)
+                    //
+                    //
+                    //     })
+                    //essai 2
+                await axios
+                        .post(PF +"/api/posts/find", request)
+                        .then((response) => {
+                            console.log(response.status);
+                            console.log(response.config.method)
+                            console.log(response.data.data);
+                            setThinkTanks(response.data.data)
+                            console.log(thinkTanks)
+                            setEntier(1)
+                            console.log(entier)
+
+
+                        })
+
+                    // console.log(answ.data.data)
+                    // console.log(thinkTanks)
+
                 }
                 catch (e) {
 
                 }
+                // axios
+                //     .post(PF +"/api/posts/find")
+                //     .then(function (response) {
+                //         console.log(response);
+                //         setThinkTanks(response.data.data)
+                //     })
+                //     .catch(function (error) {
+                //         console.log(error);
+                //     });
             }
+
             getData()
-        },[])
+        },[allTags])
+
     //
+
         const finalData = useMemo( () =>
             pickAndShuffle(Object.entries(thinkTanks), tagsToDisplay),[tagsToDisplay])
 
 
-
+const allData = pickAndShuffle(Object.entries(thinkTanks), tagsToDisplay)
     //end get data with post request on api
 
-console.log(Object.entries(thinkTanks))//Object.entries(data) : turns an Object formatted data to array formatted data
+console.log(allData)//Object.entries(data) : turns an Object formatted data to array formatted data
 
 
 
 
     return(
         <div className="big_container">
-            {finalData.map((randomized, index) => (
+            {allData.map((randomized, index) => (
                 <div key={index} className={`thinktanklist__container container and${index}`}>
 
                     {randomized.map((p,index) => (
 
                         <div key={index} className={`areas area${index + 1}`} >
-                            {console.log(p.images.thumb)}
+                            {console.log(p)}
                             <ThinkTankItem
                                 id={p.id}
-                                message={p.message}
-                                url={p.url}
-                                image={p.images}
+                                title={p.member.pseudo}
+                                brand = {"brand"}
+                                url={"https://google.com"}
+                                images={p.images}
                                 tags ={p.tags}
                                 text={p.content}
-                                date={p.date}
+                                date={p.updated_at}
                                 showModal={showModal}
                                 setShowModal={setShowModal}
                                 modalVar={modalVar}
@@ -174,7 +232,7 @@ console.log(Object.entries(thinkTanks))//Object.entries(data) : turns an Object 
                     ))}
                 </div>
             ))}
-            <Modal showModal={showModal}  setShowModal={setShowModal} image={modalVar[0]} message={modalVar[1]} url={modalVar[3]} tags={modalVar[2]} text={modalVar[4]} date={modalVar[5]}></Modal>
+            <Modal showModal={showModal}  setShowModal={setShowModal} images={modalVar[0]} title={modalVar[1]} url={modalVar[3]} tags={modalVar[2]} text={modalVar[4]} date={modalVar[5]}></Modal>
             {console.log(modalVar)}
         </div>
 
