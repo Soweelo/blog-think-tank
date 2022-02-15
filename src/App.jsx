@@ -20,7 +20,7 @@ function App() {
     const PF = process.env.REACT_APP_PUBLIC_FOLDER
    
     const SectionMain = styled.div`
-background-image: url("${PF}/app/public/4.jpg");
+background-image: url("${PF}/storage/app/public/4.jpg");
 `
     useEffect(() =>{
 

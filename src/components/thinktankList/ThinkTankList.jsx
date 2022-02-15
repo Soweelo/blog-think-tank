@@ -8,6 +8,7 @@ import {useEffect, useState, memo, useMemo} from "react"
 import Modal from "../modal/Modal";
 
 export default memo(function ThinkTankList({props, favorites, selectedTags ,allTags}) {
+    const PF = process.env.REACT_APP_PUBLIC_FOLDER
 
     let tagsToDisplay = (selectedTags.length === 0) ? allTags : selectedTags;
 // const [tagsToDisplay,setTagsToDisplay]
@@ -27,20 +28,25 @@ export default memo(function ThinkTankList({props, favorites, selectedTags ,allT
         return array;
     }
 
-    //fonction isFav, return true or false, prends un parametre un tableau de thinktankdata (correspond à un thinktank avec ses caracteristiques) et un tableau de selection
+    //fonction isFav, return true or false, prends en parametre un tableau de thinktankdata (correspond à un thinktank avec ses caracteristiques) et un tableau de selection
     function isSelected(data, selection=[]) {
         let result = false
+
         let curDataTagsLength = data[1]["tags"].length;
 
         while(curDataTagsLength >0){
-            const curThinktankTag = selection.find((tag) => data[1]["tags"][curDataTagsLength -1].name === tag)
+
+            const curThinktankTag = selection.find((tag) => data[1]["tags"][curDataTagsLength -1] === tag)
+
             if(curThinktankTag){
                 result = true
                 return result
             }
             curDataTagsLength -= 1;
         }
-        return result
+        // console.log(result)
+        // return result resultat à retourner pour controller les selected tags
+        return true
     }
 
 
@@ -117,16 +123,16 @@ export default memo(function ThinkTankList({props, favorites, selectedTags ,allT
                     lang: "fr",
                 }
                 try {
-                    const answer = await axios.post("https://api.yourworld20.com/api/posts/find", request)
-                    setThinkTanks(answer.data)
-                    console.log(answer.data)
+                    const answ = await axios.post(PF +"/api/posts/find", request)
+                    setThinkTanks(answ.data.data)
+                    console.log(answ.data.data)
                 }
                 catch (e) {
 
                 }
             }
             getData()
-        },[tagsToDisplay])
+        },[])
     //
         const finalData = useMemo( () =>
             pickAndShuffle(Object.entries(thinkTanks), tagsToDisplay),[tagsToDisplay])
@@ -135,7 +141,7 @@ export default memo(function ThinkTankList({props, favorites, selectedTags ,allT
 
     //end get data with post request on api
 
-
+console.log(Object.entries(thinkTanks))//Object.entries(data) : turns an Object formatted data to array formatted data
 
 
 
@@ -148,13 +154,14 @@ export default memo(function ThinkTankList({props, favorites, selectedTags ,allT
                     {randomized.map((p,index) => (
 
                         <div key={index} className={`areas area${index + 1}`} >
+                            {console.log(p.images.thumb)}
                             <ThinkTankItem
                                 id={p.id}
                                 message={p.message}
                                 url={p.url}
-                                image={p.image}
+                                image={p.images}
                                 tags ={p.tags}
-                                text={p.text}
+                                text={p.content}
                                 date={p.date}
                                 showModal={showModal}
                                 setShowModal={setShowModal}
