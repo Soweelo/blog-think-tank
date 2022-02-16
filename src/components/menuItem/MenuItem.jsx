@@ -11,15 +11,15 @@ export default function MenuItem({id, title, menuOpen, setMenuOpen,favorites, se
     //     var el = e.nativeEvent.target
     //     el.scrollIntoView({block: "center"})
     // }
-    if(/Android [4-6]/.test(navigator.appVersion)) {
-        window.addEventListener("resize", function() {
-            if(document.activeElement.tagName=="INPUT" || document.activeElement.tagName=="TEXTAREA") {
-                window.setTimeout(function() {
-                    document.activeElement.scrollIntoViewIfNeeded();
-                },0);
-            }
-        })
-    }
+    // if(/Android [4-6]/.test(navigator.appVersion)) {
+    //     window.addEventListener("resize", function() {
+    //         if(document.activeElement.tagName=="INPUT" || document.activeElement.tagName=="TEXTAREA") {
+    //             window.setTimeout(function() {
+    //                 document.activeElement.scrollIntoViewIfNeeded();
+    //             },0);
+    //         }
+    //     })
+    // }
 
     return(
 

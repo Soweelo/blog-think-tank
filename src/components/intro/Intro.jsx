@@ -47,12 +47,11 @@ export default function Intro(){
                 <h2>Hi welcome to</h2>
                 <h1>YOUR <span ref={textRef}></span></h1>
                 <Menu favorites={favorites} setFavorites={setFavorites} allTags={allTags} selectedTags={selectedTags} setSelectedTags={setSelectedTags}/>
-                {/*<Menu favorites={favorites} setFavorites={setFavorites} allTags={resultAllTags} selectedTags={selectedTags} setSelectedTags={setSelectedTags}/>*/}
-                {/*{console.log(allTags)}*/}
+             
             </div>
 
             <ThinkTankList props={false} favorites={favorites} selectedTags={selectedTags}  allTags={allTags}/>
-            {/*<ThinkTankList props={false} favorites={favorites} selectedTags={selectedTags}  allTags={resultAllTags}/>*/}
+       
 
 
         </div>

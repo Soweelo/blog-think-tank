@@ -8,19 +8,18 @@ import Modal from "../modal/Modal";
 
 export default memo(function ThinkTankList({props, favorites, selectedTags ,allTags}) {
 
-    const [tagsToDisplay, setTagsToDisplay]=  useState((selectedTags.length == 0) ? allTags : selectedTags)
-    useEffect(() => {
-    setTagsToDisplay(
-
-            (selectedTags.length == 0) ? allTags : selectedTags
-
-
-    )
-        }, [allTags, selectedTags, favorites]
-    )
+    //
+    // useEffect(() => {
+    //     const updateTags = async () => {
+    //         (selectedTags.length == 0) ? setTagsToDisplay(allTags) : setTagsToDisplay(selectedTags)
+    //         console.log("boucle de useffect updatetags")
+    //     }
+    //     updateTags()
+    //     }, [ allTags, selectedTags, favorites]
+    // )
     const PF = process.env.REACT_APP_PUBLIC_FOLDER
 
-    console.log("alltags: ", allTags ,"  tags to display : ", tagsToDisplay,"  selected tags : ", selectedTags,"les favoris ",favorites)
+
 
     // let tagsToDisplay = (selectedTags.length === 0) ? allTags : selectedTags;
 // const [tagsToDisplay,setTagsToDisplay]
@@ -103,12 +102,18 @@ export default memo(function ThinkTankList({props, favorites, selectedTags ,allT
     }
 
     //get data with post request on api
-
+        const [tagsToDisplay, setTagsToDisplay]=  useState(allTags)
         const  [thinkTanks, setThinkTanks] = useState({})
+    console.log("before useffect","alltags: ", allTags ,"  tags to display : ", tagsToDisplay,"  selected tags : ", selectedTags,"les favoris ",favorites)
         useEffect(() => {
+            const updateTags = async () => {
+                (selectedTags.length == 0) ? setTagsToDisplay(allTags) : setTagsToDisplay(selectedTags)
+                console.log("boucle de useffect commune: updattags")
+            }
+            updateTags()
             const getData = async () =>{
-                setTagsToDisplay(selectedTags.length !== 0 ? selectedTags : allTags)
-                console.log(tagsToDisplay)
+                // setTagsToDisplay(selectedTags.length !== 0 ? selectedTags : allTags)
+                console.log("boucle de useffect commune: getData. vérifier TagstoDisplay ",tagsToDisplay)
                 const request = {
                     limit :30,
                     offset: 1,
@@ -127,8 +132,8 @@ export default memo(function ThinkTankList({props, favorites, selectedTags ,allT
             }
 
             getData()
-console.log("think tank avant formattage", thinkTanks)
-        },[tagsToDisplay])
+console.log("think tank avant formattage, une boucle de useeffect", thinkTanks)
+        },[allTags, selectedTags,favorites])
 
     //
 
@@ -139,13 +144,14 @@ console.log("think tank avant formattage", thinkTanks)
 const allData = pickAndShuffle(Object.entries(thinkTanks), tagsToDisplay)
     //end get data with post request on api
 
-console.log(allData)//
+console.log("data formatté en dehors du useeffect",allData)//
 
 
 
 
     return(
         <div className="big_container">
+            {console.log('le component re render')}
             {allData.map((randomized, index) => (
                 <div key={index} className={`thinktanklist__container container and${index}`}>
 
@@ -174,7 +180,7 @@ console.log(allData)//
                 </div>
             ))}
             <Modal showModal={showModal}  setShowModal={setShowModal} images={modalVar[0]} title={modalVar[1]} url={modalVar[3]} tags={modalVar[2]} text={modalVar[4]} date={modalVar[5]}></Modal>
-            {console.log(modalVar)}
+            {/*{console.log(modalVar)}*/}
         </div>
 
 
