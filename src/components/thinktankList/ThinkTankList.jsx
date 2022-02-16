@@ -7,9 +7,21 @@ import {useEffect, useState, memo, useMemo} from "react"
 import Modal from "../modal/Modal";
 
 export default memo(function ThinkTankList({props, favorites, selectedTags ,allTags}) {
+
+    const [tagsToDisplay, setTagsToDisplay]=  useState((selectedTags.length == 0) ? allTags : selectedTags)
+    useEffect(() => {
+    setTagsToDisplay(
+
+            (selectedTags.length == 0) ? allTags : selectedTags
+
+
+    )
+        }, [allTags, selectedTags, favorites]
+    )
     const PF = process.env.REACT_APP_PUBLIC_FOLDER
-const [tagsToDisplay, setTagsToDisplay]=  useState(allTags)
-    // console.log(allTags)
+
+    console.log("alltags: ", allTags ,"  tags to display : ", tagsToDisplay,"  selected tags : ", selectedTags,"les favoris ",favorites)
+
     // let tagsToDisplay = (selectedTags.length === 0) ? allTags : selectedTags;
 // const [tagsToDisplay,setTagsToDisplay]
     //fonction shuffle
@@ -31,7 +43,7 @@ const [tagsToDisplay, setTagsToDisplay]=  useState(allTags)
     //fonction isFav, return true or false, prends en parametre un tableau de thinktankdata (correspond à un thinktank avec ses caracteristiques) et un tableau de selection
     function isSelected(data, selection=[]) {
         let result = false
-
+// console.log(data)
         let curDataTagsLength = data[1]["tags"].length;
 
         while(curDataTagsLength >0){
@@ -46,7 +58,7 @@ const [tagsToDisplay, setTagsToDisplay]=  useState(allTags)
         }
         // console.log(result)
         // return result resultat à retourner pour controller les selected tags
-        return true
+        return result
     }
 
 
@@ -63,22 +75,12 @@ const [tagsToDisplay, setTagsToDisplay]=  useState(allTags)
 
 
 
-    function pickAndShuffle(datas,selected=[]){
-        let datasLength = datas.length
-        let selectedDatas = []
+    function pickAndShuffle(datas,selected=[allTags]){
+        // let datasLength = datas.length
 
-        //select the favorites thinkTanks
-        while(datasLength > 0){
-            if( isSelected(datas[datasLength - 1],selected)){
-                selectedDatas.push(datas[datasLength - 1])
-            }
-            // console.log(datas[datasLength - 1])
-            datasLength -= 1
-        }
-        // console.log(selectedDatas)
 
         //shuffle and pack the favorites thinkTanks
-        let randomthinkTanks = shuffleArray(selectedDatas);
+        let randomthinkTanks = shuffleArray(datas);
         let randomized = []
         {
             randomthinkTanks.map((p) => (
@@ -105,10 +107,12 @@ const [tagsToDisplay, setTagsToDisplay]=  useState(allTags)
         const  [thinkTanks, setThinkTanks] = useState({})
         useEffect(() => {
             const getData = async () =>{
+                setTagsToDisplay(selectedTags.length !== 0 ? selectedTags : allTags)
+                console.log(tagsToDisplay)
                 const request = {
-                    limit : 10,
-                    offset: 0,
-                    tags:["fashion", "IA"],
+                    limit :30,
+                    offset: 1,
+                    tags:tagsToDisplay,
                     lang: "fr",
                 }
                    try {
@@ -123,36 +127,37 @@ const [tagsToDisplay, setTagsToDisplay]=  useState(allTags)
             }
 
             getData()
-
-        },[])
+console.log("think tank avant formattage", thinkTanks)
+        },[tagsToDisplay])
 
     //
 
-    const finalData = useMemo( () =>
-        pickAndShuffle(Object.entries(thinkTanks), tagsToDisplay),[allTags])
 
-// const allData = pickAndShuffle(Object.entries(thinkTanks), tagsToDisplay)
+    // const finalData = useMemo( () =>
+    //     pickAndShuffle(Object.entries(thinkTanks), allTags),[allTags,tagsToDisplay,setTagsToDisplay,selectedTags])
+
+const allData = pickAndShuffle(Object.entries(thinkTanks), tagsToDisplay)
     //end get data with post request on api
 
-// console.log(finalData)//Object.entries(data) : turns an Object formatted data to array formatted data
+console.log(allData)//
 
 
 
 
     return(
         <div className="big_container">
-            {finalData.map((randomized, index) => (
+            {allData.map((randomized, index) => (
                 <div key={index} className={`thinktanklist__container container and${index}`}>
 
                     {randomized.map((p,index) => (
 
                         <div key={index} className={`areas area${index + 1}`} >
-                            {/*{console.log(p)}*/}
+                            {/*{console.log(p.brand)}*/}
                             <ThinkTankItem
                                 id={p.id}
                                 title={p.member.pseudo}
-                                brand = {"brand"}
-                                url={"https://google.com"}
+                                brand = {p.brand !== null ? p.brand.name : 0}
+                                url={p.brand !== null ? p.brand.link : 0}
                                 images={p.images}
                                 tags ={p.tags}
                                 text={p.content}
@@ -169,7 +174,7 @@ const [tagsToDisplay, setTagsToDisplay]=  useState(allTags)
                 </div>
             ))}
             <Modal showModal={showModal}  setShowModal={setShowModal} images={modalVar[0]} title={modalVar[1]} url={modalVar[3]} tags={modalVar[2]} text={modalVar[4]} date={modalVar[5]}></Modal>
-            {/*{console.log(modalVar)}*/}
+            {console.log(modalVar)}
         </div>
 
 

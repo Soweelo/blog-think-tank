@@ -55,6 +55,7 @@ const ModalImgWrapper = styled.div`
     right:0;
     color:white;
     padding:1rem;
+    text-shadow: 1px 1px 1px black;
   }
   .icons{
     position: absolute;
@@ -206,7 +207,7 @@ export default function Modal({showModal , setShowModal, images, tags, title, ur
                                     images ?
                                         <img src={PF +"/"+images.small}  srcSet={`${PF +"/"+images.thumb} 768w, ${PF +"/"+images.small} 3200w`} alt={title}/>
                                         :
-                                        <img src={PF +"/storage/app/public/4.jpg"}  alt={title}/>
+                                        <img src={PF +"/storage/app/public/your-world-3-0-default-black-background.jpeg"}  alt={title}/>
                                 }
                                 <div className="tags">
                                         {tags.map((p, index)=>(
@@ -228,14 +229,13 @@ export default function Modal({showModal , setShowModal, images, tags, title, ur
 
                             <ModalContent className="modal-content">
                                 <h1>{title}</h1>
-                                <p className="modal__date"><CalendarTodayIcon/>{date}</p>
+                                <p className="modal__date"><CalendarTodayIcon/>{date.substr(0,10)}</p>
                                 <p dangerouslySetInnerHTML={{ __html: text }}>
                                 </p>
-                                <a href={"https://"+url} target="blank" >See website</a>
                                 {
-                                    url && <CloseModalButton aria-label='Close modal' onClick={() => setShowModal(prev =>!prev)}></CloseModalButton>
+                                    (url !== 0)  &&  <a href={url} target="blank" >See website</a>
                                 }
-
+                                <CloseModalButton aria-label='Close modal' onClick={() => setShowModal(prev =>!prev)}></CloseModalButton>
 
                             </ModalContent>
                       </ModalWrapper>

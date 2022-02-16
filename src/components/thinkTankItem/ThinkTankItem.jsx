@@ -8,7 +8,7 @@ export default memo(function ThinkTankItem ({id, images,title,tags,url,text, dat
     const updateModalVar =  e => {
         setModalVar([images,title,tags,url,text,date, brand])
         setShowModal(true)
-        console.log([images,title,tags,url,text,date])
+        console.log([images,title,tags,url,text,date, brand])
     }
 
     return(
@@ -18,7 +18,7 @@ export default memo(function ThinkTankItem ({id, images,title,tags,url,text, dat
                     images ?
                         <img src={PF +"/"+images.small}  srcSet={`${PF +"/"+images.thumb} 768w, ${PF +"/"+images.small} 3200w`} alt={title}/>
                         :
-                        <img src={PF +"/storage/app/public/4.jpg"}  alt={title}/>
+                        <img src={PF +"/storage/app/public/your-world-3-0-default-black-background.jpeg"}  alt={title}/>
                 }
 
 
@@ -30,7 +30,11 @@ export default memo(function ThinkTankItem ({id, images,title,tags,url,text, dat
                     ))}
                 </div>
                 <div className="thinktankItem__message">{title}</div>
-                <div className="thinktankItem__url">{url}</div>
+                {
+                    (url !== 0) &&
+                    <div className="thinktankItem__url">{url}</div>
+                }
+
                 <div className="thinktankItem__icons">
                     <div className="icon1"><Favorite/></div>
                     <div className="icon2"><Share/></div>
