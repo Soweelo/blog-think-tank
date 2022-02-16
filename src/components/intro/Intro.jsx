@@ -16,6 +16,7 @@ export default function Intro(){
     const textRef = useRef();
     const scrollRef = useRef();
     const [favorites, setFavorites] =useState(userFav);
+    const [tagsToDisplay, setTagsToDisplay]=  useState([])
     // console.log(userFav)
     useEffect(()=>{
         init(textRef.current, {
@@ -33,10 +34,16 @@ export default function Intro(){
                 const answ = await axios
                     .get(PF +"/api/tags")
                     setAllTags(answ.data.data)
-                    console.log(answ.data.data)
+                    console.log("INTRO","tags chargés dans l intro",answ.data.data)
+            setTagsToDisplay(allTags)
         }
         getTags()
     },[])
+
+    useEffect(() => {
+        (selectedTags.length !== 0) ? setTagsToDisplay(selectedTags) : setTagsToDisplay(allTags)
+        console.log("INTRO","nouveau tags to display recupéré dans l intro",tagsToDisplay)
+    },[allTags,selectedTags])
     
     return(
 
@@ -50,7 +57,7 @@ export default function Intro(){
              
             </div>
 
-            <ThinkTankList props={false} favorites={favorites} selectedTags={selectedTags}  allTags={allTags}/>
+            <ThinkTankList props={false} favorites={favorites} tagsToDisplay={tagsToDisplay}  allTags={allTags}/>
        
 
 
