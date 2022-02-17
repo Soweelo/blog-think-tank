@@ -3,15 +3,22 @@ import "./thinktanklist.scss"
 // import {thinkTanks} from "../../dummy"
 import axios from 'axios';
 import ThinkTankItem from "../thinkTankItem/ThinkTankItem"
-import {useEffect, useState, memo, useMemo} from "react"
+import {useEffect, useState, memo, useMemo, useCallback} from "react"
 import Modal from "../modal/Modal";
 
-export default memo(function ThinkTankList({props, favorites, tagsToDisplay ,allTags}) {
+export default memo(function ThinkTankList({props, favorites, tagsToDisplay ,allTags, lang}) {
 
-  
     const PF = process.env.REACT_APP_PUBLIC_FOLDER
+    //set modal vars and set open modal
+    const [modalVar, setModalVar] = useState([]);
+    const [showModal, setShowModal] = useState(false);
 
-// const [tagsToDisplay,setTagsToDisplay]
+    const openModal = () => {
+        setShowModal(true);
+    }
+    // console.log(modalVar)
+
+
     //fonction shuffle
     function shuffleArray(array) {
         let curId = array.length;
@@ -28,46 +35,8 @@ export default memo(function ThinkTankList({props, favorites, tagsToDisplay ,all
         return array;
     }
 
-//     //fonction isFav, return true or false, prends en parametre un tableau de thinktankdata (correspond à un thinktank avec ses caracteristiques) et un tableau de selection
-//     function isSelected(data, selection=[]) {
-//         let result = false
-// // console.log(data)
-//         let curDataTagsLength = data[1]["tags"].length;
-//
-//         while(curDataTagsLength >0){
-//
-//             const curThinktankTag = selection.find((tag) => data[1]["tags"][curDataTagsLength -1] === tag)
-//
-//             if(curThinktankTag){
-//                 result = true
-//                 return result
-//             }
-//             curDataTagsLength -= 1;
-//         }
-//         // console.log(result)
-//         // return result resultat à retourner pour controller les selected tags
-//         return result
-//     }
-
-
-
-    //set modal vars and set open modal
-    const [modalVar, setModalVar] = useState([]);
-    const [showModal, setShowModal] = useState(false);
-
-    const openModal = () => {
-        setShowModal(true);
-    }
-    // console.log(modalVar)
-
-
-
-
-    function pickAndShuffle(datas,selected=[allTags]){
-        // let datasLength = datas.length
-
-
-        //shuffle and pack the favorites thinkTanks
+    function pickAndShuffle(datas){
+        //shuffle and pack the thinktanks
         let randomthinkTanks = shuffleArray(datas);
         let randomized = []
         {
@@ -93,17 +62,17 @@ export default memo(function ThinkTankList({props, favorites, tagsToDisplay ,all
     //get data with post request on api
      
         const  [thinkTanks, setThinkTanks] = useState({})
-    console.log("THINKTANKLIST","before useffect","alltags: ", allTags ,"  tags to display : ", tagsToDisplay)
+    // console.log("THINKTANKLIST","before useffect","alltags: ", allTags ,"  tags to display : ", tagsToDisplay)
         useEffect(() => {
 
             const getData = async () =>{
                 // setTagsToDisplay(selectedTags.length !== 0 ? selectedTags : allTags)
-                console.log("THINKTANKLIST","boucle de useffect commune: getData. vérifier TagstoDisplay ",tagsToDisplay)
+                // console.log("THINKTANKLIST","boucle de useffect commune: getData. vérifier TagstoDisplay ",tagsToDisplay)
                 const request = {
                     limit :30,
                     offset: 1,
                     tags: tagsToDisplay,
-                    lang: "en",
+                    lang: lang,
                 }
                    try {
                     await axios
@@ -117,7 +86,7 @@ export default memo(function ThinkTankList({props, favorites, tagsToDisplay ,all
             }
 
             getData()
-console.log("THINKTANKLIST","think tank avant formattage, une boucle de useeffect", thinkTanks)
+// console.log("THINKTANKLIST","think tank avant formattage, une boucle de useeffect", thinkTanks)
         },[allTags, tagsToDisplay])
 
     //
@@ -126,17 +95,25 @@ console.log("THINKTANKLIST","think tank avant formattage, une boucle de useeffec
     // const finalData = useMemo( () =>
     //     pickAndShuffle(Object.entries(thinkTanks), allTags),[allTags,tagsToDisplay,setTagsToDisplay,selectedTags])
 
-const allData = pickAndShuffle(Object.entries(thinkTanks), tagsToDisplay)
+const allData = useMemo(function (){
+    // console.log("*THINKTANKS USE MEMO ALLDATA, VALEUR tags to display:",tagsToDisplay ,"thinkktank", thinkTanks)
+        return(
+
+            pickAndShuffle(Object.entries(thinkTanks))
+        )
+
+    },[thinkTanks,tagsToDisplay])
+
     //end get data with post request on api
 
-console.log("THINKTANKLIST","data formatté en dehors du useeffect",allData)//
+// console.log("THINKTANKLIST","data formatté en dehors du useeffect",allData)//
 
 
 
 
     return(
         <div className="big_container">
-            {console.log('le component re render')}
+            {/*{console.log('le component re render')}*/}
             {allData.map((randomized, index) => (
                 <div key={index} className={`thinktanklist__container container and${index}`}>
 

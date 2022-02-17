@@ -8,7 +8,7 @@ export default memo(function ThinkTankItem ({id, images,title,tags,url,text, dat
     const updateModalVar =  e => {
         setModalVar([images,title,tags,url,text,date, brand])
         setShowModal(true)
-        console.log([images,title,tags,url,text,date, brand])
+        // console.log([images,title,tags,url,text,date, brand])
     }
 
     return(
