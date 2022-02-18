@@ -50,6 +50,7 @@ background-image: url("${PF}/storage/app/public/4.jpg");
 getCookie(lang)
         if(getCookie("lang").length == 0){
             setLang(navigator.language.substr(0,2))
+
             // console.log("nocookie")
         }else{
             setLang(getCookie("lang"))
@@ -64,7 +65,7 @@ getCookie(lang)
   return (
       <>
           <div className="app">
-              <Topbar homeContent={homeContent} setHomeContent={setHomeContent} setLang={setLang} lang={lang}/>
+              <Topbar homeContent={homeContent} setHomeContent={setHomeContent} setLang={setLang} lang={lang} />
               <SectionMain className="sections" >
 
                   {/*<OnePageContent omeContent={homeContent} setHomeContent={setHomeContent}/>*/}

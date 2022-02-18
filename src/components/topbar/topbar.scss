@@ -44,24 +44,22 @@
     .nav{
       display: flex;
       margin-right: 15px;
+      align-items: center;
       .nav__link{
         margin-right: 15px;
         font-size: 18px;
         cursor: pointer;
-        .nav__link-GT-input{
-          display: none;
-          position: absolute;
-          top: 45px;
-          padding: 5px;
-          background-color: white;
-          right: 5px;
 
-        }
-        //&.active{
-        //           .nav__link-GT-input{
-        //    display: flex;
-        //  }
-        //}
+
+      }
+      .nav__link-GT-icon{
+        margin-left: 2rem;
+
+      }
+      .nav__link-GT-input{
+        right: 5px;
+        width: 8rem;
+        height: 2.5rem;
 
       }
     }
