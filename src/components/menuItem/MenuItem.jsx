@@ -1,6 +1,6 @@
 import "./menuitem.scss"
-import {useEffect, useRef, useState} from 'react';
-import { MdClose } from 'react-icons/md';
+// import {useEffect, useRef, useState} from 'react';
+// import { MdClose } from 'react-icons/md';
 import AutoCSearchbar from "../autoCSearchBar/AutoCSearchbar";
 
 export default function MenuItem({id, title, menuOpen, setMenuOpen,favorites, setFavorites,allTags,selectedTags, setSelectedTags}){

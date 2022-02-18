@@ -1,17 +1,38 @@
-import "./moreabout.scss"
-import BackHomeButton from "../backHomeButton/BackHomeButton"
-export default function MoreAbout(){
-    return(
-        <div id="moreabout">
-            <BackHomeButton/>
-            <h1>More about</h1>
-            <div className="moreabout__para-container">
-                <p>
-                    We are a strongly motivated team, from different countries, and with you, highly motivated too, whoever you are from, we will build or renovate step by step our new creative world 2.0, the one we wish, we imagine.
-                    Yes, the driver is a French architect, who can easily imagine building a new world from nothing or restoring an historic world ; impossible is not French !
-                    Together, ready to post ?
-                </p>
-            </div>
-        </div>
-)
-}
+import "./moreabout.scss";
+import BackHomeButton from "../backHomeButton/BackHomeButton";
+import { useEffect, useState, memo } from "react";
+import axios from "axios";
+export default memo(function MoreAbout({ lang }) {
+  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+  const [option_moreabout_title, setOption_moreabout_title] = useState("");
+  const [option_moreabout_text, setOption_moreabout_text] = useState("");
+
+  useEffect(() => {
+    const getOptions = async (key) => {
+      const moreabout_title = await axios.get(
+        PF + "/api/options/getByKey?lang=" + lang + "&key=05_more_about"
+      );
+      const moreabout_text = await axios.get(
+        PF + "/api/options/getByKey?lang=" + lang + "&key=04_more_about"
+      );
+
+      setOption_moreabout_title(moreabout_title.data.data.value);
+      setOption_moreabout_text(moreabout_text.data.data.value);
+    };
+
+    if (lang.length !== 0) {
+      getOptions();
+    }
+    // console.log("useffect  de topbar", "lang", lsang,"bottomCcontecnt",bottomBarContent,"topbar:",topBarContent )
+  }, [lang]);
+  return (
+    <div id="moreabout">
+      <BackHomeButton />
+      <h1>{option_moreabout_title}</h1>
+      <div
+        dangerouslySetInnerHTML={{ __html: option_moreabout_text }}
+        className="moreabout__para-container"
+      ></div>
+    </div>
+  );
+});

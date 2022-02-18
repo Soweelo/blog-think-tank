@@ -2,8 +2,8 @@ import "./intro.scss"
 import Menu from "../menu/Menu";
 import ThinkTankList from "../thinktankList/ThinkTankList";
 import { init } from 'ityped';
-import React, { useRef, useEffect,useState, Component, useMemo } from 'react'
-import { useScrollPosition, useScrollXPosition, useScrollYPosition } from 'react-use-scroll-position';
+import React, { useRef, useEffect,useState} from 'react'
+// import { useScrollPosition, useScrollXPosition, useScrollYPosition } from 'react-use-scroll-position';
 import {userFav} from "../../dummy"
 // import {thinkTanks} from "../../dummy"
 // import Scroll from"../scroll/scroll"
@@ -16,7 +16,7 @@ export default function Intro( {lang}){
     const textRef = useRef();
     const scrollRef = useRef();
     const [favorites, setFavorites] =useState(userFav);
-    const [tagsToDisplay, setTagsToDisplay]=  useState([])
+
     const  [allTags, setAllTags] = useState([])
 
     // console.log(userFav)
@@ -29,17 +29,6 @@ export default function Intro( {lang}){
             strings: ['WORLD 1.0', 'WORLD 2.0','WORLD 3.0' ]
         })
 
-
-        const getTags = async () =>{
-            const answ = await axios
-                .get(PF +"/api/tags")
-            setAllTags(answ.data.data)
-            // console.log("INTRO","tags chargés dans l intro",answ.data.data)
-            setTagsToDisplay(allTags)
-        }
-        getTags()
-
-
     },[])
     
 
@@ -51,15 +40,11 @@ export default function Intro( {lang}){
                     .get(PF +"/api/tags")
                     setAllTags(answ.data.data)
                     // console.log("INTRO","tags chargés dans l intro",answ.data.data)
-            setTagsToDisplay(allTags)
         }
         getTags()
     },[])
 
-    useEffect(() => {
-        (selectedTags.length !== 0) ? setTagsToDisplay(selectedTags) : setTagsToDisplay(allTags)
-        // console.log("INTRO","nouveau tags to display recupéré dans l intro",tagsToDisplay)
-    },[allTags,selectedTags])
+
 
 
     return(
@@ -74,7 +59,7 @@ export default function Intro( {lang}){
              
             </div>
 
-            <ThinkTankList props={false} favorites={favorites} tagsToDisplay={tagsToDisplay}  allTags={allTags} lang={lang} />
+            <ThinkTankList  favorites={favorites} selectedTags={selectedTags}  allTags={allTags} lang={lang} />
             <Scroll/>
 
 

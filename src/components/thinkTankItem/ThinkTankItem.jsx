@@ -1,6 +1,6 @@
 import "./thinktankitem.scss"
-import { Favorite, Share, Create, Comment } from "@material-ui/icons";
-import {useState, memo, useMemo} from 'react';
+import { Favorite, Share, Comment } from "@material-ui/icons";
+import {memo} from 'react';
 // import Modal from "../modal/Modal"
 
 export default memo(function ThinkTankItem ({id, images,title,tags,url,text, date,showModal, setShowModal,modalVar,setModalVar, brand}){

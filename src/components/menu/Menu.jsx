@@ -1,6 +1,6 @@
 import "./menu.scss"
 import MenuItem from "../menuItem/MenuItem"
-import {useState,useRef} from 'react'
+import {useState} from 'react'
 
 
 export default function Menu({favorites, setFavorites, allTags, selectedTags, setSelectedTags}){

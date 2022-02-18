@@ -3,16 +3,16 @@ import "./thinktanklist.scss"
 // import {thinkTanks} from "../../dummy"
 import axios from 'axios';
 import ThinkTankItem from "../thinkTankItem/ThinkTankItem"
-import {useEffect, useState, memo, useMemo, useCallback} from "react"
+import {useEffect, useState, memo, useMemo} from "react"
 import Modal from "../modal/Modal";
 
-export default memo(function ThinkTankList({props, favorites, tagsToDisplay ,allTags, lang}) {
+export default memo(function ThinkTankList({ favorites, selectedTags ,allTags, lang}) {
 
     const PF = process.env.REACT_APP_PUBLIC_FOLDER
     //set modal vars and set open modal
     const [modalVar, setModalVar] = useState([]);
     const [showModal, setShowModal] = useState(false);
-
+    const [tagsToDisplay, setTagsToDisplay]=  useState([])
     const openModal = () => {
         setShowModal(true);
     }
@@ -39,10 +39,8 @@ export default memo(function ThinkTankList({props, favorites, tagsToDisplay ,all
         //shuffle and pack the thinktanks
         let randomthinkTanks = shuffleArray(datas);
         let randomized = []
-        {
             randomthinkTanks.map((p) => (
                 randomized.push(p[1])))
-        }
         // console.log(randomized)
 
         //now let's create a fonction to slice randomized in array of numGroup
@@ -59,35 +57,40 @@ export default memo(function ThinkTankList({props, favorites, tagsToDisplay ,all
 
     }
 
+    useEffect(() => {
+        (selectedTags.length !== 0) ? setTagsToDisplay(selectedTags) : setTagsToDisplay(allTags)
+        // console.log("INTRO","nouveau tags to display recupéré dans l intro",tagsToDisplay)
+    },[allTags,selectedTags])
+
     //get data with post request on api
      
         const  [thinkTanks, setThinkTanks] = useState({})
     // console.log("THINKTANKLIST","before useffect","alltags: ", allTags ,"  tags to display : ", tagsToDisplay)
         useEffect(() => {
 
-            const getData = async () =>{
-                // setTagsToDisplay(selectedTags.length !== 0 ? selectedTags : allTags)
-                // console.log("THINKTANKLIST","boucle de useffect commune: getData. vérifier TagstoDisplay ",tagsToDisplay)
-                const request = {
-                    limit :30,
-                    offset: 1,
-                    tags: tagsToDisplay,
-                    lang: lang,
+                const getData = async () =>{
+                    // setTagsToDisplay(selectedTags.length !== 0 ? selectedTags : allTags)
+                    // console.log("THINKTANKLIST","boucle de useffect commune: getData. vérifier TagstoDisplay ",tagsToDisplay)
+                    const request = {
+                        limit :30,
+                        offset: 1,
+                        tags: selectedTags,
+                        lang: lang,
+                    }
+                    try {
+                        await axios
+                            .post(PF +"/api/posts/find", request)
+                            .then((response) => {
+                                setThinkTanks(response.data.data)
+                            })
+                    }
+                    catch (e) {
+                    }
                 }
-                   try {
-                    await axios
-                        .post(PF +"/api/posts/find", request)
-                        .then((response) => {
-                            setThinkTanks(response.data.data)
-                        })
-                }
-                catch (e) {
-                }
-            }
+                getData()
 
-            getData()
 // console.log("THINKTANKLIST","think tank avant formattage, une boucle de useeffect", thinkTanks)
-        },[allTags, tagsToDisplay])
+        },[selectedTags])
 
     //
 

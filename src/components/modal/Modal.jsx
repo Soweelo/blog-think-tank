@@ -144,12 +144,12 @@ const CloseModalButton = styled(MdClose)`
   border-radius: 50%;
    background-color: #eeeeeec9;
 `;
-const ModalFloat= styled.div`
-    position: absolute;
-    left: 0;
-    top:0;
-`
-;
+// const ModalFloat= styled.div`
+//     position: absolute;
+//     left: 0;
+//     top:0;
+// `
+// ;
 export default function Modal({showModal , setShowModal, images, tags, title, url, text, date}) {
     const PF = process.env.REACT_APP_PUBLIC_FOLDER
 
@@ -182,7 +182,7 @@ export default function Modal({showModal , setShowModal, images, tags, title, ur
 
             }
         },
-        [setShowModal, showModal, setIsClicked,isClicked]
+        [setShowModal, showModal, setIsClicked]
     );
 
     useEffect(

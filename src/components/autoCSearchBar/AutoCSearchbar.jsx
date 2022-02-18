@@ -1,11 +1,11 @@
 import "./autocsearchbar.scss"
-import {useEffect, useRef, useState} from 'react';
+import { useState} from 'react';
 import { MdClose } from 'react-icons/md';
 
 export default function AutoCSearchbar({selectedItems, setSelectedItems,allItems, id}){
     const [isSuggestion, setIsSuggestion] = useState(false);
     const [eMessage, setEMessage] = useState('');
-    const [selectedOption,setSelectedOption] = useState(null)
+    // const [selectedOption,setSelectedOption] = useState(null)
     const [searchText,setSearchText] = useState("")
 
 
@@ -25,12 +25,12 @@ export default function AutoCSearchbar({selectedItems, setSelectedItems,allItems
     const addItem = (e) =>{
         setEMessage('')
         let input = (e.target.className === "suggestion-select-item") ? e.target.attributes["tagsuggest"].value : e.target.value;
-        let existsSuchItem= allItems.filter(allItems => allItems == input)
-        let existsSuchSelectedItem = selectedItems.filter(selectedItems => selectedItems == input)
+        let existsSuchItem= allItems.filter(allItems => allItems === input)
+        let existsSuchSelectedItem = selectedItems.filter(selectedItems => selectedItems === input)
 
         if(e.target.className === "suggestion-select-item"){
 
-            if(existsSuchSelectedItem.length == 0){
+            if(existsSuchSelectedItem.length === 0){
                 setSelectedItems([...selectedItems, e.target.attributes["tagsuggest"].value])
                 //attention içi problème probable car dès que cette classe dès que le compoant est utilisé deux fois
                 document.getElementsByClassName('tagcontainer--input'+id)[0].value = ''
@@ -42,7 +42,7 @@ export default function AutoCSearchbar({selectedItems, setSelectedItems,allItems
         if(e.key === 'Enter' && e.target.value.length >0 ){
 
             if(existsSuchItem.length >0){
-                if(existsSuchSelectedItem.length == 0){
+                if(existsSuchSelectedItem.length === 0){
                     setSelectedItems([...selectedItems, e.target.value])
                     e.target.value =''
                     setIsSuggestion(false)
@@ -75,7 +75,7 @@ export default function AutoCSearchbar({selectedItems, setSelectedItems,allItems
 
     if(/Android [4-6]/.test(navigator.appVersion)) {
         window.addEventListener("resize", function() {
-            if(document.activeElement.tagName=="INPUT" || document.activeElement.tagName=="TEXTAREA") {
+            if(document.activeElement.tagName==="INPUT" || document.activeElement.tagName==="TEXTAREA") {
                 window.setTimeout(function() {
                     document.activeElement.scrollIntoViewIfNeeded();
                 },0);
