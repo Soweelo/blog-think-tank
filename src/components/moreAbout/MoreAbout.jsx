@@ -2,7 +2,7 @@ import "./moreabout.scss";
 import BackHomeButton from "../backHomeButton/BackHomeButton";
 import { useEffect, useState, memo } from "react";
 import axios from "axios";
-export default memo(function MoreAbout({ lang }) {
+export default function MoreAbout({ lang }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [option_moreabout_title, setOption_moreabout_title] = useState("");
   const [option_moreabout_text, setOption_moreabout_text] = useState("");
@@ -35,4 +35,4 @@ export default memo(function MoreAbout({ lang }) {
       ></div>
     </div>
   );
-});
+}
