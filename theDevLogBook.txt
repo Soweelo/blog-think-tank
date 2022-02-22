@@ -1,0 +1,6 @@
+*** Résoudre l'erreur Can't perform a React state update on an unmounted component
+Comme indiqué par l'erreur ce problème survient lorsque un callback qui change l'état d'un composant est appelé après que le composant soit démonté. Cela arrive souvent lorsque l'on contacte une API distante ou lorsque l'on oublie de clearTimeout() un intervalle précédemment créé.
+
+La solution, créer une reference isMounted et n'executer les mises à jour de valeur après les fetch async await que si isMouted est true.
+ontroller
+https://grafikart.fr/tutoriels/cant-perform-react-update-1973#autoplay

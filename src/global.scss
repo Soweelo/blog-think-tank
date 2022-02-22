@@ -11,7 +11,10 @@ $padbreak:1300px;
   border: 1px solid $primary;
   border-radius: 20px;
 }
-
+.loader{
+  position: absolute;
+  top: 40%;
+}
 @mixin mobile{
   @media (max-width: #{$mobilebreak}) {
     @content

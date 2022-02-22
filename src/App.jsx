@@ -64,44 +64,6 @@ function App() {
     // console.log("lang: ",lang,"navigator:", navigator.language,"getCookielang",getCookie(lang).length)
   }, []);
 
-  // useEffect(() =>{
-  //     setTopbarContent([])
-  //     setBottomBarContent([])
-  //     setIntroContent([])
-  //     setFaqContent([])
-  //     setMoreAboutContent([])
-  //     setJoinContent([])
-  //     const getOptions = async () => {
-  //         const rep = await axios.get(PF +"/api/options?lang=" + lang)
-  //
-  //         rep.data.data.map((option) => {
-  //             // console.log(option)
-  //             if(option.key.substr(0,2) === "01"){
-  //                 let arrayone = topBarContent
-  //                 let  newContent = arrayone.push(option)
-  //                 // console.log("each time arrayone",arrayone)
-  //                 setTopbarContent(arrayone)
-  //                 arrayone = []
-  //                 newContent=""
-  //             }else if(option.key.substr(0,2) === "05"){
-  //                 let arrayfive = bottomBarContent
-  //                 let  newContentfive = arrayfive.push(option)
-  //                 // console.log("each time arrayfive",arrayfive)
-  //                 setBottomBarContent(arrayfive)
-  //                 arrayfive = []
-  //                 newContentfive =""
-  //             }else{
-  //
-  //             }
-  //         })
-  //     }
-  //
-  //     if( lang.length !== 0){
-  //         getOptions()
-  //     }
-  //     console.log("useffect  de getlang se declenche", "lang", lang,"bottomContent",bottomBarContent,"topbar:",topBarContent )
-  // },[lang])
-
   return (
     <>
       <div className="app">

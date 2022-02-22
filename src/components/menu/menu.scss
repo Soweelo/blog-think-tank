@@ -6,7 +6,12 @@
   padding: 0;
   margin-bottom: 5rem;
   color:$complementary;
-
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  &.not-transparent{
+  opacity: 1;
+  //background-color: red;
+}
 
 
   @include mobile{
