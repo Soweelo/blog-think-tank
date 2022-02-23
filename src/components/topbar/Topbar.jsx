@@ -6,7 +6,14 @@ import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
 import { useFetch } from "../../hooks/useFetch";
 
-export default function Topbar({ homeContent, setHomeContent, lang, setLang }) {
+export default function Topbar({
+  homeContent,
+  setHomeContent,
+  lang,
+  setLang,
+  setShowLogin,
+  showLogin,
+}) {
   // const [isOpenedGT, setIsOpenedGT]= useState(false);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [allLang, setAllLang] = useState([]);
@@ -79,6 +86,10 @@ export default function Topbar({ homeContent, setHomeContent, lang, setLang }) {
       getOptions();
     }
   }, [lang]);
+
+  function openLoginInterface() {
+    setShowLogin(!showLogin);
+  }
   return (
     <div className="topbar">
       <div className="wrapper">
@@ -101,7 +112,7 @@ export default function Topbar({ homeContent, setHomeContent, lang, setLang }) {
           <div className="nav__link">
             <Search />
           </div>
-          <div className="nav__link">
+          <div className="nav__link" onClick={() => openLoginInterface()}>
             <Person />
           </div>
           <div className="nav__link nav__link-GT-icon">

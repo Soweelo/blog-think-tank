@@ -1,6 +1,12 @@
 @import "../../global.scss";
 .big_container{
   margin-bottom:150px;
+  //color: red;
+  //font-size: 2rem;
+  @include pad{
+
+      width: 100%;
+  }
   .thinktanklist__container{
     &.and0{
       margin-top: 0;

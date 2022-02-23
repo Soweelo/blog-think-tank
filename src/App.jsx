@@ -12,12 +12,15 @@ import MainMenu from "./components/mainMenu/MainMenu";
 
 import styled from "styled-components";
 import axios from "axios";
+import MemberLoginandRegister from "./components/login/MemberLoginandRegister";
 
 function App() {
   const [mainMenuOpen, setMainMenuOpen] = useState(false);
   const [homeContent, setHomeContent] = useState("0");
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [lang, setLang] = useState("");
+  const [showLogin, setShowLogin] = useState(true);
+
   const SectionMain = styled.div`
     background-image: url("${PF}/storage/app/public/4.jpg");
   `;
@@ -37,19 +40,6 @@ function App() {
     }
     return "";
   }
-
-  //     useEffect(() =>{
-  //
-  //     },[mainMenuOpen,homeContent, setHomeContent]
-  // )
-
-  //useEffect get options according to lang parameter
-  // const [topBarContent, setTopbarContent] = useState([])
-  // const [introContent, setIntroContent] = useState([])
-  // const [bottomBarContent, setBottomBarContent] = useState([])
-  // const [faqContent, setFaqContent] = useState([])
-  // const [moreAboutContent, setMoreAboutContent] = useState([])
-  // const [joinContent, setJoinContent] = useState([])
 
   useEffect(() => {
     if (getCookie("lang").length === 0) {
@@ -72,8 +62,10 @@ function App() {
           setHomeContent={setHomeContent}
           setLang={setLang}
           lang={lang}
+          showLogin={showLogin}
+          setShowLogin={setShowLogin}
         />
-        <SectionMain className="sections">
+        <SectionMain className={`sections${showLogin ? " filter" : ""}`}>
           {/*<OnePageContent omeContent={homeContent} setHomeContent={setHomeContent}/>*/}
           {(() => {
             switch (homeContent) {
@@ -99,6 +91,8 @@ function App() {
           homeContent={homeContent}
           setHomeContent={setHomeContent}
           lang={lang}
+          showLogin={showLogin}
+          setShowLogin={setShowLogin}
         />
         <Bottombar
           mainMenuOpen={mainMenuOpen}
@@ -106,6 +100,10 @@ function App() {
           homeContent={homeContent}
           setHomeContent={setHomeContent}
           lang={lang}
+        />
+        <MemberLoginandRegister
+          showLogin={showLogin}
+          setShowLogin={setShowLogin}
         />
       </div>
     </>

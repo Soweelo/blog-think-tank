@@ -1,16 +1,37 @@
 @import "../../global.scss";
 .bckHome{
-
-  z-index:50;
-  position :fixed !important;
-  bottom:10vh;
-  background-color: white!important;
+  z-index: 15;
+  position: fixed !important;
+  top: 10vh;
+  background-color: white !important;
   border-radius: 50%;
-  border: 1px solid $secondary;
-padding: 1rem;
+  border: 1px solid #383534;
+  padding: 1rem;
   color: black !important;
-  right:5%;
+  //right: 5%;
   cursor: pointer;
+  height: 2rem;
+  width: 2rem;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  left: 5vh;
+  transition: background-color 0.3s ease;
+  &:hover{
+    background-color: $secondary!important;
+    border: 1px solid white;
+    a{
+      color: white!important;
+    }
+
+  }
+  @include mobile{
+    top:unset;
+    left: unset;
+    bottom: 1vh;
+    right: 1vh;
+  }
   a{
     text-decoration: none;
     color: $complementary;

@@ -14,6 +14,7 @@
     align-items: center;
     justify-content: space-between;
     height: 100%;
+    padding: 0.1rem;
 
     .heading-left{
       display: flex;
@@ -40,6 +41,9 @@
       @include mobile{
         display: none;
       }
+      @include pad{
+        display: none;
+      }
     }
     .nav{
       display: flex;
@@ -49,7 +53,9 @@
         margin-right: 15px;
         font-size: 18px;
         cursor: pointer;
-
+        @include mobile{
+          display:none;
+        }
 
       }
       .nav__link-GT-icon{
@@ -60,7 +66,10 @@
         right: 5px;
         width: 8rem;
         height: 2.5rem;
-
+        .Dropdown-control {
+                   color: $tertiary;
+                  height: 35px;
+        }
       }
     }
 

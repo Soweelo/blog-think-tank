@@ -21,7 +21,8 @@ const Background = styled.div`
 
 const ModalWrapper = styled.div`
   width: min(800px, 90%);
-  height: min(500px, 90%);
+  height: min(400px, 90%);
+
   box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
   background: #fff;
   color: #000;
@@ -99,7 +100,7 @@ const ModalContent = styled.div`
   color: #141414;
   overflow-y:scroll;
   padding:1rem;
-  margin: 1rem;
+
     scrollbar-width: thin;
   scrollbar-color: #fff0 #fff0;
   
@@ -196,7 +197,7 @@ export default function Modal({
   return (
     <>
       {showModal ? (
-        <Background onClick={closeModal} className="background">
+        <Background onClick={closeModal} className="backgtound">
           <animated.div
             style={animation}
             ref={modalRef}
@@ -251,9 +252,11 @@ export default function Modal({
                 </p>
                 <p dangerouslySetInnerHTML={{ __html: text }}></p>
                 {url !== 0 && (
-                  <a href={url} target="blank">
-                    See website
-                  </a>
+                  <div className="modal__button-wrapper">
+                    <a href={url} target="blank">
+                      See website
+                    </a>
+                  </div>
                 )}
                 <CloseModalButton
                   aria-label="Close modal"

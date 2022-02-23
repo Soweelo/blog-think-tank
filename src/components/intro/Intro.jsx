@@ -69,7 +69,9 @@ export default function Intro({ lang }) {
       {/*<Scroll showBelow="250"/>*/}
 
       <div className="intro__welcome" id="topIntro">
-        <h2>{option_welcome_title}</h2>
+        <div className="intro__welcome-h2-wrapper">
+          <h2>{option_welcome_title}</h2>
+        </div>
         <h1>
           YOUR <span ref={textRef}></span>
         </h1>
@@ -89,7 +91,7 @@ export default function Intro({ lang }) {
         allTags={allTags}
         lang={lang}
       />
-      <Scroll />
+      <Scroll showBelow={400} />
     </div>
   );
 }

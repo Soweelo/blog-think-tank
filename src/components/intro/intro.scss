@@ -26,6 +26,9 @@ height: unset!important;
       margin-bottom:5px;
       font-family: 'Inconsolata', monospace;
       text-shadow: -2px -2px white;
+      @include mobile{
+        max-width: 200px;
+      }
     }
     h1{
       letter-spacing: 2px;

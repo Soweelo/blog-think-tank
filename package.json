@@ -52,7 +52,7 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://api.yourworld20.com/api",
+  "proxy": "https://api.yworld3.com/api",
   "devDependencies": {
     "prettier": "2.5.1",
     "terser-brunch": "^4.1.0"
