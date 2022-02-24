@@ -80,7 +80,7 @@ export default memo(function ThinkTankList({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          limit: 10,
+          limit: 1000,
           offset: 0,
           tags: selectedTags,
           lang: lang,
@@ -116,6 +116,7 @@ export default memo(function ThinkTankList({
     function () {
       // console.log(thinkTanks);
       // console.log("*THINKTANKS USE MEMO ALLDATA, VALEUR tags to display:",tagsToDisplay ,"thinkktank", thinkTanks)
+      // alert("thinktank list re shuffles");
       return pickAndShuffle(Object.entries(thinkTanks));
     },
     [thinkTanks, tagsToDisplay]

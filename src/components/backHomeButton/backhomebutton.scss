@@ -21,6 +21,7 @@
   &:hover{
     background-color: $secondary!important;
     border: 1px solid white;
+    color: white!important;
     a{
       color: white!important;
     }
@@ -32,6 +33,7 @@
     bottom: 1vh;
     right: 1vh;
   }
+  color: $complementary;
   a{
     text-decoration: none;
     color: $complementary;

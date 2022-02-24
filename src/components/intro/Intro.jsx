@@ -2,7 +2,7 @@ import "./intro.scss";
 import Menu from "../menu/Menu";
 import ThinkTankList from "../thinktankList/ThinkTankList";
 import { init } from "ityped";
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, memo } from "react";
 // import { useScrollPosition, useScrollXPosition, useScrollYPosition } from 'react-use-scroll-position';
 import { userFav } from "../../dummy";
 // import {thinkTanks} from "../../dummy"
@@ -11,7 +11,7 @@ import axios from "axios";
 import Scroll from "../scroll/scroll";
 import { useFetch } from "../../hooks/useFetch";
 
-export default function Intro({ lang }) {
+export default memo(function Intro({ lang }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const fetch = useFetch();
   const [selectedTags, setSelectedTags] = useState([]);
@@ -54,8 +54,9 @@ export default function Intro({ lang }) {
       const welcome_title = await fetch(
         PF + "/api/options/getByKey?lang=" + lang + "&key=01_welcome"
       ).then((r) => r.json());
-
-      setOption_welcome_title(welcome_title.data.value);
+      if (welcome_title.data.value) {
+        setOption_welcome_title(welcome_title.data.value);
+      }
     };
 
     if (lang.length !== 0) {
@@ -94,4 +95,4 @@ export default function Intro({ lang }) {
       <Scroll showBelow={400} />
     </div>
   );
-}
+});

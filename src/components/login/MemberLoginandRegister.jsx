@@ -96,7 +96,7 @@ const StyledInput = styled.input`
 `;
 export default function MemberLoginandRegister({ showLogin, setShowLogin }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-
+  const [registerContent, setRegisterContent] = useState(true);
   const LoginRef = useRef();
   const animation = useSpring({
     config: {
@@ -131,7 +131,10 @@ export default function MemberLoginandRegister({ showLogin, setShowLogin }) {
     document.addEventListener("keydown", keyPress);
     return () => document.removeEventListener("keydown", keyPress);
   }, [keyPress]);
-
+  function switchContent() {
+    setRegisterContent(!registerContent);
+    console.log(registerContent);
+  }
   return (
     <>
       {showLogin ? (
@@ -142,7 +145,47 @@ export default function MemberLoginandRegister({ showLogin, setShowLogin }) {
             className="animated-div"
           >
             <LoginWrapper showLogin={showLogin} className="login-wrapper">
-              <LoginContent>
+              <LoginContent className={registerContent && "d-none"}>
+                <form action="">
+                  <div className="login__input-wrapper">
+                    <h1>LOGIN</h1>
+
+                    <div className="login__input-container">
+                      <Mail />
+                      <StyledInput
+                        className="input-field"
+                        type="text"
+                        placeholder="Email"
+                        name="email"
+                      />
+                    </div>
+
+                    <div className="login__input-container">
+                      <Lock />
+                      <StyledInput
+                        className="input-field"
+                        type="password"
+                        placeholder="Password"
+                        name="psw"
+                      />
+                    </div>
+
+                    <button className="btn login__btn-submit">Login</button>
+                    <div className="login__forgoten-psw">
+                      Forgotten password? <span>Click-here</span>!
+                    </div>
+                  </div>
+
+                  <div className=" login__btn-switch" onClick={switchContent}>
+                    Still not a Member? REGISTER HERE !
+                  </div>
+                </form>
+                <CloseLoginButton
+                  aria-label="Close Login"
+                  onClick={() => setShowLogin((prev) => !prev)}
+                ></CloseLoginButton>
+              </LoginContent>
+              <LoginContent className={!registerContent && "d-none"}>
                 <form action="">
                   <div className="login__input-wrapper">
                     <h1>REGISTER NOW</h1>
@@ -176,10 +219,11 @@ export default function MemberLoginandRegister({ showLogin, setShowLogin }) {
                         name="psw"
                       />
                     </div>
+
                     <button className="btn login__btn-submit">Register</button>
                   </div>
 
-                  <div className=" login__btn-switch">
+                  <div className=" login__btn-switch" onClick={switchContent}>
                     Already Member? LOGIN HERE !
                   </div>
                 </form>

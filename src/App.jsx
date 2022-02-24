@@ -19,7 +19,7 @@ function App() {
   const [homeContent, setHomeContent] = useState("0");
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [lang, setLang] = useState("");
-  const [showLogin, setShowLogin] = useState(true);
+  const [showLogin, setShowLogin] = useState(false);
 
   const SectionMain = styled.div`
     background-image: url("${PF}/storage/app/public/4.jpg");
@@ -65,19 +65,22 @@ function App() {
           showLogin={showLogin}
           setShowLogin={setShowLogin}
         />
+
         <SectionMain className={`sections${showLogin ? " filter" : ""}`}>
           {/*<OnePageContent omeContent={homeContent} setHomeContent={setHomeContent}/>*/}
           {(() => {
             switch (homeContent) {
               case "1":
-                return <MoreAbout lang={lang} />;
+                return (
+                  <MoreAbout lang={lang} setHomeContent={setHomeContent} />
+                );
               case "2":
-                return <Privacy lang={lang} />;
+                return <Privacy lang={lang} setHomeContent={setHomeContent} />;
 
               case "3":
-                return <Faq lang={lang} />;
+                return <Faq lang={lang} setHomeContent={setHomeContent} />;
               case "4":
-                return <BePart lang={lang} />;
+                return <BePart lang={lang} setHomeContent={setHomeContent} />;
 
               default:
                 return <Intro lang={lang} />;

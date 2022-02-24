@@ -2,6 +2,9 @@ import "./mainmenu.scss";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Favorite, Person, Search } from "@material-ui/icons";
+import { QueryClient, QueryClientProvider } from "react-query";
+import GetOption from "../getoption/GetOption";
+const queryClient = new QueryClient();
 export default function MainMenu({
   mainMenuOpen,
   setMainMenuOpen,
@@ -9,39 +12,9 @@ export default function MainMenu({
   setHomeContent,
   lang,
 }) {
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-  const [option_moreabout, setOption_moreabout] = useState("");
-  const [option_privacy, setOption_privacy] = useState("");
-  const [option_faq, setOption_faq] = useState("");
-  const [option_join, setOption_join] = useState("");
-  useEffect(() => {
-    const getOptions = async (key) => {
-      const moreabout = await axios.get(
-        PF + "/api/options/getByKey?lang=" + lang + "&key=05_more_about"
-      );
-      const privacy = await axios.get(
-        PF + "/api/options/getByKey?lang=" + lang + "&key=05_privacy"
-      );
-      const faq = await axios.get(
-        PF + "/api/options/getByKey?lang=" + lang + "&key=05_faq"
-      );
-      const join = await axios.get(
-        PF + "/api/options/getByKey?lang=" + lang + "&key=05_join_the_project"
-      );
-      setOption_moreabout(moreabout.data.data.value);
-      setOption_privacy(privacy.data.data.value);
-      setOption_faq(faq.data.data.value);
-      setOption_join(join.data.data.value);
-    };
-    if (lang.length !== 0) {
-      getOptions();
-    }
-    // console.log("useffect  de topbar", "lang", lang,"bottomContent",bottomBarContent,"topbar:",topBarContent )
-  }, [lang]);
-
   const changeContent = (e) => {
     setHomeContent(e.target.id);
-    console.log(e.target);
+    // console.log(e.target);
     setMainMenuOpen(false);
   };
   return (
@@ -59,27 +32,32 @@ export default function MainMenu({
       </div>
       <ul>
         <li>
-          <p onClick={(e) => changeContent(e)} id="1">
-            {" "}
-            {option_moreabout}
-          </p>
+          <div onClick={(e) => changeContent(e)} id="1">
+            <QueryClientProvider client={queryClient}>
+              <GetOption lang={lang} optionKey="05_more_about" />{" "}
+            </QueryClientProvider>
+          </div>
         </li>
         <li>
-          <p onClick={(e) => changeContent(e)} id="2">
-            {" "}
-            {option_privacy}
-          </p>
+          <div onClick={(e) => changeContent(e)} id="2">
+            <QueryClientProvider client={queryClient}>
+              <GetOption lang={lang} optionKey="05_privacy" />{" "}
+            </QueryClientProvider>
+          </div>
         </li>
         <li>
-          <p onClick={(e) => changeContent(e)} id="3">
-            {" "}
-            {option_faq}
-          </p>
+          <div onClick={(e) => changeContent(e)} id="3">
+            <QueryClientProvider client={queryClient}>
+              <GetOption lang={lang} optionKey="05_faq" />{" "}
+            </QueryClientProvider>
+          </div>
         </li>
         <li>
-          <p onClick={(e) => changeContent(e)} id="4">
-            {option_join}
-          </p>
+          <div onClick={(e) => changeContent(e)} id="4">
+            <QueryClientProvider client={queryClient}>
+              <GetOption lang={lang} optionKey="05_join_the_project" />{" "}
+            </QueryClientProvider>
+          </div>
         </li>
       </ul>
     </div>

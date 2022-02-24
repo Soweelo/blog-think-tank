@@ -1,12 +1,12 @@
 import "./topbar.scss";
 import { Person, Favorite, Search, GTranslate } from "@material-ui/icons";
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 import axios from "axios";
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
 import { useFetch } from "../../hooks/useFetch";
 
-export default function Topbar({
+export default memo(function Topbar({
   homeContent,
   setHomeContent,
   lang,
@@ -128,4 +128,4 @@ export default function Topbar({
       </div>
     </div>
   );
-}
+});
