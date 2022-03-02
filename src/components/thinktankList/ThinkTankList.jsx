@@ -16,12 +16,42 @@ export default memo(function ThinkTankList({
   const [loading, setLoading] = useState(false);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   //set modal vars and set open modal
-  const [modalId, setModalId] = useState([]);
+  const [text, setText] = useState("");
+  const [modalVar, setModalVar] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [tagsToDisplay, setTagsToDisplay] = useState([]);
   const openModal = () => {
     setShowModal(true);
   };
+  useEffect(() => {
+    const getModalContent = async () => {
+      // setLoading(true);
+      console.log(modalVar[7]);
+      try {
+        // console.log(id);
+        const response = await fetch(
+          PF + "/api/posts/" + modalVar[7] + "/getById?lang=" + lang,
+          {
+            enabled: !!modalVar[7] && !!lang,
+          }
+        );
+        const data = await response.json();
+        // console.log(data.data);
+
+        console.log(data.data.content);
+        setText(data.data.content);
+        // setLoading(false);
+      } catch (e) {
+        if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
+          console.error(e);
+        }
+      }
+    };
+    if (showModal) {
+      console.log("ok");
+      getModalContent();
+    }
+  }, [showModal]);
   // console.log(modalVar)
 
   //fonction shuffle
@@ -150,8 +180,8 @@ export default memo(function ThinkTankList({
                 date={p.updated_at}
                 showModal={showModal}
                 setShowModal={setShowModal}
-                modalId={modalId}
-                setModalId={setModalId}
+                modalVar={modalVar}
+                setModalVar={setModalVar}
                 onClick={openModal}
               />
             </div>
@@ -161,8 +191,12 @@ export default memo(function ThinkTankList({
       <Modal
         showModal={showModal}
         setShowModal={setShowModal}
-        id={modalId}
-        lang={lang}
+        images={modalVar[0]}
+        title={modalVar[1]}
+        url={modalVar[3]}
+        tags={modalVar[2]}
+        text={text}
+        date={modalVar[5]}
       ></Modal>
       {/*{console.log(modalVar)}*/}
     </div>
