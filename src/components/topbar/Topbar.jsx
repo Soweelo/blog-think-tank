@@ -5,22 +5,25 @@ import axios from "axios";
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
 import { useFetch } from "../../hooks/useFetch";
-
+// import { QueryClient, QueryClientProvider } from "react-query";
+import GetOption from "../getoption/GetOption";
+import getOptionByKey from "../../functions/getOptionByKey/GetOptionByKey";
+// const queryClient = new QueryClient();
 export default memo(function Topbar({
-  homeContent,
   setHomeContent,
   lang,
   setLang,
   setShowLogin,
   showLogin,
+  allOptions,
 }) {
-  // const [isOpenedGT, setIsOpenedGT]= useState(false);
+  // const [isOpenedGT, setIsOpenedGT] = useState(false);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [allLang, setAllLang] = useState([]);
   // console.log(topBarContent)
   const fetch = useFetch();
   const [option_header, setOption_header] = useState("");
-
+  // console.log(allOptions);
   function dataLangToArray(data) {
     const result = [];
 
@@ -64,6 +67,11 @@ export default memo(function Topbar({
     getLangs();
   }, [PF]);
 
+  useEffect(() => {
+    let result = getOptionByKey("01_header", allOptions);
+    // console.log(result);
+    setOption_header(result);
+  }, [allOptions]);
   function setName() {
     // console.log(lang, allLang)
     if (lang.length !== 0 && allLang.length !== 0) {
@@ -74,22 +82,10 @@ export default memo(function Topbar({
   setName();
   const options = dataLangToArray(allLang);
 
-  useEffect(() => {
-    const getOptions = async (key) => {
-      const header = await axios.get(
-        PF + "/api/options/getByKey?lang=" + lang + "&key=01_header"
-      );
-      setOption_header(header.data.data.value);
-    };
-
-    if (lang.length !== 0) {
-      getOptions();
-    }
-  }, [lang]);
-
   function openLoginInterface() {
     setShowLogin(!showLogin);
   }
+
   return (
     <div className="topbar">
       <div className="wrapper">
@@ -102,9 +98,11 @@ export default memo(function Topbar({
           >
             Your world 3.0
           </p>
-          {/*<div className=" heading__item siteName">BLOG</div>*/}
         </div>
-        <div className="heading-center__item foster"> {option_header}</div>
+        <div
+          className="heading-center__item foster"
+          dangerouslySetInnerHTML={{ __html: option_header }}
+        ></div>
         <div className="nav">
           <div className="nav__link">
             <Favorite />

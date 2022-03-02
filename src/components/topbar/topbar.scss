@@ -60,15 +60,18 @@
       }
       .nav__link-GT-icon{
         margin-left: 2rem;
+        cursor: auto;
 
       }
       .nav__link-GT-input{
         right: 5px;
         width: 8rem;
         height: 2.5rem;
+        cursor: pointer;
         .Dropdown-control {
                    color: $tertiary;
                   height: 35px;
+          cursor: pointer;
         }
       }
     }

@@ -133,7 +133,7 @@ export default function MemberLoginandRegister({ showLogin, setShowLogin }) {
   }, [keyPress]);
   function switchContent() {
     setRegisterContent(!registerContent);
-    console.log(registerContent);
+    // console.log(registerContent);
   }
   return (
     <>

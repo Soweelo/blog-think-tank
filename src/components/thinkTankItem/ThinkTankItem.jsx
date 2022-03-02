@@ -9,19 +9,18 @@ export default memo(function ThinkTankItem({
   title,
   tags,
   url,
-  text,
-  date,
+
   showModal,
   setShowModal,
-  modalVar,
-  setModalVar,
+  modalId,
+  setModalId,
   brand,
 }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const updateModalVar = (e) => {
-    setModalVar([images, title, tags, url, text, date, brand]);
+    setModalId(id);
     setShowModal(true);
-    // console.log([images,title,tags,url,text,date, brand])
+    // console.log([images,title,tags,url,text,date, brand,id])
   };
 
   return (

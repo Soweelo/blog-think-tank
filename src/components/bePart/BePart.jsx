@@ -1,31 +1,28 @@
 import "./bepart.scss";
 import BackHomeButton from "../backHomeButton/BackHomeButton";
 import { memo } from "react";
+import { useState, useEffect } from "react";
+import getOptionByKey from "../../functions/getOptionByKey/GetOptionByKey";
+export default memo(function BePart({ allOptions, setHomeContent }) {
+  const [option_join, setOption_join] = useState("");
+  const [option_join_text, setOption_join_text] = useState("");
+  const changeContent = (e) => {
+    setHomeContent(e.target.id);
+  };
 
-import GetOption from "../getoption/GetOption";
+  useEffect(() => {
+    setOption_join(getOptionByKey("05_join_the_project", allOptions));
+    setOption_join_text(getOptionByKey("04_join_the_project", allOptions));
+  }, [allOptions]);
 
-import { QueryClient, QueryClientProvider } from "react-query";
-const queryClient = new QueryClient();
-
-export default memo(function BePart({ lang, setHomeContent }) {
   return (
     <div id="bepart">
       <BackHomeButton setHomeContent={setHomeContent} />
-      <h1>
-        <QueryClientProvider client={queryClient}>
-          <GetOption lang={lang} optionKey="05_join_the_project" />
-        </QueryClientProvider>
-      </h1>
-      <div className="bepart__para-container">
-        <QueryClientProvider client={queryClient}>
-          <GetOption
-            lang={lang}
-            optionKey="04_join_the_project"
-            toHtml={true}
-            setLoading={true}
-          />
-        </QueryClientProvider>
-      </div>
+      <h1 dangerouslySetInnerHTML={{ __html: option_join }}></h1>
+      <div
+        className="bepart__para-container"
+        dangerouslySetInnerHTML={{ __html: option_join_text }}
+      ></div>
     </div>
   );
 });

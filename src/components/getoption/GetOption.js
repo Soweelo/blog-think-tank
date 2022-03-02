@@ -3,19 +3,24 @@ import { QueryClient, useQuery } from "react-query";
 import Loader from "../loader/Loader";
 import "./getoption.scss";
 
-const GetOption = ({
-  lang,
+function GetOption({
+  lang = "en",
   optionKey,
-  toHtml = false,
-
+  toHtml = true,
   setLoading = false,
-}) => {
+  setOption,
+}) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+
   const { isLoading, error, data, isFetching } = useQuery(
     [lang, optionKey],
-    () =>
-      fetch(
-        PF + "/api/options/getByKey?lang=" + lang + "&key=" + optionKey
+    async () =>
+      await fetch(
+        PF +
+          "/api/options/getByKey?lang=" +
+          (lang ? lang : "en") +
+          "&key=" +
+          optionKey
       ).then((r) => r.json())
   );
   if (isLoading) {
@@ -26,8 +31,8 @@ const GetOption = ({
     }
     return null;
   }
-  if (error)
-    return <div>"An error has occurred: " {console.log(error.message)}</div>;
+  if (error) return console.log(error.message); //debug mode
+  // if (error) return null; //prod mode
   if (data.success) {
     if (toHtml) {
       return <div dangerouslySetInnerHTML={{ __html: data.data.value }}></div>;
@@ -36,5 +41,5 @@ const GetOption = ({
     }
   }
   return null;
-};
+}
 export default GetOption;

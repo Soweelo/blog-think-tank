@@ -1,23 +1,24 @@
 import "./faq.scss";
 import BackHomeButton from "../backHomeButton/BackHomeButton";
+import { useState, useEffect } from "react";
+import getOptionByKey from "../../functions/getOptionByKey/GetOptionByKey";
+export default function Faq({ allOptions, setHomeContent }) {
+  const [option_faq, setOption_faq] = useState("");
+  const [option_faq_text, setOption_faq_text] = useState("");
 
-import { QueryClient, QueryClientProvider } from "react-query";
-import GetOption from "../getoption/GetOption";
-const queryClient = new QueryClient();
-export default function Faq({ lang, setHomeContent }) {
+  useEffect(() => {
+    setOption_faq(getOptionByKey("05_faq", allOptions));
+    setOption_faq_text(getOptionByKey("04_faq", allOptions));
+  }, [allOptions]);
+
   return (
     <div id="faq">
       <BackHomeButton setHomeContent={setHomeContent} />
-      <h1>
-        <QueryClientProvider client={queryClient}>
-          <GetOption lang={lang} optionKey="05_faq" setLoading={true} />{" "}
-        </QueryClientProvider>
-      </h1>
-      <div className="faq__para-container">
-        <QueryClientProvider client={queryClient}>
-          <GetOption lang={lang} optionKey="04_faq" toHtml={true} />
-        </QueryClientProvider>
-      </div>
+      <h1 dangerouslySetInnerHTML={{ __html: option_faq }}></h1>
+      <div
+        className="faq__para-container"
+        dangerouslySetInnerHTML={{ __html: option_faq_text }}
+      ></div>
     </div>
   );
 }

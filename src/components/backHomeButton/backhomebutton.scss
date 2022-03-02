@@ -28,6 +28,7 @@
 
   }
   @include mobile{
+    display: none;
     top:unset;
     left: unset;
     bottom: 1vh;

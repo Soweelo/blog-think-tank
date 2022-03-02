@@ -5,6 +5,7 @@ import { useRef, useEffect, useCallback, useState } from "react";
 import { useSpring, animated } from "react-spring";
 import { Favorite, Share, Comment } from "@material-ui/icons";
 import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
+import { useFetch } from "../../hooks/useFetch";
 
 const Background = styled.div`
   width: 100%;
@@ -21,7 +22,7 @@ const Background = styled.div`
 
 const ModalWrapper = styled.div`
   width: min(800px, 90%);
-  height: min(400px, 90%);
+  height: min(500px, 90%);
 
   box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
   background: #fff;
@@ -147,19 +148,19 @@ const CloseModalButton = styled(MdClose)`
 //     top:0;
 // `
 // ;
-export default function Modal({
-  showModal,
-  setShowModal,
-  images,
-  tags,
-  title,
-  url,
-  text,
-  date,
-}) {
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
+export default function Modal({ showModal, setShowModal, id, lang }) {
+  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+  const [modalVar, setModalVar] = useState({});
+  const [image, setImage] = useState(null);
+  const [title, setTitle] = useState("");
+  const [tags, setTags] = useState([]);
+  const [url, setUrl] = useState(0);
+  const [text, setText] = useState("");
+  const [date, setDate] = useState("");
+  const [brand, setBrand] = useState(0);
   const modalRef = useRef();
+  const fetch = useFetch();
   const animation = useSpring({
     config: {
       duration: 150,
@@ -193,7 +194,59 @@ export default function Modal({
     document.addEventListener("keydown", keyPress);
     return () => document.removeEventListener("keydown", keyPress);
   }, [keyPress]);
+  // const data = useFetchModalContent(lang, id);
+  // if (showModal) {
+  //   console.log(id, lang);
+  //
+  // }
+  console.log(lang, id);
+  useEffect(() => {
+    const getModalContent = async () => {
+      // setLoading(true);
 
+      try {
+        console.log(id);
+        const response = await fetch(
+          PF + "/api/posts/" + id + "/getById?lang=" + lang,
+          {
+            enabled: !!id,
+          }
+        );
+        const data = await response.json();
+        console.log(data.data);
+
+        setImage(data.data.images);
+        setTitle(data.data.member.pseudo);
+        setTags(data.data.tags);
+        setUrl(data.data.brand ? data.data.brand.link : 0);
+        setText(data.data.content);
+        setDate(data.data.updated_at);
+        setBrand(data.data.brand ? data.data.brand.name : 0);
+
+        // setLoading(false);
+      } catch (e) {
+        if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
+          console.error(e);
+        }
+      }
+    };
+    if (id && lang) {
+      getModalContent();
+    }
+    // console.log(image);
+    // console.log(id);
+  }, [id]);
+  useEffect(() => {
+    if (!showModal) {
+      setImage(null);
+      setTitle("");
+      setTags([]);
+      setUrl(0);
+      setText("");
+      setDate("");
+      setBrand(0);
+    }
+  }, [showModal]);
   return (
     <>
       {showModal ? (
@@ -205,11 +258,11 @@ export default function Modal({
           >
             <ModalWrapper showModal={showModal} className="modal-wrapper">
               <ModalImgWrapper className="modal-img-wrapper">
-                {images ? (
+                {image ? (
                   <img
-                    src={PF + "/" + images.small}
-                    srcSet={`${PF + "/" + images.thumb} 768w, ${
-                      PF + "/" + images.small
+                    src={PF + "/" + image.small}
+                    srcSet={`${PF + "/" + image.thumb} 768w, ${
+                      PF + "/" + image.small
                     } 3200w`}
                     alt={title}
                   />

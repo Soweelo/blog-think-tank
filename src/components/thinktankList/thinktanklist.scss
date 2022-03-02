@@ -1,8 +1,10 @@
 @import "../../global.scss";
+//.container{height: 100px;background-color: red; margin-bottom: 2rem}
 .big_container{
   margin-bottom:150px;
   //color: red;
   //font-size: 2rem;
+  min-height: 150px;
   @include pad{
 
       width: 100%;

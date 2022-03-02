@@ -16,7 +16,7 @@ export default memo(function ThinkTankList({
   const [loading, setLoading] = useState(false);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   //set modal vars and set open modal
-  const [modalVar, setModalVar] = useState([]);
+  const [modalId, setModalId] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [tagsToDisplay, setTagsToDisplay] = useState([]);
   const openModal = () => {
@@ -150,8 +150,8 @@ export default memo(function ThinkTankList({
                 date={p.updated_at}
                 showModal={showModal}
                 setShowModal={setShowModal}
-                modalVar={modalVar}
-                setModalVar={setModalVar}
+                modalId={modalId}
+                setModalId={setModalId}
                 onClick={openModal}
               />
             </div>
@@ -161,12 +161,8 @@ export default memo(function ThinkTankList({
       <Modal
         showModal={showModal}
         setShowModal={setShowModal}
-        images={modalVar[0]}
-        title={modalVar[1]}
-        url={modalVar[3]}
-        tags={modalVar[2]}
-        text={modalVar[4]}
-        date={modalVar[5]}
+        id={modalId}
+        lang={lang}
       ></Modal>
       {/*{console.log(modalVar)}*/}
     </div>

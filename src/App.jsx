@@ -11,8 +11,10 @@ import { useState, useEffect, memo } from "react";
 import MainMenu from "./components/mainMenu/MainMenu";
 
 import styled from "styled-components";
-import axios from "axios";
+
 import MemberLoginandRegister from "./components/login/MemberLoginandRegister";
+
+import { useFetch } from "./hooks/useFetch";
 
 function App() {
   const [mainMenuOpen, setMainMenuOpen] = useState(false);
@@ -20,10 +22,11 @@ function App() {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [lang, setLang] = useState("");
   const [showLogin, setShowLogin] = useState(false);
-
+  const [allOptions, setAllOptions] = useState([]);
   const SectionMain = styled.div`
     background-image: url("${PF}/storage/app/public/4.jpg");
   `;
+  const fetch = useFetch();
 
   function getCookie(cname) {
     let name = cname + "=";
@@ -44,16 +47,32 @@ function App() {
   useEffect(() => {
     if (getCookie("lang").length === 0) {
       setLang(navigator.language.substr(0, 2));
-
-      // console.log("nocookie")
     } else {
       setLang(getCookie("lang"));
-      // console.log("there is a cookie, now lang is updates to", lang)
+    }
+  }, []);
+  useEffect(() => {
+    const fetchAllOptions = async () => {
+      try {
+        const response = await fetch(PF + "/api/options?lang=" + lang, {
+          enabled: !!lang,
+        });
+        const data = await response.json();
+        // console.log(data.data);
+        setAllOptions(data.data);
+      } catch (e) {
+        if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
+          console.error(e);
+        }
+      }
+    };
+    // console.log(allOptions);
+    if (lang) {
+      fetchAllOptions();
     }
 
-    // console.log("lang: ",lang,"navigator:", navigator.language,"getCookielang",getCookie(lang).length)
-  }, []);
-
+    // console.log(allOptions);
+  }, [lang]);
   return (
     <>
       <div className="app">
@@ -64,6 +83,7 @@ function App() {
           lang={lang}
           showLogin={showLogin}
           setShowLogin={setShowLogin}
+          allOptions={allOptions}
         />
 
         <SectionMain className={`sections${showLogin ? " filter" : ""}`}>
@@ -72,18 +92,40 @@ function App() {
             switch (homeContent) {
               case "1":
                 return (
-                  <MoreAbout lang={lang} setHomeContent={setHomeContent} />
+                  <MoreAbout
+                    lang={lang}
+                    setHomeContent={setHomeContent}
+                    allOptions={allOptions}
+                  />
                 );
               case "2":
-                return <Privacy lang={lang} setHomeContent={setHomeContent} />;
+                return (
+                  <Privacy
+                    lang={lang}
+                    setHomeContent={setHomeContent}
+                    allOptions={allOptions}
+                  />
+                );
 
               case "3":
-                return <Faq lang={lang} setHomeContent={setHomeContent} />;
+                return (
+                  <Faq
+                    lang={lang}
+                    setHomeContent={setHomeContent}
+                    allOptions={allOptions}
+                  />
+                );
               case "4":
-                return <BePart lang={lang} setHomeContent={setHomeContent} />;
+                return (
+                  <BePart
+                    lang={lang}
+                    setHomeContent={setHomeContent}
+                    allOptions={allOptions}
+                  />
+                );
 
               default:
-                return <Intro lang={lang} />;
+                return <Intro lang={lang} allOptions={allOptions} />;
             }
           })()}
         </SectionMain>
@@ -96,6 +138,7 @@ function App() {
           lang={lang}
           showLogin={showLogin}
           setShowLogin={setShowLogin}
+          allOptions={allOptions}
         />
         <Bottombar
           mainMenuOpen={mainMenuOpen}
@@ -103,6 +146,7 @@ function App() {
           homeContent={homeContent}
           setHomeContent={setHomeContent}
           lang={lang}
+          allOptions={allOptions}
         />
         <MemberLoginandRegister
           showLogin={showLogin}

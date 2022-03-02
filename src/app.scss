@@ -22,6 +22,7 @@
       text-shadow: -2px -2px  white;
     }
     @include mobile{
+      overflow-y: hidden;
       h1{
         color: $primary;
         text-shadow: 1px 1px  $complementary;
