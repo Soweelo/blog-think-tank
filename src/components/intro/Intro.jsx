@@ -8,10 +8,11 @@ import { userFav } from "../../dummy";
 
 import Scroll from "../scroll/scroll";
 import getOptionByKey from "../../functions/getOptionByKey/GetOptionByKey";
+import { useFetch } from "../../hooks/useFetch";
 
 export default memo(function Intro({ lang, allOptions }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-
+  const fetch = useFetch();
   const [selectedTags, setSelectedTags] = useState([]);
   const textRef = useRef();
   const scrollRef = useRef();
@@ -19,7 +20,6 @@ export default memo(function Intro({ lang, allOptions }) {
   const [option_welcome, setOption_welcome] = useState("");
   const [allTags, setAllTags] = useState([]);
 
-  // console.log(userFav)
   useEffect(() => {
     init(textRef.current, {
       showCursor: true,
@@ -34,7 +34,7 @@ export default memo(function Intro({ lang, allOptions }) {
     // console.log("INTRO"," début chargementtags chargés dans l intro")
     const getTags = async () => {
       try {
-        const response = await fetch(PF + "/api/tags", {
+        const response = await fetch(PF + "/api/tags?lang=" + lang, {
           enabled: !!lang,
         }).then((r) => r.json());
         // console.log(response.data);
@@ -46,9 +46,10 @@ export default memo(function Intro({ lang, allOptions }) {
         }
       }
     };
-
-    getTags();
-  }, []);
+    if (lang) {
+      getTags();
+    }
+  }, [lang]);
 
   useEffect(() => {
     setOption_welcome(getOptionByKey("01_welcome", allOptions));

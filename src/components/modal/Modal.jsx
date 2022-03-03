@@ -152,6 +152,7 @@ export default function Modal({
   url,
   text,
   date,
+  loadingModal,
 }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
@@ -194,73 +195,82 @@ export default function Modal({
     <>
       {showModal ? (
         <Background onClick={closeModal} className="backgtound">
-          <animated.div
-            style={animation}
-            ref={modalRef}
-            className="animated-div"
-          >
-            <ModalWrapper showModal={showModal} className="modal-wrapper">
-              <ModalImgWrapper className="modal-img-wrapper">
-                {images ? (
-                  <img
-                    src={PF + "/" + images.small}
-                    srcSet={`${PF + "/" + images.thumb} 768w, ${
-                      PF + "/" + images.small
-                    } 3200w`}
-                    alt={title}
-                  />
-                ) : (
-                  <img
-                    src={
-                      PF +
-                      "/storage/app/public/your-world-3-0-default-black-background.jpeg"
-                    }
-                    alt={title}
-                  />
-                )}
-                <div className="tags">
-                  {tags.map((p, index) => (
-                    <p key={index}>#{tags[index]}</p>
-                  ))}
-                </div>
-                <div className="icons">
-                  <div className="icon1">
-                    <Favorite />
+          {!loadingModal ? (
+            <animated.div
+              style={animation}
+              ref={modalRef}
+              className="animated-div"
+            >
+              <ModalWrapper showModal={showModal} className="modal-wrapper">
+                <ModalImgWrapper className="modal-img-wrapper">
+                  {images ? (
+                    <img
+                      src={PF + "/" + images.small}
+                      srcSet={`${PF + "/" + images.thumb} 768w, ${
+                        PF + "/" + images.small
+                      } 3200w`}
+                      alt={title}
+                    />
+                  ) : (
+                    <img
+                      src={
+                        PF +
+                        "/storage/app/public/your-world-3-0-default-black-background.jpeg"
+                      }
+                      alt={title}
+                    />
+                  )}
+                  <div className="tags">
+                    {tags.map((p, index) => (
+                      <p key={index}>#{tags[index]}</p>
+                    ))}
                   </div>
-                  <div className="icon2">
-                    <Share />
+                  <div className="icons">
+                    <div className="icon1">
+                      <Favorite />
+                    </div>
+                    <div className="icon2">
+                      <Share />
+                    </div>
+                    <div
+                      onClick={() => setIsClicked(!isClicked)}
+                      className={"icon3  " + (isClicked && "expand")}
+                    >
+                      <Comment />
+                      <div className="icon--tocome">...coming soon!</div>
+                    </div>
                   </div>
-                  <div
-                    onClick={() => setIsClicked(!isClicked)}
-                    className={"icon3  " + (isClicked && "expand")}
-                  >
-                    <Comment />
-                    <div className="icon--tocome">...coming soon!</div>
-                  </div>
-                </div>
-              </ModalImgWrapper>
+                </ModalImgWrapper>
 
-              <ModalContent className="modal-content">
-                <h1>{title}</h1>
-                <p className="modal__date">
-                  <CalendarTodayIcon />
-                  {date.substr(0, 10)}
-                </p>
-                <p dangerouslySetInnerHTML={{ __html: text }}></p>
-                {url !== 0 && (
-                  <div className="modal__button-wrapper">
-                    <a href={url} target="blank">
-                      See website
-                    </a>
-                  </div>
-                )}
-                <CloseModalButton
-                  aria-label="Close modal"
-                  onClick={() => setShowModal((prev) => !prev)}
-                ></CloseModalButton>
-              </ModalContent>
-            </ModalWrapper>
-          </animated.div>
+                <ModalContent className="modal-content">
+                  <h1>{title}</h1>
+                  <p className="modal__date">
+                    <CalendarTodayIcon />
+                    {date.substr(0, 10)}
+                  </p>
+                  <p dangerouslySetInnerHTML={{ __html: text }}></p>
+                  {url !== 0 && (
+                    <div className="modal__button-wrapper">
+                      <a href={url} target="blank">
+                        See website
+                      </a>
+                    </div>
+                  )}
+                  <CloseModalButton
+                    aria-label="Close modal"
+                    onClick={() => setShowModal((prev) => !prev)}
+                  ></CloseModalButton>
+                </ModalContent>
+              </ModalWrapper>{" "}
+            </animated.div>
+          ) : (
+            <div className="lds-ring">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+          )}
         </Background>
       ) : null}
     </>

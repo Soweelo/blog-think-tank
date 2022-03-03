@@ -14,6 +14,7 @@ export default memo(function ThinkTankList({
 }) {
   const fetch = useFetch();
   const [loading, setLoading] = useState(false);
+  const [loadingModal, setLoadingModal] = useState(false);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   //set modal vars and set open modal
   const [text, setText] = useState("");
@@ -25,8 +26,8 @@ export default memo(function ThinkTankList({
   };
   useEffect(() => {
     const getModalContent = async () => {
-      // setLoading(true);
-      console.log(modalVar[7]);
+      setLoadingModal(true);
+      // console.log(modalVar[7]);
       try {
         // console.log(id);
         const response = await fetch(
@@ -38,9 +39,14 @@ export default memo(function ThinkTankList({
         const data = await response.json();
         // console.log(data.data);
 
-        console.log(data.data.content);
-        setText(data.data.content);
-        // setLoading(false);
+        // console.log(data.data.content);
+        // console.log(data.data.content.content);
+        setText(
+          data.data.content.content
+            ? data.data.content.content
+            : data.data.content
+        );
+        setLoadingModal(false);
       } catch (e) {
         if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
           console.error(e);
@@ -48,7 +54,7 @@ export default memo(function ThinkTankList({
       }
     };
     if (showModal) {
-      console.log("ok");
+      // console.log("ok");
       getModalContent();
     }
   }, [showModal]);
@@ -197,6 +203,7 @@ export default memo(function ThinkTankList({
         tags={modalVar[2]}
         text={text}
         date={modalVar[5]}
+        loadingModal={loadingModal}
       ></Modal>
       {/*{console.log(modalVar)}*/}
     </div>
