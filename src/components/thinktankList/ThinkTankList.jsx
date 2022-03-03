@@ -2,7 +2,7 @@ import "./thinktanklist.scss";
 // import {thinkTanks} from "../../dummy"
 // import axios from "axios";
 import ThinkTankItem from "../thinkTankItem/ThinkTankItem";
-import { useEffect, useState, memo, useMemo } from "react";
+import { useEffect, useState, memo, useMemo, useRef } from "react";
 import Modal from "../modal/Modal";
 import { useFetch } from "../../hooks/useFetch";
 import Loader from "../loader/Loader";
@@ -105,57 +105,89 @@ export default memo(function ThinkTankList({
 
   //get data with post request on api
 
-  const [thinkTanks, setThinkTanks] = useState({});
-  // console.log("THINKTANKLIST","before useffect","alltags: ", allTags ,"  tags to display : ", tagsToDisplay)
-  useEffect(() => {
-    const getData = async () => {
-      setLoading(true);
-      // setTagsToDisplay(selectedTags.length !== 0 ? selectedTags : allTags)
-      // console.log("THINKTANKLIST","boucle de useffect commune: getData. vérifier TagstoDisplay ",tagsToDisplay)
-      const requestOptions = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          limit: 1000,
-          offset: 0,
-          tags: selectedTags,
-          lang: lang,
-        }),
-      };
-      try {
-        const response = await fetch(PF + "/api/posts/find", requestOptions);
-        const data = await response.json();
-        // console.log(data.data);
-        setThinkTanks(data.data);
+  // const [loading, setLoading] = useState(true);
+  const [allThinkTanks, setallThinkTanks] = useState([]);
+  const [offset, setOffset] = useState(0);
+  const [lastElement, setLastElement] = useState(null);
+  // const [lastgroup, setLastGroup] = useState([]);
+  const groupLimit = 12;
+  // const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
-        setLoading(false);
-      } catch (e) {
-        if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
-          console.error(e);
-        }
+  const [stopRequest, setStopRequest] = useState(false);
+  const observer = useRef(
+    new IntersectionObserver((entries) => {
+      const first = entries[0];
+      if (first.isIntersecting) {
+        setOffset((no) => no + groupLimit);
       }
+    })
+  );
+
+  const callThinktank = async () => {
+    setLoading(true);
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        limit: groupLimit,
+        offset: offset,
+        tags: [],
+        lang: "en",
+      }),
     };
-    if (lang.length !== 0) {
-      getData();
-      // console.log(thinkTanks);
+    try {
+      let response = await fetch(
+        "https://api.yworld3.com/api/posts/find",
+        requestOptions
+      );
+      let data = await response.json();
+      let all = new Set([...allThinkTanks, ...data.data]);
+      console.log(data.data.length);
+      if (data.data.length === 0 || data.data.length < groupLimit) {
+        setStopRequest(true);
+        console.log("limit so set stop request to", stopRequest);
+      }
+
+      // console.log("lastgroup set with new data",lastgroup)
+      // console.log("new data",data.data)
+      setallThinkTanks([...all]);
+      setLoading(false);
+    } catch (e) {
+      if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
+        console.error(e);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (!stopRequest) {
+      callThinktank();
+    }
+  }, [offset]);
+
+  useEffect(() => {
+    const currentElement = lastElement;
+    const currentObserver = observer.current;
+
+    if (currentElement) {
+      currentObserver.observe(currentElement);
     }
 
-    // console.log("THINKTANKLIST","think tank avant formattage, une boucle de useeffect", thinkTanks)
-  }, [selectedTags]);
-
-  //
-
-  // const finalData = useMemo( () =>
-  //     pickAndShuffle(Object.entries(thinkTanks), allTags),[allTags,tagsToDisplay,setTagsToDisplay,selectedTags])
+    return () => {
+      if (currentElement) {
+        currentObserver.unobserve(currentElement);
+      }
+    };
+  }, [lastElement]);
 
   const allData = useMemo(
     function () {
       // console.log(thinkTanks);
-      // console.log("*THINKTANKS USE MEMO ALLDATA, VALEUR tags to display:",tagsToDisplay ,"thinkktank", thinkTanks)
+      // console.log("*THINKTANKS USE MEMO ALLDATA, VALEUR tags to display:",tagsToDisplay ,"thinktank", thinkTanks)
       // alert("thinktank list re shuffles");
-      return pickAndShuffle(Object.entries(thinkTanks));
+      return pickAndShuffle(Object.entries(allThinkTanks));
     },
-    [thinkTanks, tagsToDisplay]
+    [allThinkTanks, tagsToDisplay, lang]
   );
 
   //end get data with post request on api
@@ -165,33 +197,60 @@ export default memo(function ThinkTankList({
   return (
     <div className="big_container">
       {<Loader loading={loading} />}
-
+      {console.log("alldata", allData)}
       {/*{console.log('le component re render')}*/}
       {allData.map((randomized, index) => (
         <div
           key={index}
           className={`thinktanklist__container container and${index}`}
         >
-          {randomized.map((p, index) => (
-            <div key={index} className={`areas area${index + 1}`}>
-              {/*{console.log(p.brand)}*/}
-              <ThinkTankItem
-                id={p.id}
-                title={p.member.pseudo}
-                brand={p.brand !== null ? p.brand.name : 0}
-                url={p.brand !== null ? p.brand.link : 0}
-                images={p.images}
-                tags={p.tags}
-                text={p.content}
-                date={p.updated_at}
-                showModal={showModal}
-                setShowModal={setShowModal}
-                modalVar={modalVar}
-                setModalVar={setModalVar}
-                onClick={openModal}
-              />
-            </div>
-          ))}
+          {console.log("one data called randomized", randomized)}
+          {allThinkTanks.length > 0 &&
+            allThinkTanks.map((p, i) => {
+              return i === allThinkTanks.length - 1 &&
+                !loading &&
+                !stopRequest ? (
+                <div
+                  key={`${p.id}-${i}`}
+                  ref={setLastElement}
+                  className={`areas area${(i % 12) + 1}`}
+                >
+                  <ThinkTankItem
+                    id={p.id}
+                    title={p.member.pseudo}
+                    brand={p.brand !== null ? p.brand.name : 0}
+                    url={p.brand !== null ? p.brand.link : 0}
+                    images={p.images}
+                    tags={p.tags}
+                    text={p.content}
+                    date={p.updated_at}
+                    showModal={showModal}
+                    setShowModal={setShowModal}
+                    modalVar={modalVar}
+                    setModalVar={setModalVar}
+                    onClick={openModal}
+                  />
+                </div>
+              ) : (
+                <div key={index} className={`areas area${(i % 12) + 1}`}>
+                  <ThinkTankItem
+                    id={p.id}
+                    title={p.member.pseudo}
+                    brand={p.brand !== null ? p.brand.name : 0}
+                    url={p.brand !== null ? p.brand.link : 0}
+                    images={p.images}
+                    tags={p.tags}
+                    text={p.content}
+                    date={p.updated_at}
+                    showModal={showModal}
+                    setShowModal={setShowModal}
+                    modalVar={modalVar}
+                    setModalVar={setModalVar}
+                    onClick={openModal}
+                  />
+                </div>
+              );
+            })}
         </div>
       ))}
       <Modal
