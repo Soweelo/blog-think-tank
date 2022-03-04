@@ -8,6 +8,10 @@ position: relative;
   background-color: rgba(45, 44, 44, 1);
   color:$primary;
   display: flex;
+  @include mobile{
+    //color:$complementary;
+    text-shadow: -1px 1px 1px #2f2f2f ;
+  }
 
   .thinktankItem__icons{
     position: absolute;
@@ -33,6 +37,10 @@ position: relative;
     @include mobile{
       max-height: calc(100vh - 70px);
       max-width: calc(100vw - 30px);
+      opacity: 0.8;
+      &:hover{
+        opacity:0.7;
+      }
     }
   }
   .thinktankItem__tags{
@@ -74,6 +82,9 @@ position: relative;
   &:hover{
     //color: black;
     text-shadow: -5px 5px 7px rgb(0, 0, 0);
+    @include mobile{
+      text-shadow: -1px 1px 1px #2f2f2f;
+    }
     img{
       opacity: 0.9;
       transform:scale(1.01);
