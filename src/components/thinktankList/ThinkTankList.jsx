@@ -6,6 +6,7 @@ import { useEffect, useState, memo, useMemo, useRef } from "react";
 import Modal from "../modal/Modal";
 import { useFetch } from "../../hooks/useFetch";
 import Loader from "../loader/Loader";
+import useTrait from "../../hooks/useTrait";
 export default memo(function ThinkTankList({
   favorites,
   selectedTags,
@@ -16,31 +17,39 @@ export default memo(function ThinkTankList({
   const [loading, setLoading] = useState(false);
   const [loadingModal, setLoadingModal] = useState(false);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-  //set modal vars and set open modal
   const [text, setText] = useState("");
   const [modalVar, setModalVar] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [tagsToDisplay, setTagsToDisplay] = useState([]);
+  const tagsToDisplay = useTrait([]);
+  const bigArray = useTrait([]);
+  const [allThinkTanks, setallThinkTanks] = useState([]);
+  const [offset, setOffset] = useState(0);
+  const [lastElement, setLastElement] = useState(null);
+  const groupLimit = 12;
+  const [stopRequest, setStopRequest] = useState(false);
+  const observer = useRef(
+    new IntersectionObserver((entries) => {
+      const first = entries[0];
+      if (first.isIntersecting) {
+        setOffset((no) => no + groupLimit);
+        // alert("new request");
+      }
+    })
+  );
   const openModal = () => {
     setShowModal(true);
   };
   useEffect(() => {
     const getModalContent = async () => {
       setLoadingModal(true);
-      // console.log(modalVar[7]);
       try {
-        // console.log(id);
         const response = await fetch(
           PF + "/api/posts/" + modalVar[7] + "/getById?lang=" + lang,
           {
             enabled: !!modalVar[7] && !!lang,
           }
         );
-        const data = await response.json();
-        // console.log(data.data);
-
-        // console.log(data.data.content);
-        // console.log(data.data.content.content);
+        const data = await response.json(); // console.log(data.data.content);
         setText(
           data.data.content.content
             ? data.data.content.content
@@ -76,62 +85,19 @@ export default memo(function ThinkTankList({
     return array;
   }
 
-  function pickAndShuffle(datas) {
-    //shuffle and pack the thinktanks
-    let randomthinkTanks = shuffleArray(datas);
-    let randomized = [];
-    randomthinkTanks.map((p) => randomized.push(p[1]));
-    // console.log(randomized)
-
-    //now let's create a fonction to slice randomized in array of numGroup
-    let pickedAndShuffledPacks = [];
-    let remainToSplice = randomized;
-    while (remainToSplice.length > 12) {
-      let b = remainToSplice.splice(0, 12);
-      // console.log(b)
-      pickedAndShuffledPacks.push(b);
-    }
-    pickedAndShuffledPacks.push(remainToSplice);
-    // console.log(pickedAndShuffledPacks)
-    return pickedAndShuffledPacks;
-  }
-
-  useEffect(() => {
-    selectedTags.length !== 0
-      ? setTagsToDisplay(selectedTags)
-      : setTagsToDisplay(allTags);
-    // console.log("INTRO","nouveau tags to display recupéré dans l intro",tagsToDisplay)
-  }, [allTags, selectedTags]);
-
-  //get data with post request on api
-
-  // const [loading, setLoading] = useState(true);
-  const [allThinkTanks, setallThinkTanks] = useState([]);
-  const [offset, setOffset] = useState(0);
-  const [lastElement, setLastElement] = useState(null);
-  // const [lastgroup, setLastGroup] = useState([]);
-  const groupLimit = 12;
-  // const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-
-  const [stopRequest, setStopRequest] = useState(false);
-  const observer = useRef(
-    new IntersectionObserver((entries) => {
-      const first = entries[0];
-      if (first.isIntersecting) {
-        setOffset((no) => no + groupLimit);
-      }
-    })
-  );
-  const [bigArray, setBigArray] = useState([]);
   const callThinktank = async () => {
     setLoading(true);
+    // console.log("in request. selected tags", selectedTags);
+    // console.log("in request. tagsToDisplay", tagsToDisplay.get());
+    // console.log("in request. offset", offset);
+    // console.log("bigarray au debut de la requete", bigArray.get());
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         limit: groupLimit,
         offset: offset,
-        tags: tagsToDisplay,
+        tags: tagsToDisplay.get(),
         lang: lang,
       }),
     };
@@ -147,22 +113,14 @@ export default memo(function ThinkTankList({
         firstProperty: containerCount,
         secondProperty: shuffleArray(data.data),
       };
-      console.log("newPack", newPack);
-      // console.log("data with new offset", data.data);
-      let newarray = [...bigArray];
+      let newarray = [...bigArray.get()];
+      // console.log("newpack", newPack);
       newarray.push(newPack);
-      setBigArray(newarray);
-      console.log("newarray", newarray);
-      console.log("bigarray", bigArray);
-      console.log("shufflearray", shuffleArray(data.data));
+      bigArray.set(newarray);
       if (data.data.length === 0 || data.data.length < groupLimit) {
         setStopRequest(true);
-        // console.log("limit so set stop request to", stopRequest);
       }
 
-      // console.log("lastgroup set with new data",lastgroup)
-      // console.log("new data",data.data)
-      setallThinkTanks([...all]);
       setLoading(false);
     } catch (e) {
       if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
@@ -170,21 +128,26 @@ export default memo(function ThinkTankList({
       }
     }
   };
-  console.log("bigarray in code", bigArray);
   useEffect(() => {
-    if (!stopRequest) {
+    if (!stopRequest && !loading) {
       callThinktank();
       setContainerCount(containerCount + 1);
     }
   }, [offset]);
   useEffect(() => {
+    selectedTags.length !== 0
+      ? tagsToDisplay.set(selectedTags)
+      : tagsToDisplay.set(allTags);
+    bigArray.set([]);
+    // console.log(bigArray);
     setOffset(0);
     setContainerCount(0);
     callThinktank();
-  }, [tagsToDisplay]);
+  }, [selectedTags, allTags]);
 
   useEffect(() => {
     const currentElement = lastElement;
+    // console.log(lastElement);
     const currentObserver = observer.current;
 
     if (currentElement) {
@@ -198,22 +161,21 @@ export default memo(function ThinkTankList({
     };
   }, [lastElement]);
 
-  //end get data with post request on api
-
-  // console.log("THINKTANKLIST","data formatté en dehors du useeffect",allData)//
-
   const [containerCount, setContainerCount] = useState(0);
   return (
     <div className="big_container">
       {<Loader loading={loading} />}
       {/*{console.log("***********")}*/}
-      {console.log("allthinktanks", allThinkTanks)}
-      {/*{console.log('le component re render')}*/}
-      {bigArray.map((packOfTwelve, counter) => {
+      {/*{console.log("allthinktanks", allThinkTanks)}*/}
+      {/*{console.log("bigarrayget", bigArray.get())}*/}
+      {bigArray.get().map((packOfTwelve, counter) => {
         return (
-          <div className={`thinktanklist__container container and${counter}`}>
+          <div
+            className={`thinktanklist__container container and${counter}`}
+            key={counter}
+          >
             {packOfTwelve.secondProperty.map((p, i) => {
-              return i === allThinkTanks.length - 1 &&
+              return i === packOfTwelve.secondProperty.length - 1 &&
                 !loading &&
                 !stopRequest ? (
                 <div
@@ -260,9 +222,7 @@ export default memo(function ThinkTankList({
           </div>
         );
       })}
-
       {loading && <p className="text-center">loading...</p>}
-
       {stopRequest && <p className="text-center my-10">All by now !♥</p>}
       <Modal
         showModal={showModal}

@@ -4,3 +4,8 @@ Comme indiqué par l'erreur ce problème survient lorsque un callback qui change
 La solution, créer une reference isMounted et n'executer les mises à jour de valeur après les fetch async await que si isMouted est true.
 ontroller
 https://grafikart.fr/tutoriels/cant-perform-react-update-1973#autoplay
+
+
+*** Résoudre le problème de mise à jour d'une variable définie par un useState (le useState est asynchrone donc la nouvelle valeur n'est accessible qu'au prochain re-render).
+Création d'un hook useTrait: il permet d'utiliser une valeur immédiatement grâce à get, et de la mettre à jour avec set.
+Voir exemple dans ThinkTankList: pour la variable bigArray qui ne se mettait pas à jour immédiatement lors du changement de tags.
