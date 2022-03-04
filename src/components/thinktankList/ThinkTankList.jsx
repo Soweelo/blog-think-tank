@@ -122,7 +122,7 @@ export default memo(function ThinkTankList({
       }
     })
   );
-
+  const [bigArray, setBigArray] = useState([]);
   const callThinktank = async () => {
     setLoading(true);
     const requestOptions = {
@@ -131,8 +131,8 @@ export default memo(function ThinkTankList({
       body: JSON.stringify({
         limit: groupLimit,
         offset: offset,
-        tags: [],
-        lang: "en",
+        tags: tagsToDisplay,
+        lang: lang,
       }),
     };
     try {
@@ -142,10 +142,22 @@ export default memo(function ThinkTankList({
       );
       let data = await response.json();
       let all = new Set([...allThinkTanks, ...data.data]);
-      console.log(data.data.length);
+
+      let newPack = {
+        firstProperty: containerCount,
+        secondProperty: shuffleArray(data.data),
+      };
+      console.log("newPack", newPack);
+      // console.log("data with new offset", data.data);
+      let newarray = [...bigArray];
+      newarray.push(newPack);
+      setBigArray(newarray);
+      console.log("newarray", newarray);
+      console.log("bigarray", bigArray);
+      console.log("shufflearray", shuffleArray(data.data));
       if (data.data.length === 0 || data.data.length < groupLimit) {
         setStopRequest(true);
-        console.log("limit so set stop request to", stopRequest);
+        // console.log("limit so set stop request to", stopRequest);
       }
 
       // console.log("lastgroup set with new data",lastgroup)
@@ -158,12 +170,18 @@ export default memo(function ThinkTankList({
       }
     }
   };
-
+  console.log("bigarray in code", bigArray);
   useEffect(() => {
     if (!stopRequest) {
       callThinktank();
+      setContainerCount(containerCount + 1);
     }
   }, [offset]);
+  useEffect(() => {
+    setOffset(0);
+    setContainerCount(0);
+    callThinktank();
+  }, [tagsToDisplay]);
 
   useEffect(() => {
     const currentElement = lastElement;
@@ -180,33 +198,21 @@ export default memo(function ThinkTankList({
     };
   }, [lastElement]);
 
-  const allData = useMemo(
-    function () {
-      // console.log(thinkTanks);
-      // console.log("*THINKTANKS USE MEMO ALLDATA, VALEUR tags to display:",tagsToDisplay ,"thinktank", thinkTanks)
-      // alert("thinktank list re shuffles");
-      return pickAndShuffle(Object.entries(allThinkTanks));
-    },
-    [allThinkTanks, tagsToDisplay, lang]
-  );
-
   //end get data with post request on api
 
   // console.log("THINKTANKLIST","data formatté en dehors du useeffect",allData)//
 
+  const [containerCount, setContainerCount] = useState(0);
   return (
     <div className="big_container">
       {<Loader loading={loading} />}
-      {console.log("alldata", allData)}
+      {/*{console.log("***********")}*/}
+      {console.log("allthinktanks", allThinkTanks)}
       {/*{console.log('le component re render')}*/}
-      {allData.map((randomized, index) => (
-        <div
-          key={index}
-          className={`thinktanklist__container container and${index}`}
-        >
-          {console.log("one data called randomized", randomized)}
-          {allThinkTanks.length > 0 &&
-            allThinkTanks.map((p, i) => {
+      {bigArray.map((packOfTwelve, counter) => {
+        return (
+          <div className={`thinktanklist__container container and${counter}`}>
+            {packOfTwelve.secondProperty.map((p, i) => {
               return i === allThinkTanks.length - 1 &&
                 !loading &&
                 !stopRequest ? (
@@ -232,7 +238,7 @@ export default memo(function ThinkTankList({
                   />
                 </div>
               ) : (
-                <div key={index} className={`areas area${(i % 12) + 1}`}>
+                <div key={i} className={`areas area${(i % 12) + 1}`}>
                   <ThinkTankItem
                     id={p.id}
                     title={p.member.pseudo}
@@ -251,8 +257,13 @@ export default memo(function ThinkTankList({
                 </div>
               );
             })}
-        </div>
-      ))}
+          </div>
+        );
+      })}
+
+      {loading && <p className="text-center">loading...</p>}
+
+      {stopRequest && <p className="text-center my-10">All by now !♥</p>}
       <Modal
         showModal={showModal}
         setShowModal={setShowModal}
