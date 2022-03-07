@@ -122,7 +122,7 @@ export default memo(function ThinkTankList({
       }
 
       setLoading(false);
-    } catch (e) {
+    }catch (e) {
       if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
         console.error(e);
       }

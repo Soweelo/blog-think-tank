@@ -5,7 +5,7 @@ import Bottombar from "./components/bottomBar/Bottombar";
 import MoreAbout from "./components/moreAbout/MoreAbout";
 import Privacy from "./components/privacy/Privacy";
 import Faq from "./components/faq/Faq";
-
+import Account from "./components/account/Account"
 import BePart from "./components/bePart/BePart";
 import { useState, useEffect, memo } from "react";
 import MainMenu from "./components/mainMenu/MainMenu";
@@ -27,6 +27,7 @@ function App() {
     background-image: url("${PF}/storage/app/public/4.jpg");
   `;
   const fetch = useFetch();
+const [sessionToken, setSessionToken] = useState([])
 
   function getCookie(cname) {
     let name = cname + "=";
@@ -51,6 +52,30 @@ function App() {
       setLang(getCookie("lang"));
     }
   }, []);
+  // useEffect(() => {
+  //   const fetchSessionVar = async () => {
+  //     try {
+  //       const response = await fetch(PF + "api/members/session?token=6630f87578ebe9ab117461b31a20bacc\n" +
+  //           "-- " + lang, {
+  //         enabled: !!lang,
+  //       });
+  //       const data = await response.json();
+  //       // console.log(data.data);
+  //       setAllOptions(data.data);
+  //     } catch (e) {
+  //       if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
+  //         console.error(e);
+  //       }
+  //     }
+  //   };
+  //   // console.log(allOptions);
+  //
+  //     fetchSessionVar();
+  //   console.log(sessionToken)
+  //
+  //   // console.log(allOptions);
+  // }, []);
+
   useEffect(() => {
     const fetchAllOptions = async () => {
       try {
@@ -84,6 +109,8 @@ function App() {
           showLogin={showLogin}
           setShowLogin={setShowLogin}
           allOptions={allOptions}
+          sessionToken={sessionToken}
+
         />
 
         <SectionMain className={`sections${showLogin ? " filter" : ""}`}>
@@ -123,7 +150,11 @@ function App() {
                     allOptions={allOptions}
                   />
                 );
-
+              case "5":
+                return(
+                    <Account  allOptions={allOptions} sessionToken={sessionToken}
+                    setSessionToken={setSessionToken} setHomeContent={setHomeContent}/>
+                )
               default:
                 return <Intro lang={lang} allOptions={allOptions} />;
             }
@@ -151,6 +182,9 @@ function App() {
         <MemberLoginandRegister
           showLogin={showLogin}
           setShowLogin={setShowLogin}
+          sessionToken={sessionToken}
+          setSessionToken={setSessionToken}
+          setHomeContent={setHomeContent}
         />
       </div>
     </>

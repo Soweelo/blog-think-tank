@@ -16,7 +16,10 @@ export default memo(function Topbar({
   setShowLogin,
   showLogin,
   allOptions,
+    sessionToken,
+
 }) {
+
   // const [isOpenedGT, setIsOpenedGT] = useState(false);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [allLang, setAllLang] = useState([]);
@@ -83,7 +86,14 @@ export default memo(function Topbar({
   const options = dataLangToArray(allLang);
 
   function openLoginInterface() {
-    setShowLogin(!showLogin);
+    console.log(sessionToken)
+    if(sessionToken.length !== 0){
+      setHomeContent("5")
+
+    }else{
+      setShowLogin(!showLogin);
+    }
+
   }
 
   return (
@@ -110,7 +120,7 @@ export default memo(function Topbar({
           <div className="nav__link">
             <Search />
           </div>
-          <div className="nav__link" onClick={() => openLoginInterface()}>
+          <div className="nav__link" onClick={() =>  openLoginInterface()}>
             <Person />
           </div>
           <div className="nav__link nav__link-GT-icon">

@@ -6,6 +6,7 @@ import { useRef, useEffect, useCallback, useState } from "react";
 import { useSpring, animated } from "react-spring";
 import { Person, Mail, Lock } from "@material-ui/icons";
 import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
+import { useFetch } from "../../hooks/useFetch";
 
 const Background = styled.div`
   width: 100%;
@@ -94,10 +95,12 @@ const StyledInput = styled.input`
   color: white;
   height: 40px;
 `;
-export default function MemberLoginandRegister({ showLogin, setShowLogin }) {
+export default function MemberLoginandRegister({ showLogin, setShowLogin,setIsSession, sessionToken, setSessionToken,setHomeContent }) {
+
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-  const [registerContent, setRegisterContent] = useState(true);
+  const [registerContent, setRegisterContent] = useState(false);
   const LoginRef = useRef();
+  const fetch = useFetch();
   const animation = useSpring({
     config: {
       duration: 150,
@@ -135,6 +138,115 @@ export default function MemberLoginandRegister({ showLogin, setShowLogin }) {
     setRegisterContent(!registerContent);
     // console.log(registerContent);
   }
+  const [email, setEmail] = useState('')
+  const [regEmail, setRegEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [regPassword, setRegPassword] = useState('')
+  const [regUsername, setRegUsername] = useState('')
+
+  const handleLoginEmailChange = event => {
+    setEmail(event.target.value)
+  }
+  const handleLoginPasswordChange = event => {
+    setPassword(event.target.value)
+  };
+  const handleRegisterEmailChange = event => {
+    setRegEmail(event.target.value)
+  }
+  const handleRegisterPasswordChange = event => {
+    setRegPassword(event.target.value)
+  };
+  const handleRegisterUsernameChange = event => {
+    setRegUsername(event.target.value)
+  };
+  function sha512(str) {
+    return crypto.subtle.digest("SHA-512", new TextEncoder("utf-8").encode(str)).then(buf => {
+      return Array.prototype.map.call(new Uint8Array(buf), x=>(('00'+x.toString(16)).slice(-2))).join('');
+    });
+  }
+
+  // ***
+  // const fetchAllOptions = async () => {
+  //   try {
+  //     const response = await fetch(PF + "/api/options?lang=" + lang, {
+  //       enabled: !!lang,
+  //     });
+  //     const data = await response.json();
+  //     // console.log(data.data);
+  //     setAllOptions(data.data);
+  //   } catch (e) {
+  //     if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
+  //       console.error(e);
+  //     }
+  //   }
+  // *****
+const handleRegisterSubmit = async(event)=>{
+  event.preventDefault();
+  // try{
+    if ((5 < regPassword.length && regPassword.length < 25) && (regEmail.length > 0) && (regUsername.length >3)) {
+      // alert("fine length")
+
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          pseudo: regUsername,
+          email: regEmail,
+          password: regPassword,
+
+        }),
+      };
+      const url = PF + '/api/members'
+      // console.log(hashedRegPsw, regEmail,url)
+
+      const response = await fetch(url, requestOptions)
+          .then(response => response.json())
+      let data = await response;
+      console.log(data.session);
+      setSessionToken([data.data.session,data.data.pseudo])
+      setShowLogin(false)
+      setHomeContent("5")
+  // }catch(e) {
+  //   if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
+  //     console.error(e);
+  //   }
+  }
+}
+  const handleLoginSubmit = async(event) => {
+    event.preventDefault();
+    try {
+      if ((5 < password.length && password.length < 25) && (email.length > 0)) {
+        // alert("fine length")
+let hashedPsw = await sha512(password)
+
+        const url = PF + '/api/members?email=' + email + '&password=' + hashedPsw
+        // console.log(hashedPsw, email,url)
+
+        const response = await fetch(url)
+            .then(r => r.json())
+            .catch(error => console.log('Form submit error', error))
+        const data = await response
+        // console.log(data);
+        // console.log(data.data);
+        // console.log(data.data.session);
+        setSessionToken([data.data.session,data.data.pseudo])
+        setShowLogin(false)
+        setHomeContent("5")
+      } else {
+        alert("whether your password or email length is wrong, please give it a check")
+        // console.log(password, email)
+      }
+
+
+    } catch (e) {
+      if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
+        console.error(e);
+      }
+
+    }
+    ;
+
+  }
   return (
     <>
       {showLogin ? (
@@ -146,7 +258,7 @@ export default function MemberLoginandRegister({ showLogin, setShowLogin }) {
           >
             <LoginWrapper showLogin={showLogin} className="login-wrapper">
               <LoginContent className={registerContent && "d-none"}>
-                <form action="">
+                <form onSubmit={handleLoginSubmit}>
                   <div className="login__input-wrapper">
                     <h1>LOGIN</h1>
 
@@ -155,8 +267,9 @@ export default function MemberLoginandRegister({ showLogin, setShowLogin }) {
                       <StyledInput
                         className="input-field"
                         type="text"
-                        placeholder="Email"
-                        name="email"
+                        placeholder="Enter email"
+                        onChange={handleLoginEmailChange}
+                        value={email}
                       />
                     </div>
 
@@ -166,11 +279,12 @@ export default function MemberLoginandRegister({ showLogin, setShowLogin }) {
                         className="input-field"
                         type="password"
                         placeholder="Password"
-                        name="psw"
+                        value={password}
+                        onChange={handleLoginPasswordChange}
                       />
                     </div>
 
-                    <button className="btn login__btn-submit">Login</button>
+                    <button className="btn login__btn-submit" type="submit">Login</button>
                     <div className="login__forgoten-psw">
                       Forgotten password? <span>Click-here</span>!
                     </div>
@@ -186,7 +300,7 @@ export default function MemberLoginandRegister({ showLogin, setShowLogin }) {
                 ></CloseLoginButton>
               </LoginContent>
               <LoginContent className={!registerContent && "d-none"}>
-                <form action="">
+                <form onSubmit={handleRegisterSubmit}>
                   <div className="login__input-wrapper">
                     <h1>REGISTER NOW</h1>
                     <div className="login__input-container">
@@ -196,7 +310,8 @@ export default function MemberLoginandRegister({ showLogin, setShowLogin }) {
                         type="text"
                         placeholder="Username"
                         name="usrnm"
-                        placeholder="Username"
+                        value={regUsername}
+                        onChange={handleRegisterUsernameChange}
                       />
                     </div>
 
@@ -207,6 +322,8 @@ export default function MemberLoginandRegister({ showLogin, setShowLogin }) {
                         type="text"
                         placeholder="Email"
                         name="email"
+                        value={regEmail}
+                        onChange={handleRegisterEmailChange}
                       />
                     </div>
 
@@ -216,11 +333,12 @@ export default function MemberLoginandRegister({ showLogin, setShowLogin }) {
                         className="input-field"
                         type="password"
                         placeholder="Password"
-                        name="psw"
+                        value={regPassword}
+                        onChange={handleRegisterPasswordChange}
                       />
                     </div>
 
-                    <button className="btn login__btn-submit">Register</button>
+                    <button className="btn login__btn-submit" type="submit">Register</button>
                   </div>
 
                   <div className=" login__btn-switch" onClick={switchContent}>
