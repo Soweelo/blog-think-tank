@@ -16,10 +16,8 @@ export default memo(function Topbar({
   setShowLogin,
   showLogin,
   allOptions,
-    sessionToken,
-
+  session,
 }) {
-
   // const [isOpenedGT, setIsOpenedGT] = useState(false);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [allLang, setAllLang] = useState([]);
@@ -39,7 +37,8 @@ export default memo(function Topbar({
 
   function setLangAndCookieLang(option) {
     setLang(option);
-    document.cookie = "lang=" + option + "; SameSite=Lax; Secure";
+    document.cookie =
+      "YW-lang=" + option + "; SameSite=Lax; Secure;;max-age=31536000";
   }
 
   function getFullname(all, code) {
@@ -86,14 +85,11 @@ export default memo(function Topbar({
   const options = dataLangToArray(allLang);
 
   function openLoginInterface() {
-    console.log(sessionToken)
-    if(sessionToken.length !== 0){
-      setHomeContent("5")
-
-    }else{
+    if (session.length !== 0) {
+      setHomeContent("5");
+    } else {
       setShowLogin(!showLogin);
     }
-
   }
 
   return (
@@ -120,7 +116,7 @@ export default memo(function Topbar({
           <div className="nav__link">
             <Search />
           </div>
-          <div className="nav__link" onClick={() =>  openLoginInterface()}>
+          <div className="nav__link" onClick={() => openLoginInterface()}>
             <Person />
           </div>
           <div className="nav__link nav__link-GT-icon">

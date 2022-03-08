@@ -95,8 +95,14 @@ const StyledInput = styled.input`
   color: white;
   height: 40px;
 `;
-export default function MemberLoginandRegister({ showLogin, setShowLogin,setIsSession, sessionToken, setSessionToken,setHomeContent }) {
+export default function MemberLoginandRegister({
+  showLogin,
+  setShowLogin,
 
+  session,
+  setSession,
+  setHomeContent,
+}) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [registerContent, setRegisterContent] = useState(false);
   const LoginRef = useRef();
@@ -118,7 +124,12 @@ export default function MemberLoginandRegister({ showLogin, setShowLogin,setIsSe
     // console.log( "et e.target vaut ")
     // console.log(e.target)
   };
-
+  function setCookieSession(option1, option2) {
+    document.cookie =
+      "YW-session-token=" + option1 + "; SameSite=Lax; Secure;;max-age=7200";
+    document.cookie =
+      "YW-session-pseudo=" + option2 + "; SameSite=Lax; Secure;;max-age=7200";
+  }
   const keyPress = useCallback(
     (e) => {
       if (e.key === "Escape" && showLogin) {
@@ -138,52 +149,46 @@ export default function MemberLoginandRegister({ showLogin, setShowLogin,setIsSe
     setRegisterContent(!registerContent);
     // console.log(registerContent);
   }
-  const [email, setEmail] = useState('')
-  const [regEmail, setRegEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [regPassword, setRegPassword] = useState('')
-  const [regUsername, setRegUsername] = useState('')
+  const [email, setEmail] = useState("");
+  const [regEmail, setRegEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [regPassword, setRegPassword] = useState("");
+  const [regUsername, setRegUsername] = useState("");
 
-  const handleLoginEmailChange = event => {
-    setEmail(event.target.value)
-  }
-  const handleLoginPasswordChange = event => {
-    setPassword(event.target.value)
+  const handleLoginEmailChange = (event) => {
+    setEmail(event.target.value);
   };
-  const handleRegisterEmailChange = event => {
-    setRegEmail(event.target.value)
-  }
-  const handleRegisterPasswordChange = event => {
-    setRegPassword(event.target.value)
+  const handleLoginPasswordChange = (event) => {
+    setPassword(event.target.value);
   };
-  const handleRegisterUsernameChange = event => {
-    setRegUsername(event.target.value)
+  const handleRegisterEmailChange = (event) => {
+    setRegEmail(event.target.value);
+  };
+  const handleRegisterPasswordChange = (event) => {
+    setRegPassword(event.target.value);
+  };
+  const handleRegisterUsernameChange = (event) => {
+    setRegUsername(event.target.value);
   };
   function sha512(str) {
-    return crypto.subtle.digest("SHA-512", new TextEncoder("utf-8").encode(str)).then(buf => {
-      return Array.prototype.map.call(new Uint8Array(buf), x=>(('00'+x.toString(16)).slice(-2))).join('');
-    });
+    return crypto.subtle
+      .digest("SHA-512", new TextEncoder("utf-8").encode(str))
+      .then((buf) => {
+        return Array.prototype.map
+          .call(new Uint8Array(buf), (x) => ("00" + x.toString(16)).slice(-2))
+          .join("");
+      });
   }
 
-  // ***
-  // const fetchAllOptions = async () => {
-  //   try {
-  //     const response = await fetch(PF + "/api/options?lang=" + lang, {
-  //       enabled: !!lang,
-  //     });
-  //     const data = await response.json();
-  //     // console.log(data.data);
-  //     setAllOptions(data.data);
-  //   } catch (e) {
-  //     if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
-  //       console.error(e);
-  //     }
-  //   }
-  // *****
-const handleRegisterSubmit = async(event)=>{
-  event.preventDefault();
-  // try{
-    if ((5 < regPassword.length && regPassword.length < 25) && (regEmail.length > 0) && (regUsername.length >3)) {
+  const handleRegisterSubmit = async (event) => {
+    event.preventDefault();
+    // try{
+    if (
+      5 < regPassword.length &&
+      regPassword.length < 25 &&
+      regEmail.length > 0 &&
+      regUsername.length > 3
+    ) {
       // alert("fine length")
 
       const requestOptions = {
@@ -193,60 +198,60 @@ const handleRegisterSubmit = async(event)=>{
           pseudo: regUsername,
           email: regEmail,
           password: regPassword,
-
         }),
       };
-      const url = PF + '/api/members'
+      const url = PF + "/api/members";
       // console.log(hashedRegPsw, regEmail,url)
 
-      const response = await fetch(url, requestOptions)
-          .then(response => response.json())
+      const response = await fetch(url, requestOptions).then((response) =>
+        response.json()
+      );
       let data = await response;
-      console.log(data.session);
-      setSessionToken([data.data.session,data.data.pseudo])
-      setShowLogin(false)
-      setHomeContent("5")
-  // }catch(e) {
-  //   if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
-  //     console.error(e);
-  //   }
-  }
-}
-  const handleLoginSubmit = async(event) => {
+
+      setSession([data.data.session, data.data.pseudo]);
+      setCookieSession(data.data.session, data.data.pseudo);
+      setShowLogin(false);
+      setHomeContent("5");
+      // }catch(e) {
+      //   if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
+      //     console.error(e);
+      //   }
+    }
+  };
+  const handleLoginSubmit = async (event) => {
     event.preventDefault();
     try {
-      if ((5 < password.length && password.length < 25) && (email.length > 0)) {
+      if (5 < password.length && password.length < 25 && email.length > 0) {
         // alert("fine length")
-let hashedPsw = await sha512(password)
+        let hashedPsw = await sha512(password);
 
-        const url = PF + '/api/members?email=' + email + '&password=' + hashedPsw
+        const url =
+          PF + "/api/members?email=" + email + "&password=" + hashedPsw;
         // console.log(hashedPsw, email,url)
 
         const response = await fetch(url)
-            .then(r => r.json())
-            .catch(error => console.log('Form submit error', error))
-        const data = await response
+          .then((r) => r.json())
+          .catch((error) => console.log("Form submit error", error));
+        const data = await response;
         // console.log(data);
         // console.log(data.data);
         // console.log(data.data.session);
-        setSessionToken([data.data.session,data.data.pseudo])
-        setShowLogin(false)
-        setHomeContent("5")
+        setSession([data.data.session, data.data.pseudo]);
+        setCookieSession(data.data.session, data.data.pseudo);
+        setShowLogin(false);
+        setHomeContent("5");
       } else {
-        alert("whether your password or email length is wrong, please give it a check")
+        alert(
+          "whether your password or email length is wrong, please give it a check"
+        );
         // console.log(password, email)
       }
-
-
     } catch (e) {
       if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
         console.error(e);
       }
-
     }
-    ;
-
-  }
+  };
   return (
     <>
       {showLogin ? (
@@ -284,7 +289,9 @@ let hashedPsw = await sha512(password)
                       />
                     </div>
 
-                    <button className="btn login__btn-submit" type="submit">Login</button>
+                    <button className="btn login__btn-submit" type="submit">
+                      Login
+                    </button>
                     <div className="login__forgoten-psw">
                       Forgotten password? <span>Click-here</span>!
                     </div>
@@ -338,7 +345,9 @@ let hashedPsw = await sha512(password)
                       />
                     </div>
 
-                    <button className="btn login__btn-submit" type="submit">Register</button>
+                    <button className="btn login__btn-submit" type="submit">
+                      Register
+                    </button>
                   </div>
 
                   <div className=" login__btn-switch" onClick={switchContent}>

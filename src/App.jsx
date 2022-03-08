@@ -5,11 +5,11 @@ import Bottombar from "./components/bottomBar/Bottombar";
 import MoreAbout from "./components/moreAbout/MoreAbout";
 import Privacy from "./components/privacy/Privacy";
 import Faq from "./components/faq/Faq";
-import Account from "./components/account/Account"
+import Account from "./components/account/Account";
 import BePart from "./components/bePart/BePart";
 import { useState, useEffect, memo } from "react";
 import MainMenu from "./components/mainMenu/MainMenu";
-
+import PopupMessage from "./components/popup/PopupMessage";
 import styled from "styled-components";
 
 import MemberLoginandRegister from "./components/login/MemberLoginandRegister";
@@ -23,11 +23,13 @@ function App() {
   const [lang, setLang] = useState("");
   const [showLogin, setShowLogin] = useState(false);
   const [allOptions, setAllOptions] = useState([]);
+  const [popupContent, setPopupContent] = useState("");
+  const [isOpenedPopup, setIsOpenedPopup] = useState(false);
   const SectionMain = styled.div`
     background-image: url("${PF}/storage/app/public/4.jpg");
   `;
   const fetch = useFetch();
-const [sessionToken, setSessionToken] = useState([])
+  const [session, setSession] = useState([]);
 
   function getCookie(cname) {
     let name = cname + "=";
@@ -46,35 +48,18 @@ const [sessionToken, setSessionToken] = useState([])
   }
 
   useEffect(() => {
-    if (getCookie("lang").length === 0) {
+    if (getCookie("YW-lang").length === 0) {
       setLang(navigator.language.substr(0, 2));
     } else {
-      setLang(getCookie("lang"));
+      setLang(getCookie("YW-lang"));
+    }
+    if (getCookie("YW-session-token").length !== 0) {
+      setSession([
+        getCookie("YW-session-token"),
+        getCookie("YW-session-pseudo"),
+      ]);
     }
   }, []);
-  // useEffect(() => {
-  //   const fetchSessionVar = async () => {
-  //     try {
-  //       const response = await fetch(PF + "api/members/session?token=6630f87578ebe9ab117461b31a20bacc\n" +
-  //           "-- " + lang, {
-  //         enabled: !!lang,
-  //       });
-  //       const data = await response.json();
-  //       // console.log(data.data);
-  //       setAllOptions(data.data);
-  //     } catch (e) {
-  //       if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
-  //         console.error(e);
-  //       }
-  //     }
-  //   };
-  //   // console.log(allOptions);
-  //
-  //     fetchSessionVar();
-  //   console.log(sessionToken)
-  //
-  //   // console.log(allOptions);
-  // }, []);
 
   useEffect(() => {
     const fetchAllOptions = async () => {
@@ -98,6 +83,8 @@ const [sessionToken, setSessionToken] = useState([])
 
     // console.log(allOptions);
   }, [lang]);
+  // console.log(isOpenedPopup);
+
   return (
     <>
       <div className="app">
@@ -109,8 +96,7 @@ const [sessionToken, setSessionToken] = useState([])
           showLogin={showLogin}
           setShowLogin={setShowLogin}
           allOptions={allOptions}
-          sessionToken={sessionToken}
-
+          session={session}
         />
 
         <SectionMain className={`sections${showLogin ? " filter" : ""}`}>
@@ -151,10 +137,26 @@ const [sessionToken, setSessionToken] = useState([])
                   />
                 );
               case "5":
-                return(
-                    <Account  allOptions={allOptions} sessionToken={sessionToken}
-                    setSessionToken={setSessionToken} setHomeContent={setHomeContent}/>
-                )
+                return (
+                  <>
+                    {/*<button*/}
+                    {/*  className="btn small"*/}
+                    {/*  onClick={() => {*/}
+                    {/*    callBackPopUp();*/}
+                    {/*  }}*/}
+                    {/*>*/}
+                    {/*  here*/}
+                    {/*</button>*/}
+                    <Account
+                      allOptions={allOptions}
+                      session={session}
+                      setSession={setSession}
+                      setHomeContent={setHomeContent}
+                      // setPopupContent={setPopupContent}
+                      // setIsOpenPopup={setIsOpenedPopup}
+                    />
+                  </>
+                );
               default:
                 return <Intro lang={lang} allOptions={allOptions} />;
             }
@@ -182,9 +184,15 @@ const [sessionToken, setSessionToken] = useState([])
         <MemberLoginandRegister
           showLogin={showLogin}
           setShowLogin={setShowLogin}
-          sessionToken={sessionToken}
-          setSessionToken={setSessionToken}
+          session={session}
+          setSession={setSession}
           setHomeContent={setHomeContent}
+        />
+
+        <PopupMessage
+          content={popupContent}
+          isOpen={isOpenedPopup}
+          setIsOpen={setIsOpenedPopup}
         />
       </div>
     </>

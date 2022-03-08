@@ -1,6 +1,9 @@
 $primary: #ffffff;
 $secondary: #383534;
-$tertiary: #646464;
+$tertiary: rgba(100, 100, 100, 0.68);
+$edit: rgba(39, 39, 122, 0.43);
+$delete: rgba(255, 0, 0, 0.45);
+$validate: rgba(0, 128, 0, 0.56);
 $complementary: #2f2f2f;
 $mobilebreak:768px;
 $padbreak:1300px;
@@ -15,6 +18,10 @@ $padbreak:1300px;
   position: absolute;
   top: 40%;
 }
+//.small{
+//  width: 50px !important;
+//  height: 50px !important;
+//background-color: blue}
 @mixin mobile{
   @media (max-width: #{$mobilebreak}) {
     @content

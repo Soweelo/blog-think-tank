@@ -122,7 +122,7 @@ export default memo(function ThinkTankList({
       }
 
       setLoading(false);
-    }catch (e) {
+    } catch (e) {
       if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
         console.error(e);
       }
@@ -238,7 +238,7 @@ export default memo(function ThinkTankList({
           </div>
         </div>
       )}
-      {stopRequest && <p className="text-center my-10">All by now !</p>}
+      {/*{stopRequest && <p className="text-center my-10">All by now !</p>}*/}
       <Modal
         showModal={showModal}
         setShowModal={setShowModal}
