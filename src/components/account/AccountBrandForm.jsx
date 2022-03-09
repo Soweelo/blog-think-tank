@@ -19,12 +19,20 @@ export default function AccountBrandForm({
   token,
   setBackMessage,
   setAccountContent,
+  brandContent,
 }) {
   // console.log(formContent);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [message, setMessage] = useState("");
-  const [brandName, setBrandName] = useState("");
-  const [brandLink, setBrandLink] = useState("");
+  const [brandId, setBrandId] = useState(
+    formContent == 1 ? brandContent[0] : ""
+  );
+  const [brandName, setBrandName] = useState(
+    formContent == 1 ? brandContent[1] : ""
+  );
+  const [brandLink, setBrandLink] = useState(
+    formContent == 1 ? brandContent[2] : ""
+  );
   const handleBrandNameChange = (e) => {
     setBrandName(e.target.value);
   };
@@ -78,7 +86,50 @@ export default function AccountBrandForm({
     }
   };
   //edit Brand
-  const submitEditBrand = async (e) => {};
+  const submitEditBrand = async (event) => {
+    event.preventDefault();
+    // try{
+    if (
+      5 < brandName.length &&
+      brandName.length < 25 &&
+      brandName.length > 0 &&
+      brandName.length > 3
+    ) {
+      // alert("fine length")
+
+      const requestOptions = {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          link: brandLink,
+          name: brandName,
+          token: token,
+        }),
+      };
+      const url = PF + "/api/brands/" + brandId;
+      // console.log(hashedRegPsw, regEmail,url)
+
+      const response = await fetch(url, requestOptions).then((response) =>
+        response.json()
+      );
+      let data = await response;
+      if (data.success == true) {
+        // console.log(response);
+        setBackMessage(data.message);
+        setAccountContent(2);
+      } else {
+        console.log(response);
+        setMessage(data.message);
+      }
+
+      // }catch(e) {
+      //   if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
+      //     console.error(e);
+      //   }
+    } else {
+      setMessage("Your brand name or link length is not valid");
+    }
+  };
   return (
     <>
       <h2>{formContent === 1 ? "Edit your Brand" : "Add a new Brand"}</h2>

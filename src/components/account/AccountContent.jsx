@@ -11,6 +11,7 @@ export default function AccountContent({
   setAccountContent,
 }) {
   const allBrands = useTrait([]);
+
   const [brandMessage, setBrandMessage] = useState("");
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const fetch = useFetch();
@@ -28,27 +29,40 @@ export default function AccountContent({
       }
     }
   };
-  const getBrandById = async (e) => {
-    e.preventDefault();
-    const id = e.target.attributes["data-value"].value;
-    console.log(id);
-    try {
-      const response = await fetch(PF + "/api/brands/" + id);
-      const data = await response.json();
-      console.log(data);
-      if (data.success) {
-        setBrandContent([1, 2]);
-        setAccountContent(3);
-        setAccountBrandForm(1);
-      } else {
-        setBrandMessage(data.message);
+  const getBrandById = (id) => {
+    allBrands.get().map((brand, i) => {
+      if (brand.id === id) {
+        setBrandContent([brand.id, brand.name, brand.link]);
+        console.log(brandContent);
+        return;
       }
-    } catch (e) {
-      if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
-        console.error(e);
-      }
-    }
+      return;
+    });
+    return brandContent;
   };
+  getBrandById();
+
+  // const getBrandById = async (e) => {
+  //   e.preventDefault();
+  //   const id = e.target.attributes["data-value"].value;
+  //   console.log(id);
+  //   try {
+  //     const response = await fetch(PF + "/api/brands/" + id);
+  //     const data = await response.json();
+  //     console.log(data);
+  //     if (data.success) {
+  //       setBrandContent([1, 2]);
+  //       setAccountContent(3);
+  //       setAccountBrandForm(1);
+  //     } else {
+  //       setBrandMessage(data.message);
+  //     }
+  //   } catch (e) {
+  //     if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
+  //       console.error(e);
+  //     }
+  //   }
+  // };
   const deleteBrand = async (e) => {
     e.preventDefault();
     // console.log(e.target.attributes["data-value"].value);
@@ -138,7 +152,11 @@ export default function AccountContent({
                           <div
                             className="btn account-content__buttons-btn-edit"
                             data-value={brand.id}
-                            onClick={(e) => getBrandById(e)}
+                            onClick={() => {
+                              setAccountContent(3);
+                              setAccountBrandForm(1);
+                              getBrandById(brand.id);
+                            }}
                           >
                             EDIT
                           </div>
@@ -169,6 +187,7 @@ export default function AccountContent({
                   token={session[0]}
                   setBackMessage={setBrandMessage}
                   setAccountContent={setAccountContent}
+                  brandContent={brandContent}
                 />
               </div>
             );
