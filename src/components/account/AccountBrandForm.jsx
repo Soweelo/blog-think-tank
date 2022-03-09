@@ -118,7 +118,7 @@ export default function AccountBrandForm({
         setBackMessage(data.message);
         setAccountContent(2);
       } else {
-        console.log(response);
+        // console.log(response);
         setMessage(data.message);
       }
 
@@ -133,7 +133,7 @@ export default function AccountBrandForm({
   return (
     <>
       <h2>{formContent === 1 ? "Edit your Brand" : "Add a new Brand"}</h2>
-      <div>{message}</div>
+      <div className="account__form-message">{message}</div>
       <form onSubmit={formContent === 1 ? submitEditBrand : submitAddBrand}>
         <div className="account__input-container">
           <div className="account-label">Name</div>

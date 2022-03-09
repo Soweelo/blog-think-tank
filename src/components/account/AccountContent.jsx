@@ -5,6 +5,12 @@ import { useFetch } from "../../hooks/useFetch";
 import AccountBrandForm from "./AccountBrandForm";
 import { ArrowBack, Close } from "@material-ui/icons";
 import useTrait from "../../hooks/useTrait";
+import {
+  PersonOutline,
+  LockOpen,
+  MailOutline,
+  StarOutline,
+} from "@material-ui/icons";
 export default function AccountContent({
   accountContent,
   session,
@@ -33,7 +39,7 @@ export default function AccountContent({
     allBrands.get().map((brand, i) => {
       if (brand.id === id) {
         setBrandContent([brand.id, brand.name, brand.link]);
-        console.log(brandContent);
+        // console.log(brandContent);
         return;
       }
       return;
@@ -197,19 +203,31 @@ export default function AccountContent({
                 <h2>My Account</h2>
                 <div className="account-content__info-container">
                   <div className="account-content__info-line">
-                    <div className="account-content__label">Pseudo</div>
+                    <div className="account-content__label">
+                      <PersonOutline />
+                      Pseudo
+                    </div>
                     <div className="account-content__value">{session[1]}</div>
                   </div>
                   <div className="account-content__info-line">
-                    <div className="account-content__label">Password</div>
+                    <div className="account-content__label">
+                      <LockOpen />
+                      Password
+                    </div>
                     <div className="account-content__value">*******</div>
                   </div>
                   <div className="account-content__info-line">
-                    <div className="account-content__label">Status</div>
+                    <div className="account-content__label">
+                      <StarOutline />
+                      Status
+                    </div>
                     <div className="account-content__value">is_Premium</div>
                   </div>
                   <div className="account-content__info-line">
-                    <div className="account-content__label">Email</div>
+                    <div className="account-content__label">
+                      <MailOutline />
+                      Email
+                    </div>
                     <div className="account-content__value">
                       youremail@gmail.com
                     </div>
