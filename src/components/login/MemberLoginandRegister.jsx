@@ -98,7 +98,6 @@ const StyledInput = styled.input`
 export default function MemberLoginandRegister({
   showLogin,
   setShowLogin,
-
   session,
   setSession,
   setHomeContent,

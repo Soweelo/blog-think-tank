@@ -1,3 +1,13 @@
+***Render des switch:
+{(()=>{
+    switch(var){
+        case 1:)
+            return(<div></div>)
+        default:
+            return(<div></div>)
+    }}
+)()}
+
 *** Résoudre l'erreur Can't perform a React state update on an unmounted component
 Comme indiqué par l'erreur ce problème survient lorsque un callback qui change l'état d'un composant est appelé après que le composant soit démonté. Cela arrive souvent lorsque l'on contacte une API distante ou lorsque l'on oublie de clearTimeout() un intervalle précédemment créé.
 

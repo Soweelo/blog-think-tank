@@ -2,22 +2,75 @@ import { useState, useEffect } from "react";
 import "./accountcontent.scss";
 import AutoCSearchbar from "../autoCSearchBar/AutoCSearchbar";
 import { useFetch } from "../../hooks/useFetch";
-
+import AccountBrandForm from "./AccountBrandForm";
+import { ArrowBack, Close } from "@material-ui/icons";
+import useTrait from "../../hooks/useTrait";
 export default function AccountContent({
   accountContent,
   session,
   setAccountContent,
 }) {
-  const [allBrands, setAllBrands] = useState([]);
+  const allBrands = useTrait([]);
+  const [brandMessage, setBrandMessage] = useState("");
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const fetch = useFetch();
-
+  const [accountBrandForm, setAccountBrandForm] = useState(1);
+  const [brandContent, setBrandContent] = useState([]);
   const getAllBrands = async () => {
     try {
       const response = await fetch(PF + "/api/brands/list?token=" + session[0]);
       const data = await response.json();
-      console.log(data.data);
-      setAllBrands(data.data);
+      // console.log(data.data);
+      allBrands.set(data.data);
+    } catch (e) {
+      if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
+        console.error(e);
+      }
+    }
+  };
+  const getBrandById = async (e) => {
+    e.preventDefault();
+    const id = e.target.attributes["data-value"].value;
+    console.log(id);
+    try {
+      const response = await fetch(PF + "/api/brands/" + id);
+      const data = await response.json();
+      console.log(data);
+      if (data.success) {
+        setBrandContent([1, 2]);
+        setAccountContent(3);
+        setAccountBrandForm(1);
+      } else {
+        setBrandMessage(data.message);
+      }
+    } catch (e) {
+      if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
+        console.error(e);
+      }
+    }
+  };
+  const deleteBrand = async (e) => {
+    e.preventDefault();
+    // console.log(e.target.attributes["data-value"].value);
+    const id = e.target.attributes["data-value"].value;
+
+    try {
+      const response = await fetch(
+        PF + "/api/brands/" + id + "?token=" + session[0],
+        { method: "DELETE" }
+      );
+      const data = await response.json();
+      // console.log("data", data);
+      // console.log("response", response);
+      if (data.success) {
+        // console.log(data);
+        setBrandMessage(data.message);
+        await getAllBrands();
+      } else {
+        // console.log(data);
+        setBrandMessage(data.message);
+        await getAllBrands();
+      }
     } catch (e) {
       if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
         console.error(e);
@@ -26,7 +79,9 @@ export default function AccountContent({
   };
   useEffect(() => {
     getAllBrands();
-  }, [session]);
+
+    // console.log("rerender", allBrands.get());
+  }, [accountBrandForm, accountContent]);
   return (
     <div className="account-content__wrapper">
       {(() => {
@@ -42,13 +97,25 @@ export default function AccountContent({
           case 2:
             return (
               <div>
+                {brandMessage && (
+                  <div className="account__message">
+                    {brandMessage}
+                    <Close
+                      onClick={() => {
+                        setBrandMessage("");
+                      }}
+                    />
+                  </div>
+                )}
                 <div className="account-content__info-line">
                   <h2>My Brands</h2>
+
                   <div className="account-content__buttons">
                     <div
                       className="btn account-content__buttons-btn-create"
                       onClick={() => {
                         setAccountContent(3);
+                        setAccountBrandForm(0);
                       }}
                     >
                       ADD NEW BRAND
@@ -57,7 +124,7 @@ export default function AccountContent({
                 </div>
 
                 <div className="account-content__info-container">
-                  {allBrands.map((brand, i) => {
+                  {allBrands.get().map((brand, i) => {
                     return (
                       <div
                         className="account-content__info-line bordered"
@@ -68,10 +135,18 @@ export default function AccountContent({
                           dangerouslySetInnerHTML={{ __html: brand.name }}
                         ></div>
                         <div className="account-content__buttons">
-                          <div className="btn account-content__buttons-btn-edit">
+                          <div
+                            className="btn account-content__buttons-btn-edit"
+                            data-value={brand.id}
+                            onClick={(e) => getBrandById(e)}
+                          >
                             EDIT
                           </div>
-                          <div className="btn account-content__buttons-btn-delete">
+                          <div
+                            className="btn account-content__buttons-btn-delete"
+                            data-value={brand.id}
+                            onClick={(e) => deleteBrand(e)}
+                          >
                             DELETE
                           </div>
                         </div>
@@ -81,7 +156,22 @@ export default function AccountContent({
                 </div>
               </div>
             );
-
+          case 3:
+            return (
+              <div>
+                <ArrowBack
+                  onClick={() => {
+                    setAccountContent(2);
+                  }}
+                />
+                <AccountBrandForm
+                  formContent={accountBrandForm}
+                  token={session[0]}
+                  setBackMessage={setBrandMessage}
+                  setAccountContent={setAccountContent}
+                />
+              </div>
+            );
           default:
             return (
               <div>

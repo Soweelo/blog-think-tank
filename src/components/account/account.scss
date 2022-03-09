@@ -111,7 +111,11 @@ font-weight: 300;
       }
     }
   }
-  .account__content-display{width: 66%;box-sizing: border-box}
+  .account__content-display{width: 66%;box-sizing: border-box; overflow-y: scroll;
+
+    scrollbar-width: inherit;
+
+  }
   @include mobile{
     h1{
       padding: 0.2rem 0.5rem 0 0.5rem;

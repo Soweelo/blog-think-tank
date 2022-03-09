@@ -4,6 +4,15 @@
   width: 100%;margin: 1rem 0;
   padding:1rem;
   box-sizing: border-box;;
+  .account__message{
+    position: absolute;
+    top: 36px;
+    color: $tertiary;
+    background-color: $validate;
+    padding: 0.7rem;
+    border-radius: 20px;
+    right: 33%;
+  }
   h2{
     margin-top: 2rem;
   }
