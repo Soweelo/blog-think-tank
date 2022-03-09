@@ -17,11 +17,14 @@ export default function AccountContent({
   setAccountContent,
 }) {
   const allBrands = useTrait([]);
+  const allPosts = useTrait([]);
 
   const [brandMessage, setBrandMessage] = useState("");
+  const [postMessage, setPostMessage] = useState("");
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const fetch = useFetch();
   const [accountBrandForm, setAccountBrandForm] = useState(1);
+  const [accountPostForm, setAccountPostForm] = useState(1);
   const [brandContent, setBrandContent] = useState([]);
   const getAllBrands = async () => {
     try {
@@ -29,6 +32,20 @@ export default function AccountContent({
       const data = await response.json();
       // console.log(data.data);
       allBrands.set(data.data);
+    } catch (e) {
+      if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
+        console.error(e);
+      }
+    }
+  };
+  const getAllPosts = async () => {
+    try {
+      const response = await fetch(
+        PF + "/api/posts/postsList?token=" + session[0]
+      );
+      const data = await response.json();
+      console.log(data.data);
+      allPosts.set(data.data);
     } catch (e) {
       if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
         console.error(e);
@@ -102,6 +119,11 @@ export default function AccountContent({
 
     // console.log("rerender", allBrands.get());
   }, [accountBrandForm, accountContent]);
+  useEffect(() => {
+    getAllPosts();
+
+    // console.log("rerender", allBrands.get());
+  }, [accountPostForm, accountContent]);
   return (
     <div className="account-content__wrapper">
       {(() => {
@@ -109,8 +131,67 @@ export default function AccountContent({
           case 1:
             return (
               <div>
-                <h2>My Posts</h2>
-                <div className="account-content__info-line"></div>;
+                {postMessage && (
+                  <div className="account__message">
+                    {postMessage}
+                    <Close
+                      onClick={() => {
+                        setPostMessage("");
+                      }}
+                    />
+                  </div>
+                )}
+                <div className="account-content__info-line">
+                  <h2>My Posts</h2>
+
+                  <div className="account-content__buttons">
+                    <div
+                      className="btn account-content__buttons-btn-create"
+                      // onClick={() => {
+                      //   setAccountContent(3);
+                      //   setAccountBrandForm(0);
+                      // }}
+                    >
+                      ADD NEW POST
+                    </div>
+                  </div>
+                </div>
+
+                <div className="account-content__info-container">
+                  {allPosts.get().map((post, i) => {
+                    return (
+                      <div
+                        className="account-content__info-line bordered"
+                        key={i}
+                      >
+                        <div
+                          className="account-content__label"
+                          dangerouslySetInnerHTML={{ __html: post.content }}
+                        ></div>
+                        {/*<div className="account-content__buttons">*/}
+                        {/*  <div*/}
+                        {/*    className="btn account-content__buttons-btn-edit"*/}
+                        {/*    data-value={brand.id}*/}
+                        {/*    onClick={() => {*/}
+                        {/*      setAccountContent(3);*/}
+                        {/*      setAccountBrandForm(1);*/}
+                        {/*      getBrandById(brand.id);*/}
+                        {/*    }}*/}
+                        {/*  >*/}
+                        {/*    EDIT*/}
+                        {/*  </div>*/}
+                        {/*  <div*/}
+                        {/*    className="btn account-content__buttons-btn-delete"*/}
+                        {/*    data-value={brand.id}*/}
+                        {/*    onClick={(e) => deleteBrand(e)}*/}
+                        {/*  >*/}
+                        {/*    DELETE*/}
+                        {/*  </div>*/}
+                        {/*</div>*/}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             );
 
