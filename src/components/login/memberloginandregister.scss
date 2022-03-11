@@ -73,6 +73,11 @@ padding: 1.5rem 1rem;
 
     }
   }
+  .login__message--error{
+    font-size: 0.9rem;
+    color: $delete;
+
+  }
 }
   .login__btn-switch{
     width: 80%;

@@ -148,6 +148,8 @@ export default function MemberLoginandRegister({
   }, [keyPress]);
   function switchContent() {
     setRegisterContent(!registerContent);
+    setMessageLogin("");
+    setMessageRegister("");
     // console.log(registerContent);
   }
   const [email, setEmail] = useState("");
@@ -155,7 +157,8 @@ export default function MemberLoginandRegister({
   const [password, setPassword] = useState("");
   const [regPassword, setRegPassword] = useState("");
   const [regUsername, setRegUsername] = useState("");
-
+  const [messageLogin, setMessageLogin] = useState("");
+  const [messageRegister, setMessageRegister] = useState("");
   const handleLoginEmailChange = (event) => {
     setEmail(event.target.value);
   };
@@ -216,12 +219,16 @@ export default function MemberLoginandRegister({
 
           setShowLogin(false);
           setHomeContent("5");
+        } else {
+          setMessageRegister("Password or email not valid");
         }
       } catch (e) {
         if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
           console.error(e);
         }
       }
+    } else {
+      setMessageRegister("UserName, email or password has a length issue");
     }
   };
   const handleLoginSubmit = async (event) => {
@@ -248,11 +255,12 @@ export default function MemberLoginandRegister({
           setShowLogin(false);
           setHomeContent("5");
           setIsValidToken(true);
+        } else {
+          setMessageLogin("Password or email not valid");
         }
       } else {
-        alert(
-          "whether your password or email length is wrong, please give it a check"
-        );
+        setMessageLogin("Password or email length issue");
+
         // console.log(password, email)
       }
     } catch (e) {
@@ -301,6 +309,7 @@ export default function MemberLoginandRegister({
                     <button className="btn login__btn-submit" type="submit">
                       Login
                     </button>
+                    <div className="login__message--error">{messageLogin}</div>
                     <div className="login__forgoten-psw">
                       Forgotten password? <span>Click-here</span>!
                     </div>
@@ -357,6 +366,9 @@ export default function MemberLoginandRegister({
                     <button className="btn login__btn-submit" type="submit">
                       Register
                     </button>
+                    <div className="login__message--error">
+                      {messageRegister}
+                    </div>
                   </div>
 
                   <div className=" login__btn-switch" onClick={switchContent}>
