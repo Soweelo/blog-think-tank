@@ -11,6 +11,73 @@
       cursor: pointer;
     }
   }
+  .account__input-container{
+    margin-top:1rem;
+  }
+  .account__message--delete{
+    position: absolute;
+    top: 50%;
+    background-color: white;
+    height: 10rem;
+    width: 15rem;
+    border: 1px solid #ff000036;
+    transform: translate(50%,-50%);
+    border-radius: 20px;
+    box-shadow: $box-shadow;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    .account__message-delete-text{
+      padding: 0.5rem;
+      font-size: 0.9rem;
+    }
+    .account__message-delete-btn{
+      display: flex;
+      align-items: center;
+      width: 100%;
+      justify-content: space-around;
+      button{
+        background-color: $primary;
+        padding: 0.7rem;
+        border-radius: 20px;
+        width: 5rem;
+        cursor:pointer;
+        text-transform: uppercase;
+        transition: all 0.5s ease-in-out;
+        &:hover{
+          background-color: #bbbbbb;
+          font-weight: bold;
+          color:$primary
+        }
+      }
+      button:first-child{
+        border:1px solid $delete;
+
+      }
+      button:last-child{
+        border:1px solid $validate
+      }
+    }
+  }
+  .account__btn-submit{
+    border:1px solid $validate;
+    color: $validate;
+    width: 8rem;
+    text-transform: uppercase;
+    //font-weight:bold;
+    cursor:pointer;
+    margin-top:2rem;
+    transition: all 100ms ease-in-out;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    &:hover{
+      background-color: $tertiary;
+      font-weight: bold;
+      background-color: #bbbbbb;
+      color: #ffffff;
+    }
+
+  }
   .account__form-message{
     margin-bottom: 1rem;
     color: $delete;

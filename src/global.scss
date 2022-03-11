@@ -1,14 +1,14 @@
 $primary: #ffffff;
 $shadow: #bbbbbb;
 $secondary: #383534;
-$tertiary: rgba(100, 100, 100, 0.68);
+$tertiary: rgba(100, 100, 100, 0.42);
 $edit: rgba(39, 39, 122, 0.43);
 $delete: rgba(255, 0, 0, 0.45);
 $validate:  rgba(0, 128, 0, 0.65);
 $complementary: #2f2f2f;
 $mobilebreak:768px;
 $padbreak:1300px;
-
+$box-shadow:rgba(0, 0, 0, 0.2) 0px 5px 16px;
 .btn{
   background-color: transparent;
   padding: 5px 5px;

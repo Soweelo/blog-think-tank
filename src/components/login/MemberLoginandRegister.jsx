@@ -237,7 +237,6 @@ export default function MemberLoginandRegister({
       if (5 < password.length && password.length < 25 && email.length > 0) {
         // alert("fine length")
         let hashedPsw = await sha512(password);
-
         const url = await (PF +
           "/api/members?email=" +
           email +

@@ -4,15 +4,16 @@ import { Mail, Close } from "@material-ui/icons";
 // Styling a regular HTML input
 const StyledInput = styled.input`
   display: block;
-  margin: 0;
+  margin: 0.3rem 0 0 0;
   border: none;
   padding: 0 0 0 0.5rem;
   background-color: white;
   opacity: 0.8;
   color: black;
-  border: 1px solid black;
+  border: 1px solid rgba(100, 100, 100, 0.68);
   border-radius: 20px;
   height: 40px;
+  width: max(50%, 300px);
 `;
 export default function AccountBrandForm({
   formContent,
