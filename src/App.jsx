@@ -11,10 +11,11 @@ import { useState, useEffect, memo } from "react";
 import MainMenu from "./components/mainMenu/MainMenu";
 import PopupMessage from "./components/popup/PopupMessage";
 import styled from "styled-components";
-
+import outDateCookieSession from "./functions/cookiesController/outDateCookieSession";
 import MemberLoginandRegister from "./components/login/MemberLoginandRegister";
-
+// import checkValidToken from "./functions/sessionController/checkValidToken";
 import { useFetch } from "./hooks/useFetch";
+// import { useCheckValidToken } from "./functions/sessionController/useCheckValidToken";
 
 function App() {
   const [mainMenuOpen, setMainMenuOpen] = useState(false);
@@ -25,6 +26,8 @@ function App() {
   const [allOptions, setAllOptions] = useState([]);
   const [popupContent, setPopupContent] = useState("");
   const [isOpenedPopup, setIsOpenedPopup] = useState(false);
+  const [isValidToken, setIsValidToken] = useState(false);
+  const [loading, setLoading] = useState(false);
   const SectionMain = styled.div`
     background-image: url("${PF}/storage/app/public/4.jpg");
   `;
@@ -33,7 +36,9 @@ function App() {
 
   function getCookie(cname) {
     let name = cname + "=";
+
     let decodedCookie = decodeURIComponent(document.cookie);
+    // console.log(decodedCookie);
     let ca = decodedCookie.split(";");
     for (let i = 0; i < ca.length; i++) {
       let c = ca[i];
@@ -46,18 +51,65 @@ function App() {
     }
     return "";
   }
+  getCookie("YW-session-token");
+  function endSession() {
+    if (session.length !== 0) {
+      outDateCookieSession(session[0], session[1]);
+      // alert("disconnected", session[0], session[1]);
+      setSession([]);
+
+      setHomeContent("0");
+      // setPopupContent("Disconnected");
+      // callBackPopUp();
+    } else {
+      // alert("your Session expired!");
+      setHomeContent("0");
+      setSession([]);
+    }
+  }
+  useEffect(() => {
+    const token = getCookie("YW-session-token");
+    const pseudo = getCookie("YW-session-pseudo");
+    // console.log(getCookie("YW-session-token"));
+    if (token.length !== 0) {
+      const checkToken = async () => {
+        // console.log(token);
+        try {
+          setLoading(true);
+
+          const response = await fetch(
+            PF + "/api/members/session?token=" + token
+          );
+          const data = await response.json();
+          // console.log(data);
+          if (data.success) {
+            setSession([token, pseudo]);
+            setIsValidToken(true);
+          } else {
+            setSession([]);
+            if (token && pseudo) {
+              outDateCookieSession(token, pseudo);
+            }
+          }
+          setLoading(false);
+          // return isValidToken;
+        } catch (e) {
+          console.log(e);
+        }
+        // console.log(session);
+        // console.log("isValid", isValidToken);
+      };
+      if (!loading) {
+        checkToken();
+      }
+    }
+  }, [isValidToken, session]);
 
   useEffect(() => {
     if (getCookie("YW-lang").length === 0) {
       setLang(navigator.language.substr(0, 2));
     } else {
       setLang(getCookie("YW-lang"));
-    }
-    if (getCookie("YW-session-token").length !== 0) {
-      setSession([
-        getCookie("YW-session-token"),
-        getCookie("YW-session-pseudo"),
-      ]);
     }
   }, []);
 
@@ -97,6 +149,8 @@ function App() {
           setShowLogin={setShowLogin}
           allOptions={allOptions}
           session={session}
+          isValidToken={isValidToken}
+          setSession={setSession}
         />
 
         <SectionMain className={`sections${showLogin ? " filter" : ""}`}>
@@ -147,14 +201,20 @@ function App() {
                     {/*>*/}
                     {/*  here*/}
                     {/*</button>*/}
-                    <Account
-                      allOptions={allOptions}
-                      session={session}
-                      setSession={setSession}
-                      setHomeContent={setHomeContent}
-                      // setPopupContent={setPopupContent}
-                      // setIsOpenPopup={setIsOpenedPopup}
-                    />
+                    {session.length !== 0 ? (
+                      <Account
+                        allOptions={allOptions}
+                        session={session}
+                        setSession={setSession}
+                        setHomeContent={setHomeContent}
+                        isValidToken={isValidToken}
+                        setIsValidToken={setIsValidToken}
+                        // setPopupContent={setPopupContent}
+                        // setIsOpenPopup={setIsOpenedPopup}
+                      />
+                    ) : (
+                      setHomeContent(0)
+                    )}
                   </>
                 );
               default:
@@ -172,6 +232,9 @@ function App() {
           showLogin={showLogin}
           setShowLogin={setShowLogin}
           allOptions={allOptions}
+          isValidToken={isValidToken}
+          setSession={setSession}
+          session={session}
         />
         <Bottombar
           mainMenuOpen={mainMenuOpen}
@@ -187,6 +250,8 @@ function App() {
           session={session}
           setSession={setSession}
           setHomeContent={setHomeContent}
+          setIsValidToken={setIsValidToken}
+          isValidToken={isValidToken}
         />
 
         <PopupMessage

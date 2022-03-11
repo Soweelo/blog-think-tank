@@ -8,6 +8,9 @@ import { useFetch } from "../../hooks/useFetch";
 // import { QueryClient, QueryClientProvider } from "react-query";
 import GetOption from "../getoption/GetOption";
 import getOptionByKey from "../../functions/getOptionByKey/GetOptionByKey";
+// import checkValidToken from "../../functions/sessionController/checkValidToken";
+import outDateCookieSession from "../../functions/cookiesController/outDateCookieSession";
+import getCookie from "../../functions/cookiesController/getCookie";
 // const queryClient = new QueryClient();
 export default memo(function Topbar({
   setHomeContent,
@@ -17,6 +20,8 @@ export default memo(function Topbar({
   showLogin,
   allOptions,
   session,
+  setSession,
+  isValidToken,
 }) {
   // const [isOpenedGT, setIsOpenedGT] = useState(false);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
@@ -85,10 +90,25 @@ export default memo(function Topbar({
   const options = dataLangToArray(allLang);
 
   function openLoginInterface() {
+    // console.log("session", session, "isValidToken", isValidToken);
     if (session.length !== 0) {
-      setHomeContent("5");
+      // console.log("1");
+      if (isValidToken) {
+        setHomeContent("5");
+        // console.log("2");
+      } else {
+        outDateCookieSession(session[0], session[1]);
+        setShowLogin(true);
+        // console.log("3");
+      }
     } else {
-      setShowLogin(!showLogin);
+      setShowLogin(true);
+      const token = getCookie("YW-session-token");
+      const pseudo = getCookie("YW-session-pseudo");
+      // console.log("4");
+      if (token.length !== 0 && isValidToken) {
+        setSession([token, pseudo]);
+      }
     }
   }
 

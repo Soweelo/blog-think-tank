@@ -23,7 +23,7 @@ export default memo(function ThinkTankList({
   const tagsToDisplay = useTrait([]);
   const bigArray = useTrait([]);
   const [allThinkTanks, setallThinkTanks] = useState([]);
-  const [offset, setOffset] = useState(0);
+  const offset = useTrait(0);
   const [lastElement, setLastElement] = useState(null);
   const groupLimit = 12;
   const [stopRequest, setStopRequest] = useState(false);
@@ -31,7 +31,7 @@ export default memo(function ThinkTankList({
     new IntersectionObserver((entries) => {
       const first = entries[0];
       if (first.isIntersecting) {
-        setOffset((no) => no + groupLimit);
+        offset.set((no) => no + groupLimit);
         // alert("new request");
       }
     })
@@ -96,7 +96,7 @@ export default memo(function ThinkTankList({
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         limit: groupLimit,
-        offset: offset,
+        offset: offset.get(),
         tags: tagsToDisplay.get(),
         lang: lang,
       }),
@@ -128,23 +128,29 @@ export default memo(function ThinkTankList({
       }
     }
   };
+
   useEffect(() => {
+    selectedTags.length !== 0
+      ? tagsToDisplay.set(selectedTags)
+      : tagsToDisplay.set([]);
+    bigArray.set([]);
+    // console.log(bigArray);
+    offset.set(0);
+    // console.log(offset.get());
+    setContainerCount(0);
+    setStopRequest(false);
+    // console.log("ok set");
+    callThinktank();
+  }, [selectedTags, allTags]);
+  // console.log("selected Tags", selectedTags, "tags to display", tagsToDisplay);
+
+  useEffect(() => {
+    // console.log(stopRequest);
     if (!stopRequest && !loading) {
       callThinktank();
       setContainerCount(containerCount + 1);
     }
-  }, [offset]);
-  useEffect(() => {
-    selectedTags.length !== 0
-      ? tagsToDisplay.set(selectedTags)
-      : tagsToDisplay.set(allTags);
-    bigArray.set([]);
-    // console.log(bigArray);
-    setOffset(0);
-    setContainerCount(0);
-    callThinktank();
-  }, [selectedTags, allTags]);
-
+  }, [offset.get()]);
   useEffect(() => {
     const currentElement = lastElement;
     // console.log(lastElement);

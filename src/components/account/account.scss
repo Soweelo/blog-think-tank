@@ -20,7 +20,7 @@
     margin-top: 1.5rem;
     margin-bottom: 0.3rem;
     max-height: 95vh;
-    overflow-y: scroll;
+    //overflow-y: scroll;
     scrollbar-width:none;
     display: flex;
     min-height: 80vh;
@@ -40,6 +40,30 @@
       box-shadow: 5px 5px 5px rgba(128, 128, 128, 0.36);
       background-color: $complementary;
       color: $primary;
+      border-radius: 20px 0 0 20px;
+      @include mobile{
+        width: 0;
+        transition: all 50ms ease-in-out;
+        //transition: opacity 1ms ease-in-out;
+        border-radius: 20px;
+        padding:0;
+        overflow: hidden;
+        opacity: 0;
+        .bckHome{
+          display: flex;
+          top: 55px;
+          height: 1.3rem;
+          width: 1.3rem;
+          right: 19px;
+        }
+        &.mobileView{
+          width: 100%;
+          opacity: 1;
+
+
+        }
+      }
+
       .account__menubar-avatar-wrapper{
 
         display: flex;
@@ -114,6 +138,23 @@ font-weight: 300;
   .account__content-display{width: 66%;box-sizing: border-box; overflow-y: scroll;
 
     scrollbar-width: inherit;
+@include mobile{
+  width: 0;
+opacity :0;
+  border-radius: 20px;
+  padding:0;
+  transition: all 50ms ease-in-out;
+  &.mobileView{
+    width: 100%;
+    opacity:1;
+  }
+}
+
+  }
+  .account__content-display::-webkit-scrollbar{
+
+display: none;
+
 
   }
   @include mobile{
@@ -123,7 +164,10 @@ font-weight: 300;
     }
     .account__para-container{
       margin-top: 0;
-      padding: 1rem ;
+      //padding: 1rem ;
+      @include mobile{
+        margin-top: 0.3rem;
+      }
       h2{
         font-size: 1.3rem;
       }

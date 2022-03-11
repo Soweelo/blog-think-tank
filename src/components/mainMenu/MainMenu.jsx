@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Favorite, Person, Search, Home } from "@material-ui/icons";
 import getOptionByKey from "../../functions/getOptionByKey/GetOptionByKey";
+import outDateCookieSession from "../../functions/cookiesController/outDateCookieSession";
+import getCookie from "../../functions/cookiesController/getCookie";
 
 export default function MainMenu({
   mainMenuOpen,
@@ -13,6 +15,9 @@ export default function MainMenu({
   showLogin,
   setShowLogin,
   allOptions,
+  isValidToken,
+  setSession,
+  session,
 }) {
   const changeContent = (e) => {
     setHomeContent(e.target.id);
@@ -20,7 +25,26 @@ export default function MainMenu({
     setMainMenuOpen(false);
   };
   function openLoginInterface() {
-    setShowLogin(!showLogin);
+    // console.log("session", session, "isValidToken", isValidToken);
+    if (session.length !== 0) {
+      // console.log("1");
+      if (isValidToken) {
+        setHomeContent("5");
+        // console.log("2");
+      } else {
+        outDateCookieSession(session[0], session[1]);
+        setShowLogin(true);
+        // console.log("3");
+      }
+    } else {
+      setShowLogin(true);
+      const token = getCookie("YW-session-token");
+      const pseudo = getCookie("YW-session-pseudo");
+      // console.log("4");
+      if (token.length !== 0 && isValidToken) {
+        setSession([token, pseudo]);
+      }
+    }
     setMainMenuOpen(false);
   }
   const [option_moreabout, setOption_moreabout] = useState("");

@@ -54,7 +54,7 @@ const LoginContent = styled.div`
   align-items: center;
   line-height: 1.8;
   color: #141414;
-  overflow-y:scroll;
+  // overflow-y:scroll;
   padding:1rem;
 
     scrollbar-width: thin;
@@ -101,6 +101,8 @@ export default function MemberLoginandRegister({
   session,
   setSession,
   setHomeContent,
+  setIsValidToken,
+  isValidToken,
 }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [registerContent, setRegisterContent] = useState(false);
@@ -125,9 +127,9 @@ export default function MemberLoginandRegister({
   };
   function setCookieSession(option1, option2) {
     document.cookie =
-      "YW-session-token=" + option1 + "; SameSite=Lax; Secure;;max-age=7200";
+      "YW-session-token=" + option1 + "; SameSite=Lax; Secure;max-age=7200";
     document.cookie =
-      "YW-session-pseudo=" + option2 + "; SameSite=Lax; Secure;;max-age=7200";
+      "YW-session-pseudo=" + option2 + "; SameSite=Lax; Secure;max-age=7200";
   }
   const keyPress = useCallback(
     (e) => {
@@ -201,20 +203,25 @@ export default function MemberLoginandRegister({
       };
       const url = PF + "/api/members";
       // console.log(hashedRegPsw, regEmail,url)
+      try {
+        const response = await fetch(url, requestOptions).then((response) =>
+          response.json()
+        );
 
-      const response = await fetch(url, requestOptions).then((response) =>
-        response.json()
-      );
-      let data = await response;
+        let data = await response;
+        if (data.success) {
+          setSession([data.data.session, data.data.pseudo]);
+          setCookieSession(data.data.session, data.data.pseudo);
+          setIsValidToken(true);
 
-      setSession([data.data.session, data.data.pseudo]);
-      setCookieSession(data.data.session, data.data.pseudo);
-      setShowLogin(false);
-      setHomeContent("5");
-      // }catch(e) {
-      //   if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
-      //     console.error(e);
-      //   }
+          setShowLogin(false);
+          setHomeContent("5");
+        }
+      } catch (e) {
+        if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
+          console.error(e);
+        }
+      }
     }
   };
   const handleLoginSubmit = async (event) => {
@@ -224,21 +231,24 @@ export default function MemberLoginandRegister({
         // alert("fine length")
         let hashedPsw = await sha512(password);
 
-        const url =
-          PF + "/api/members?email=" + email + "&password=" + hashedPsw;
-        // console.log(hashedPsw, email,url)
+        const url = await (PF +
+          "/api/members?email=" +
+          email +
+          "&password=" +
+          hashedPsw);
 
         const response = await fetch(url)
           .then((r) => r.json())
           .catch((error) => console.log("Form submit error", error));
         const data = await response;
-        // console.log(data);
-        // console.log(data.data);
-        // console.log(data.data.session);
-        setSession([data.data.session, data.data.pseudo]);
-        setCookieSession(data.data.session, data.data.pseudo);
-        setShowLogin(false);
-        setHomeContent("5");
+
+        if (data.success) {
+          setSession([data.data.session, data.data.pseudo]);
+          setCookieSession(data.data.session, data.data.pseudo);
+          setShowLogin(false);
+          setHomeContent("5");
+          setIsValidToken(true);
+        }
       } else {
         alert(
           "whether your password or email length is wrong, please give it a check"

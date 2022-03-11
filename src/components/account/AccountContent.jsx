@@ -15,6 +15,8 @@ export default function AccountContent({
   accountContent,
   session,
   setAccountContent,
+  mobileView,
+  setMobileView,
 }) {
   const allBrands = useTrait([]);
   const allPosts = useTrait([]);
@@ -26,6 +28,7 @@ export default function AccountContent({
   const [accountBrandForm, setAccountBrandForm] = useState(1);
   const [accountPostForm, setAccountPostForm] = useState(1);
   const [brandContent, setBrandContent] = useState([]);
+
   const getAllBrands = async () => {
     try {
       const response = await fetch(PF + "/api/brands/list?token=" + session[0]);
@@ -44,7 +47,7 @@ export default function AccountContent({
         PF + "/api/posts/postsList?token=" + session[0]
       );
       const data = await response.json();
-      console.log(data.data);
+      // console.log(data.data);
       allPosts.set(data.data);
     } catch (e) {
       if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
@@ -131,6 +134,13 @@ export default function AccountContent({
           case 1:
             return (
               <div>
+                {" "}
+                <ArrowBack
+                  className="mobileView"
+                  onClick={() => {
+                    setMobileView("menu");
+                  }}
+                />
                 {postMessage && (
                   <div className="account__message">
                     {postMessage}
@@ -156,7 +166,6 @@ export default function AccountContent({
                     </div>
                   </div>
                 </div>
-
                 <div className="account-content__info-container">
                   {allPosts.get().map((post, i) => {
                     return (
@@ -198,6 +207,12 @@ export default function AccountContent({
           case 2:
             return (
               <div>
+                <ArrowBack
+                  className="mobileView"
+                  onClick={() => {
+                    setMobileView("menu");
+                  }}
+                />
                 {brandMessage && (
                   <div className="account__message">
                     {brandMessage}
@@ -281,6 +296,12 @@ export default function AccountContent({
           default:
             return (
               <div>
+                <ArrowBack
+                  className="mobileView"
+                  onClick={() => {
+                    setMobileView("menu");
+                  }}
+                />
                 <h2>My Account</h2>
                 <div className="account-content__info-container">
                   <div className="account-content__info-line">
