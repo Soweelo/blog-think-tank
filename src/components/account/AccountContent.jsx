@@ -66,7 +66,7 @@ export default function AccountContent({
     });
     return brandContent;
   };
-  getBrandById();
+  // getBrandById();
 
   // const getBrandById = async (e) => {
   //   e.preventDefault();

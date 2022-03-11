@@ -2,7 +2,7 @@ import "./account.scss";
 import BackHomeButton from "../backHomeButton/BackHomeButton";
 import AccountContent from "./AccountContent";
 import { useState, useEffect } from "react";
-import { Person, Create, LocalOffer } from "@material-ui/icons";
+import { Person, Create, LocalOffer, Home } from "@material-ui/icons";
 import outDateCookieSession from "../../functions/cookiesController/outDateCookieSession";
 // import getOptionByKey from "../../functions/getOptionByKey/GetOptionByKey";
 export default function Account({
@@ -50,6 +50,10 @@ export default function Account({
       setIsValidToken(false);
     }
   }
+  const changeContent = (e) => {
+    setHomeContent(e.target.id);
+    // console.log("click" + e.target.id);
+  };
   // console.log(accountContent);
   return (
     <div id="account">
@@ -61,7 +65,14 @@ export default function Account({
             "account__menu-bar" + (mobileView === "menu" ? " mobileView" : "")
           }
         >
-          <BackHomeButton className="account__menu-bar-home" />
+          {/*<BackHomeButton className="account__menu-bar-home" />*/}
+          <div
+            className="account__menu-bar-home"
+            onClick={(e) => changeContent(e)}
+          >
+            {" "}
+            <Home />
+          </div>
           <div className="account__menubar-avatar-wrapper">
             <Person />
             <div className="account__pseudo">
