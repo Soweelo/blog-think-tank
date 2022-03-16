@@ -1,4 +1,4 @@
-@import "../../global.scss";
+@import "../../../global";
 
 .account-content__wrapper{
   width: 100%;margin: 1rem 0;
@@ -11,6 +11,9 @@
       cursor: pointer;
     }
   }
+  //.account-content__message{
+  //  background-color: $validate;
+  //}
   .account__input-container{
     margin-top:1rem;
   }
@@ -27,6 +30,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+    z-index: 1;
     .account__message-delete-text{
       padding: 0.5rem;
       font-size: 0.9rem;
@@ -87,11 +91,13 @@
   .account__message{
     position: absolute;
     top: 36px;
-    color: $tertiary;
-    background-color: $validate;
+    color: $primary;
+    background-color: rgba(0, 128, 0, 1);
     padding: 0.7rem;
     border-radius: 20px;
     right: 33%;
+    z-index: 10;
+    opacity:1;
   }
   h2{
     margin-top: 2rem;

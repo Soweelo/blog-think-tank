@@ -211,6 +211,7 @@ function App() {
                         setIsValidToken={setIsValidToken}
                         // setPopupContent={setPopupContent}
                         // setIsOpenPopup={setIsOpenedPopup}
+                        lang={lang}
                       />
                     ) : (
                       setHomeContent(0)

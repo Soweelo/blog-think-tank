@@ -9,6 +9,7 @@
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
+    "autoheight-textarea": "^1.0.3",
     "axios": "^0.24.0",
     "dotenv": "^10.0.0",
     "ityped": "^1.0.3",
@@ -29,6 +30,7 @@
     "sass": "^1.45.0",
     "styled-components": "^4.4.1",
     "swiper": "^7.4.1",
+    "timeago.js": "^4.0.2",
     "web-vitals": "^2.1.2"
   },
   "scripts": {

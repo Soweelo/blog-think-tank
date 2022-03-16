@@ -22,7 +22,7 @@ export default function AccountBrandForm({
   setAccountContent,
   brandContent,
 }) {
-  // console.log(formContent);
+  console.log(formContent);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [message, setMessage] = useState("");
   const [brandId, setBrandId] = useState(

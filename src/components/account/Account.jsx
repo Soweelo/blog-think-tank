@@ -1,6 +1,6 @@
 import "./account.scss";
 import BackHomeButton from "../backHomeButton/BackHomeButton";
-import AccountContent from "./AccountContent";
+import AccountContent from "./accountContent/AccountContent";
 import { useState, useEffect } from "react";
 import { Person, Create, LocalOffer, Home } from "@material-ui/icons";
 import outDateCookieSession from "../../functions/cookiesController/outDateCookieSession";
@@ -14,18 +14,10 @@ export default function Account({
   setIsOpenPopup,
   isValidToken,
   setIsValidToken,
+  lang,
 }) {
   const [accountContent, setAccountContent] = useState(0);
-  // function outDateCookieSession(option1, option2) {
-  //   document.cookie =
-  //     "YW-session-token=" +
-  //     option1 +
-  //     "; SameSite=Lax; Secure;expires=Thu, 18 Dec 2013 12:00:00 UTC;";
-  //   document.cookie =
-  //     "YW-session-pseudo=" +
-  //     option2 +
-  //     "; SameSite=Lax; Secure;expires=Thu, 18 Dec 2013 12:00:00 UTC;";
-  // }
+
   const [mobileView, setMobileView] = useState("menu");
   const callBackPopUp = () => {
     setIsOpenPopup(true);
@@ -123,6 +115,7 @@ export default function Account({
             setAccountContent={setAccountContent}
             mobileView={mobileView}
             setMobileView={setMobileView}
+            lang={lang}
           />
         </div>
       </div>

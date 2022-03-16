@@ -246,7 +246,7 @@ export default function Modal({
                   <h1>{title}</h1>
                   <p className="modal__date">
                     <CalendarTodayIcon />
-                    {date.substr(0, 10)}
+                    {date}
                   </p>
                   <p dangerouslySetInnerHTML={{ __html: text }}></p>
                   {url !== 0 && (

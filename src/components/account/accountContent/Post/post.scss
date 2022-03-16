@@ -1,0 +1,233 @@
+@import "../../../../global";
+.account-content__post {
+  width: 100%;
+  border-radius: 10px;
+  -webkit-box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.38);
+  box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.38);
+}
+
+.account-content__postWrapper {
+  padding: 10px;
+  margin-top: 0.5rem;
+  //border: 1px solid $complementary;
+  border-radius: 20px;
+  background-color: transparent
+}
+.account-content__mobileView{
+  display: none!important;
+  @include mobile{
+    display: flex !important;
+  }
+}
+.account-content__postTop {
+  display: flex;
+  align-items: center;
+}
+
+.account-content__postProfileImg {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.account-content__postInput {
+  border: none;
+  width: 100%;
+  white-space: pre-line;
+}
+
+.account-content__postInput:focus {
+  outline: none;
+}
+
+.account-content__postHr {
+  margin: 20px;
+  color: $tertiary;
+}
+
+.account-content__postBottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.account-content__postOptions{
+  display: flex;
+  margin-left: 20px;
+  max-width: 100%;
+  flex-wrap: wrap
+}
+
+.account-content__postOption{
+  display: flex;
+  align-items: center;
+  margin-right: 15px;
+  cursor: pointer;
+}
+
+.account-content__postIcon{
+  font-size: 18px;
+  margin-right: 3px;
+  flex-wrap: wrap;
+  &.red{
+    color: $delete }
+  &.blue{
+    color:$edit;
+  }
+}
+
+.account-content__postOptionText{
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0.5rem 0;
+}
+
+.account-content__postButton{
+  margin-right: 1rem;
+  padding: 0.5rem 0.9rem;
+  cursor:pointer;
+  transition: all 100ms ease-in-out;
+  color:$validate;
+  border:1px solid $validate !important;
+  margin-top:0.5rem;
+  text-transform: uppercase;
+  padding:0.2rem;
+
+  @include mobile{
+    font-size: 0.9rem;
+    margin: 0.7rem auto;
+  }
+  &:hover{
+    font-weight: bold;
+    background-color: $shadow;
+    color: $primary;
+  }
+}
+
+.account-content__postImgContainer{
+  padding: 0 20px 10px 20px;
+  position: relative;
+}
+
+.account-content__postImg{
+  width: 100%;
+  max-height: min(300px, 90vh);
+  object-fit: contain;
+}
+
+.account-content__postCancelImg{
+  position: absolute;
+  top: 0;
+  right: 20px;
+  cursor: pointer;
+  opacity: 0.7;
+}
+.account-content__post-wrapper{
+width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; align-items: center;
+  margin-top:2rem;
+  .account-content__post-container{
+    box-sizing: border-box;
+    -webkit-box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.68);
+    box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.38);
+    width: min(98%,650px);
+    margin: 1rem auto;
+
+    .account-content__top{
+      display: flex;
+      .account-content__post-date{
+        font-size: 0.8rem;
+        color: gray;
+        padding: 0.5rem;
+      }
+      .account-content__buttons-btn-delete{
+        color:$delete;
+        border:1px solid $delete !important;
+        padding: 0.4rem 0.8rem;
+        margin: 0.5rem 0.5rem 0.5rem auto;
+
+        @include mobile{
+        font-size: 0.9rem;
+        margin: 0.7rem auto;
+      }
+        &:hover{
+          font-weight: bold;
+          background-color: $shadow;
+          color: $primary;
+        }
+      }
+
+
+
+    }
+
+    .account-content__content-input{
+      display: flex;
+      flex-direction: column;
+
+      .account-content__text{
+        box-sizing: border-box;
+        font-size: 0.9rem;
+        width: 100%;
+        outline: none;
+        border-color: transparent;
+        cursor: pointer;
+        padding: 0.3rem;
+        resize :none;
+        height: unset;
+      }
+      .account-content__buttons{
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        opacity: 0;
+        align-items: center;
+        &.visible{
+          opacity: 1;
+          .btn{
+            margin-right: 1rem;
+
+            cursor:pointer;
+            transition: all 100ms ease-in-out;
+
+         ;
+            text-transform: uppercase;
+            padding:0.2rem;
+            &.account-content__buttons-btn-edit{
+              color:$edit;
+              border:1px solid $edit !important;
+              padding: 0.4rem 0.8rem;
+            }
+            &.account-content__buttons-btn-delete{
+              color:$delete;
+              border:1px solid $delete !important;
+              padding: 0.4rem 0.8rem;
+            }
+            @include mobile{
+              font-size: 0.9rem;
+              margin: 0.7rem auto;
+            }
+            &:hover{
+              font-weight: bold;
+              background-color: $shadow;
+              color: $primary;
+            }
+        }
+
+        }
+      }
+    }
+
+    .account-content__postTagContainer{
+    //display: flex;
+    justify-content: center;
+    align-content: center;
+    margin: 1rem;
+  }
+  }
+}

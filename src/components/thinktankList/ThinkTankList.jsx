@@ -7,6 +7,7 @@ import Modal from "../modal/Modal";
 import { useFetch } from "../../hooks/useFetch";
 import Loader from "../loader/Loader";
 import useTrait from "../../hooks/useTrait";
+import { format } from "timeago.js";
 export default memo(function ThinkTankList({
   favorites,
   selectedTags,
@@ -177,6 +178,7 @@ export default memo(function ThinkTankList({
       {bigArray.get().map((packOfTwelve, counter) => {
         // console.log("packOfTwelve", packOfTwelve.secondProperty.length);
         // }
+        // console.log(lang);
 
         return (
           packOfTwelve.secondProperty.length !== 0 && (
@@ -219,7 +221,7 @@ export default memo(function ThinkTankList({
                       images={p.images}
                       tags={p.tags}
                       text={p.content}
-                      date={p.updated_at}
+                      date={format(p.updated_at, lang)}
                       showModal={showModal}
                       setShowModal={setShowModal}
                       modalVar={modalVar}
