@@ -11,12 +11,25 @@
 *** Résoudre l'erreur Can't perform a React state update on an unmounted component
 Comme indiqué par l'erreur ce problème survient lorsque un callback qui change l'état d'un composant est appelé après que le composant soit démonté. Cela arrive souvent lorsque l'on contacte une API distante ou lorsque l'on oublie de clearTimeout() un intervalle précédemment créé.
 
-La solution, créer une reference isMounted et n'executer les mises à jour de valeur après les fetch async await que si isMouted est true.
-ontroller
-https://grafikart.fr/tutoriels/cant-perform-react-update-1973#autoplay
+La solution, créer une reference isMounted et n'executer les mises à jour de valeur après les fetch async await que si isMounted est true.
+Controller:  https://grafikart.fr/tutoriels/cant-perform-react-update-1973#autoplay
 
 
 *** Résoudre le problème de mise à jour d'une variable définie par un useState (le useState est asynchrone donc la nouvelle valeur n'est accessible qu'au prochain re-render).
 Création d'un hook useTrait: il permet d'utiliser une valeur immédiatement grâce à get, et de la mettre à jour avec set.
 Voir exemple dans ThinkTankList: pour la variable bigArray qui ne se mettait pas à jour immédiatement lors du changement de tags.
 https://dev.to/bytebodger/synchronous-state-with-react-hooks-1k4f
+
+*** Certaines variables devraient être accessibles depuis n'importe quel composant via redux ou un context provider. En effet faire passer les variables de session, de langue, de redirection via les props de parent en enfant parfois sur une profondeur de plusieurs étages est extrêment redondant et alourdit le code.
+ex: variable  langue, session (token valide),  etc.
+
+*** Gestion des requêtes impliquant un token dans l'url ou les paramètres d'envoi, mettre un redirect dans tous les catch(e): quand le token est undefined, un redirige l'utilisateur vers des composants à l'affichage adapté.
+
+*** Pour les forms:
+    + On peut traiter les valeurs des input avec des variables définoes avec useState mais attention, à chaque changement d'état le composant sera
+      re-rendu, or il faut éviter les rendus inutiles.
+      Une solution autre que le hokk useStae peut être d'utiliser useRef (lamadev, https://www.youtube.com/watch?v=pFHyZvVxce0&t=8699s  1:01:00)
+
+    + Ne pas hésiter à utiliser les attributs minLength, maxLength, required et type pour les différents input. Le submit est annulé et le              navigateur affiche automatiquement à l'utilisateur des messages d'erreur adaptés, traduits et esthétiques !!
+
+

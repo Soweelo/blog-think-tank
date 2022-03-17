@@ -89,6 +89,7 @@ function App() {
             setSession([]);
             if (token && pseudo) {
               outDateCookieSession(token, pseudo);
+              setHomeContent("0");
             }
           }
           setLoading(false);

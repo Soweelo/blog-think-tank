@@ -14,7 +14,6 @@ export default function EditAutoCSearchbar({
   setEMessage,
   setAddTag,
   setDeleteATag,
-  deleteATag,
 }) {
   const [isSuggestion, setIsSuggestion] = useState(false);
   const searchText = useTrait("");
@@ -55,7 +54,9 @@ export default function EditAutoCSearchbar({
             ...postTags.get(),
             e.target.attributes["tagsuggest"].value,
           ]);
-          setAddTag([true, e.target.attributes["tagsuggest"].value, postId]);
+          if (postId) {
+            setAddTag([true, e.target.attributes["tagsuggest"].value, postId]);
+          }
           //attention ici problème probable car avec cette classe dès que le composant est utilisé deux fois
           document.getElementsByClassName("tagcontainer--input" + id)[0].value =
             "";
@@ -71,26 +72,27 @@ export default function EditAutoCSearchbar({
         if (existsSuchItem.length > 0) {
           if (existsSuchSelectedItem.length === 0) {
             postTags.set([...selectedItems, e.target.value]);
-            setAddTag([true, e.target.value, postId]);
+            if (postId) {
+              setAddTag([true, e.target.value, postId]);
+            }
             e.target.value = "";
             setIsSuggestion(false);
             searchText.set("");
-            console.log("etla");
           } else {
             setEMessage("You already selected this tag");
           }
         } else {
-          console.log("etla");
           if (editing) {
             let newTagName = e.target.value;
             if (newTagName.length > 3 && newTagName.length < 40) {
               postTags.set([...selectedItems, newTagName]);
               setAllItems([...allItems, { name: newTagName }]);
-              setAddTag([true, newTagName, postId]);
+              if (postId) {
+                setAddTag([true, newTagName, postId]);
+              }
               e.target.value = "";
               setIsSuggestion(false);
               setEMessage("Congrats! You created a new tag.");
-              // console.log(allItems);
               searchText.set("");
             } else {
               setEMessage(
@@ -118,7 +120,9 @@ export default function EditAutoCSearchbar({
     postTags.set(newSelectedItems);
     // selectedItems = postTags.get();
     // console.log(postTags.get(), id);
-    setDeleteATag([true, item, postId]);
+    if (postId) {
+      setDeleteATag([true, item, postId]);
+    }
   };
 
   const setOpenToCenter = (e) => {

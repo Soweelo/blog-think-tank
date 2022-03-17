@@ -27,6 +27,7 @@ export default function AccountContent({
   mobileView,
   setMobileView,
   lang,
+  setHomeContent,
 }) {
   const [brandMessage, setBrandMessage] = useState("");
 
@@ -50,6 +51,7 @@ export default function AccountContent({
                 setAccountContent={setAccountContent}
                 accountContent={accountContent}
                 lang={lang}
+                setHomeContent={setHomeContent}
               />
             );
 

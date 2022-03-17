@@ -116,6 +116,7 @@ export default function Account({
             mobileView={mobileView}
             setMobileView={setMobileView}
             lang={lang}
+            setHomeContent={setHomeContent}
           />
         </div>
       </div>

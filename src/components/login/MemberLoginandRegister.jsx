@@ -150,30 +150,15 @@ export default function MemberLoginandRegister({
     setRegisterContent(!registerContent);
     setMessageLogin("");
     setMessageRegister("");
-    // console.log(registerContent);
   }
-  const [email, setEmail] = useState("");
-  const [regEmail, setRegEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [regPassword, setRegPassword] = useState("");
-  const [regUsername, setRegUsername] = useState("");
+  const loginEmail = useRef();
+  const regEmail = useRef();
+  const loginPassword = useRef();
+  const regPassword = useRef();
+  const regUsername = useRef();
   const [messageLogin, setMessageLogin] = useState("");
   const [messageRegister, setMessageRegister] = useState("");
-  const handleLoginEmailChange = (event) => {
-    setEmail(event.target.value);
-  };
-  const handleLoginPasswordChange = (event) => {
-    setPassword(event.target.value);
-  };
-  const handleRegisterEmailChange = (event) => {
-    setRegEmail(event.target.value);
-  };
-  const handleRegisterPasswordChange = (event) => {
-    setRegPassword(event.target.value);
-  };
-  const handleRegisterUsernameChange = (event) => {
-    setRegUsername(event.target.value);
-  };
+
   function sha512(str) {
     return crypto.subtle
       .digest("SHA-512", new TextEncoder("utf-8").encode(str))
@@ -186,81 +171,60 @@ export default function MemberLoginandRegister({
 
   const handleRegisterSubmit = async (event) => {
     event.preventDefault();
-    // try{
-    if (
-      5 < regPassword.length &&
-      regPassword.length < 25 &&
-      regEmail.length > 0 &&
-      regUsername.length > 3
-    ) {
-      // alert("fine length")
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        pseudo: regUsername.current.value,
+        email: regEmail.current.value,
+        password: regPassword.current.value,
+      }),
+    };
+    const url = PF + "/api/members";
+    try {
+      const response = await fetch(url, requestOptions).then((response) =>
+        response.json()
+      );
+      let data = await response;
+      if (data.success) {
+        setSession([data.data.session, data.data.pseudo]);
+        setCookieSession(data.data.session, data.data.pseudo);
+        setIsValidToken(true);
 
-      const requestOptions = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          pseudo: regUsername,
-          email: regEmail,
-          password: regPassword,
-        }),
-      };
-      const url = PF + "/api/members";
-      // console.log(hashedRegPsw, regEmail,url)
-      try {
-        const response = await fetch(url, requestOptions).then((response) =>
-          response.json()
-        );
-
-        let data = await response;
-        if (data.success) {
-          setSession([data.data.session, data.data.pseudo]);
-          setCookieSession(data.data.session, data.data.pseudo);
-          setIsValidToken(true);
-
-          setShowLogin(false);
-          setHomeContent("5");
-        } else {
-          setMessageRegister("Password or email not valid");
-        }
-      } catch (e) {
-        if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
-          console.error(e);
-        }
+        setShowLogin(false);
+        setHomeContent("5");
+      } else {
+        setMessageRegister("Password or email not valid");
       }
-    } else {
-      setMessageRegister("UserName, email or password has a length issue");
+    } catch (e) {
+      if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
+        console.error(e);
+      }
     }
   };
   const handleLoginSubmit = async (event) => {
     event.preventDefault();
     try {
-      if (5 < password.length && password.length < 25 && email.length > 0) {
-        // alert("fine length")
-        let hashedPsw = await sha512(password);
-        const url = await (PF +
-          "/api/members?email=" +
-          email +
-          "&password=" +
-          hashedPsw);
+      let hashedPsw = await sha512(loginPassword.current.value);
+      const url = await (PF +
+        "/api/members?email=" +
+        loginEmail.current.value +
+        "&password=" +
+        hashedPsw);
 
-        const response = await fetch(url)
-          .then((r) => r.json())
-          .catch((error) => console.log("Form submit error", error));
-        const data = await response;
-
-        if (data.success) {
-          setSession([data.data.session, data.data.pseudo]);
-          setCookieSession(data.data.session, data.data.pseudo);
-          setShowLogin(false);
-          setHomeContent("5");
-          setIsValidToken(true);
-        } else {
-          setMessageLogin("Password or email not valid");
-        }
+      const response = await fetch(url)
+        .then((r) => r.json())
+        .catch((error) => console.log("Form submit error", error));
+      const data = await response;
+      console.log(response, loginEmail.current.value, url, hashedPsw);
+      if (data.success) {
+        setSession([data.data.session, data.data.pseudo]);
+        setCookieSession(data.data.session, data.data.pseudo);
+        setShowLogin(false);
+        setHomeContent("5");
+        setIsValidToken(true);
       } else {
-        setMessageLogin("Password or email length issue");
-
-        // console.log(password, email)
+        setMessageLogin("Password or email not valid");
       }
     } catch (e) {
       if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
@@ -287,10 +251,10 @@ export default function MemberLoginandRegister({
                       <Mail />
                       <StyledInput
                         className="input-field"
-                        type="text"
+                        type="email"
                         placeholder="Enter email"
-                        onChange={handleLoginEmailChange}
-                        value={email}
+                        ref={loginEmail}
+                        required
                       />
                     </div>
 
@@ -300,8 +264,10 @@ export default function MemberLoginandRegister({
                         className="input-field"
                         type="password"
                         placeholder="Password"
-                        value={password}
-                        onChange={handleLoginPasswordChange}
+                        ref={loginPassword}
+                        minLength="5"
+                        maxLength="25"
+                        required
                       />
                     </div>
 
@@ -334,8 +300,9 @@ export default function MemberLoginandRegister({
                         type="text"
                         placeholder="Username"
                         name="usrnm"
-                        value={regUsername}
-                        onChange={handleRegisterUsernameChange}
+                        ref={regUsername}
+                        required
+                        minLength="3"
                       />
                     </div>
 
@@ -343,11 +310,11 @@ export default function MemberLoginandRegister({
                       <Mail />
                       <StyledInput
                         className="input-field"
-                        type="text"
+                        type="email"
                         placeholder="Email"
                         name="email"
-                        value={regEmail}
-                        onChange={handleRegisterEmailChange}
+                        ref={regEmail}
+                        required
                       />
                     </div>
 
@@ -357,8 +324,10 @@ export default function MemberLoginandRegister({
                         className="input-field"
                         type="password"
                         placeholder="Password"
-                        value={regPassword}
-                        onChange={handleRegisterPasswordChange}
+                        ref={regPassword}
+                        minLength="5"
+                        maxLength="25"
+                        required
                       />
                     </div>
 

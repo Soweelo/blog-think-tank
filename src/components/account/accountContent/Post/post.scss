@@ -22,6 +22,20 @@
 .account-content__postTop {
   display: flex;
   align-items: center;
+  autoheight-textarea{
+    width: 100%;
+    div{
+      box-sizing: border-box;
+      font-size: 0.9rem;
+      width: 100%;
+      outline: none;
+      border-color: transparent;
+      cursor: pointer;
+      padding: 0.3rem;
+      resize: none;
+    }
+  }
+
 }
 
 .account-content__postProfileImg {
@@ -36,6 +50,7 @@
   border: none;
   width: 100%;
   white-space: pre-line;
+  resize: none;
 }
 
 .account-content__postInput:focus {
@@ -49,23 +64,25 @@
 
 .account-content__postBottom {
   display: flex;
-  align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
+  flex-direction: column;
 }
 
 .account-content__postOptions{
   display: flex;
   margin-left: 20px;
   max-width: 100%;
-  flex-wrap: wrap
+  flex-wrap: wrap;
+  flex-direction: column;
 }
 
 .account-content__postOption{
   display: flex;
-  align-items: center;
+  //align-items: center;
   margin-right: 15px;
   cursor: pointer;
+  margin-top:1rem;
 }
 
 .account-content__postIcon{
@@ -82,9 +99,11 @@
 .account-content__postOptionText{
   font-size: 14px;
   font-weight: 500;
-  margin: 0.5rem 0;
+  margin: 0.5rem 1rem 0 0;
 }
-
+.account-content__postEditAutoSearch-Wrapper{
+  width: min(100%,580px);
+}
 .account-content__postButton{
   margin-right: 1rem;
   padding: 0.5rem 0.9rem;
@@ -93,8 +112,11 @@
   color:$validate;
   border:1px solid $validate !important;
   margin-top:0.5rem;
+
   text-transform: uppercase;
   padding:0.2rem;
+width:7rem;
+  margin:auto;
 
   @include mobile{
     font-size: 0.9rem;
