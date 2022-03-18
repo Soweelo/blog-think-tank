@@ -5,6 +5,7 @@ import useTrait from "../../../../hooks/useTrait";
 import { format } from "timeago.js";
 import EditAutoCSearchbar from "../../../autoCSearchBar/EditAutoSearchBar";
 import "autoheight-textarea";
+import { Cancel, PermMedia } from "@material-ui/icons";
 // import { Editor } from "@tinymce/tinymce-react";
 
 export default function UserPostList({
@@ -26,7 +27,8 @@ export default function UserPostList({
   const [eMessage, setEMessage] = useState("");
   const [postContentMemo, setPostContentMemo] = useState("");
   const allPosts = useTrait([]);
-
+  const [file, setFile] = useState();
+  const [changedImgPostId, setChangedImgPostId] = useState(-1);
   const desc = useRef();
   // const editorRef = useRef(null);
   const [addATag, setAddATag] = useState([false, "", -1]);
@@ -64,13 +66,14 @@ export default function UserPostList({
         response.json()
       );
       let data = await response;
-      if (data.success == true) {
+      if (data.success) {
         setPostMessage(data.message);
       } else {
-        setPostMessage(data.message);
+        setHomeContent("0");
       }
     } else {
       setPostMessage("Your post content length is not valid");
+      console.log(postContent[1].length);
     }
   };
   //*** end edit Content
@@ -98,7 +101,7 @@ export default function UserPostList({
         // setAccountContent(2);
       } else {
         // console.log(response);
-        setPostMessage(data.message);
+        setHomeContent("0");
       }
     } catch (e) {
       if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
@@ -136,7 +139,7 @@ export default function UserPostList({
         // setAccountContent(2);
       } else {
         // console.log(response);
-        setPostMessage(data.message);
+        setHomeContent("0");
       }
     } catch (e) {
       if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
@@ -164,7 +167,12 @@ export default function UserPostList({
         PF + "/api/posts/postsList?token=" + session[0]
       );
       const data = await response.json();
-      allPosts.set(data.data);
+      if (data.success) {
+        allPosts.set(data.data);
+      } else {
+        setHomeContent("0");
+      }
+
       setRerenderPostsList(false);
     } catch (e) {
       if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
@@ -175,7 +183,10 @@ export default function UserPostList({
   const handleContentChange = (event, id) => {
     setPostContent([id, event.target.value]);
   };
-
+  // const handleFileChange = (event, id) => {
+  //   console.log(event.target.files[0]);
+  //   setFile([id, event.target.files[0]]);
+  // };
   const undoChangeContent = () => {
     setPostContent([-1, postContentMemo]);
     setPostContentButton([-1, false]);
@@ -199,6 +210,38 @@ export default function UserPostList({
   //     console.log(editorRef.current.getContent());
   //   }
   // };
+  //***deleteImg
+  const deletePostImg = async (id) => {
+    // console.log("delete");
+    try {
+      const requestOptions = {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          token: session[0],
+        }),
+      };
+      const url = PF + "/api/posts/" + id + "/deleteDefaultImage";
+      const response = await fetch(url, requestOptions).then((response) =>
+        response.json()
+      );
+      let data = await response;
+      if (data.success == true) {
+        // console.log(response);
+        setPostMessage(data.message);
+        // getAllPosts();
+        // setAccountContent(2);
+      } else {
+        // console.log(response);
+        setHomeContent("0");
+      }
+    } catch (e) {
+      if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
+        console.error(e);
+      }
+    }
+  };
+  //***end deleteImg
   return (
     <div className="account-content__post-wrapper">
       {allPosts.get().map((post, i) => {
@@ -247,14 +290,14 @@ export default function UserPostList({
                 }
               >
                 <div
-                  className="btn account-content__buttons-btn-edit"
+                  className="btn account-content__buttons-btn-save"
                   data-value={post.id}
                   onClick={(e) => {
                     submitEditContent(e);
                     // console.log("ok");
                   }}
                 >
-                  EDIT
+                  SAVE
                 </div>
                 <div
                   className="btn account-content__buttons-btn-delete"
@@ -266,27 +309,87 @@ export default function UserPostList({
                 </div>
               </div>
             </div>
+            <form action="submitPostImage">
+              <label
+                htmlFor={"file-" + post.id}
+                className="account-content__postOption"
+              >
+                <PermMedia className="account-content__postIcon red" />
+                <span className="account-content__postOptionText">
+                  Photo or Video
+                </span>
+
+                <input
+                  style={{ display: "none" }}
+                  type="file"
+                  id={"file-" + post.id}
+                  accept=".png,.jpeg,.jpg"
+                  onChange={(e) => {
+                    setFile(e.target.files[0]);
+                    setChangedImgPostId(post.id);
+                  }}
+                  // onChange={(e) => setFile([e.target.files[0]])}
+                  // value={file[0] == post.id ? file[1] : post.file}
+                />
+              </label>
+              <button className="btn account-content__postButton" type="submit">
+                SAVE
+              </button>
+            </form>
 
             <div className="account-content__postImgContainer">
-              {post.images ? (
-                <img
-                  className="account-content__postImg"
-                  src={PF + "/" + post.images.small}
-                  srcSet={`${PF + "/" + post.images.thumb} 768w, ${
-                    PF + "/" + post.images.small
-                  } 3200w`}
-                  // alt={title}
-                />
-              ) : (
-                <img
-                  className="account-content__postImg"
-                  src={
-                    PF +
-                    "/storage/app/public/your-world-3-0-default-black-background.jpeg"
-                  }
-                  // alt={title}
-                />
-              )}
+              <div
+                className="account-content__postImgContainer"
+                onClick={(e) => console.log(post.id)}
+              >
+                {changedImgPostId == post.id ? (
+                  file ? (
+                    <>
+                      <img
+                        className="account-content__postImg"
+                        src={URL.createObjectURL(file)}
+                        alt=""
+                      />
+                      <Cancel
+                        className="account-content__postCancelImg"
+                        onClick={() => {
+                          deletePostImg(post.id);
+                          setFile(null);
+                          setChangedImgPostId(-1);
+                        }}
+                      />
+                    </>
+                  ) : (
+                    <p>
+                      This post has no image. <b>Your world 3.0</b> I'll display
+                      a default image
+                    </p>
+                  )
+                ) : post.images ? (
+                  <>
+                    <img
+                      className="account-content__postImg"
+                      src={PF + "/" + post.images.small}
+                      srcSet={`${PF + "/" + post.images.thumb} 768w, ${
+                        PF + "/" + post.images.small
+                      } 3200w`}
+                      // alt={title}
+                    />
+                    <Cancel
+                      className="account-content__postCancelImg"
+                      onClick={() => {
+                        deletePostImg(post.id);
+                        setChangedImgPostId(post.id);
+                      }}
+                    />
+                  </>
+                ) : (
+                  <p>
+                    This post has no image. <b>Your world 3.0</b> I'll display a
+                    default image
+                  </p>
+                )}
+              </div>
             </div>
             <div
               className="account-content__postTagContainer"

@@ -26,11 +26,12 @@ export default function Account({
     }, 7000);
   };
   function endSession() {
+    // logoutCall;
     if (session.length !== 0) {
       outDateCookieSession(session[0], session[1]);
       // alert("disconnected", session[0], session[1]);
       setSession([]);
-      setIsValidToken(false);
+      // setIsValidToken(false);
 
       setHomeContent("0");
       // setPopupContent("Disconnected");
@@ -117,6 +118,7 @@ export default function Account({
             setMobileView={setMobileView}
             lang={lang}
             setHomeContent={setHomeContent}
+            isValidToken={isValidToken}
           />
         </div>
       </div>

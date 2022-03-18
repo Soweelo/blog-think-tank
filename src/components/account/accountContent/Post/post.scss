@@ -58,7 +58,7 @@
 }
 
 .account-content__postHr {
-  margin: 20px;
+  margin-bottom: 20px;
   color: $tertiary;
 }
 
@@ -220,9 +220,9 @@ width: 100%;
          ;
             text-transform: uppercase;
             padding:0.2rem;
-            &.account-content__buttons-btn-edit{
-              color:$edit;
-              border:1px solid $edit !important;
+            &.account-content__buttons-btn-save{
+              color:$validate;
+              border:1px solid $validate !important;
               padding: 0.4rem 0.8rem;
             }
             &.account-content__buttons-btn-delete{

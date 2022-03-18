@@ -1,13 +1,13 @@
 import "./memberloginandregister.scss";
-
 import styled from "styled-components";
 import { MdClose } from "react-icons/md";
-import { useRef, useEffect, useCallback, useState } from "react";
+import { useRef, useEffect, useCallback, useState, useContext } from "react";
 import { useSpring, animated } from "react-spring";
 import { Person, Mail, Lock } from "@material-ui/icons";
-import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
 import { useFetch } from "../../hooks/useFetch";
-
+import { loginCall } from "../../apiCalls";
+import { AuthContext } from "../../context/AuthContext";
+import { CircularProgress } from "@material-ui/core";
 const Background = styled.div`
   width: 100%;
   height: 100%;
@@ -158,7 +158,7 @@ export default function MemberLoginandRegister({
   const regUsername = useRef();
   const [messageLogin, setMessageLogin] = useState("");
   const [messageRegister, setMessageRegister] = useState("");
-
+  // const { user, isFetching, error, dispatch } = useContext(AuthContext);
   function sha512(str) {
     return crypto.subtle
       .digest("SHA-512", new TextEncoder("utf-8").encode(str))
@@ -202,6 +202,18 @@ export default function MemberLoginandRegister({
       }
     }
   };
+  // const handleLoginSubmit = async (e) => {
+  //   e.preventDefault();
+  //   let hashedPsw = await sha512(loginPassword.current.value);
+  //   loginCall(
+  //     {
+  //       email: loginEmail.current.value,
+  //       password: hashedPsw,
+  //     },
+  //     dispatch
+  //   );
+  // };
+  // console.log(user);
   const handleLoginSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -216,12 +228,13 @@ export default function MemberLoginandRegister({
         .then((r) => r.json())
         .catch((error) => console.log("Form submit error", error));
       const data = await response;
-      console.log(response, loginEmail.current.value, url, hashedPsw);
+      // console.log(response, loginEmail.current.value, url, hashedPsw);
       if (data.success) {
         setSession([data.data.session, data.data.pseudo]);
         setCookieSession(data.data.session, data.data.pseudo);
         setShowLogin(false);
         setHomeContent("5");
+
         setIsValidToken(true);
       } else {
         setMessageLogin("Password or email not valid");
@@ -271,22 +284,44 @@ export default function MemberLoginandRegister({
                       />
                     </div>
 
-                    <button className="btn login__btn-submit" type="submit">
-                      Login
+                    <button
+                      className="btn login__btn-submit"
+                      type="submit"
+                      // disabled={isFetching}
+                    >
+                      {/*{isFetching ? (*/}
+                      {/*  <CircularProgress color="white" size="20px" />*/}
+                      {/*) : (*/}
+                      {/*  "Log In"*/}
+                      {/*)}*/}
+                      Log In
                     </button>
-                    <div className="login__message--error">{messageLogin}</div>
-                    <div className="login__forgoten-psw">
+                    <div
+                      className="login__message--error"
+                      // disabled={isFetching}
+                    >
+                      {messageLogin}
+                    </div>
+                    <div
+                      className="login__forgoten-psw"
+                      // disabled={isFetching}
+                    >
                       Forgotten password? <span>Click-here</span>!
                     </div>
                   </div>
 
-                  <div className=" login__btn-switch" onClick={switchContent}>
+                  <div
+                    className=" login__btn-switch"
+                    onClick={switchContent}
+                    // disabled={isFetching}
+                  >
                     Still not a Member? REGISTER HERE !
                   </div>
                 </form>
                 <CloseLoginButton
                   aria-label="Close Login"
                   onClick={() => setShowLogin((prev) => !prev)}
+                  // disabled={isFetching}
                 ></CloseLoginButton>
               </LoginContent>
               <LoginContent className={!registerContent && "d-none"}>

@@ -7,7 +7,7 @@ import Privacy from "./components/privacy/Privacy";
 import Faq from "./components/faq/Faq";
 import Account from "./components/account/Account";
 import BePart from "./components/bePart/BePart";
-import { useState, useEffect, memo } from "react";
+import { useState, useEffect, useContext } from "react";
 import MainMenu from "./components/mainMenu/MainMenu";
 import PopupMessage from "./components/popup/PopupMessage";
 import styled from "styled-components";
@@ -15,9 +15,12 @@ import outDateCookieSession from "./functions/cookiesController/outDateCookieSes
 import MemberLoginandRegister from "./components/login/MemberLoginandRegister";
 // import checkValidToken from "./functions/sessionController/checkValidToken";
 import { useFetch } from "./hooks/useFetch";
+import { AuthContext } from "./context/AuthContext";
+import getCookie from "./functions/cookiesController/getCookie";
 // import { useCheckValidToken } from "./functions/sessionController/useCheckValidToken";
 
 function App() {
+  const { user } = useContext(AuthContext);
   const [mainMenuOpen, setMainMenuOpen] = useState(false);
   const [homeContent, setHomeContent] = useState("0");
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
@@ -33,24 +36,6 @@ function App() {
   `;
   const fetch = useFetch();
   const [session, setSession] = useState([]);
-
-  function getCookie(cname) {
-    let name = cname + "=";
-
-    let decodedCookie = decodeURIComponent(document.cookie);
-    // console.log(decodedCookie);
-    let ca = decodedCookie.split(";");
-    for (let i = 0; i < ca.length; i++) {
-      let c = ca[i];
-      while (c.charAt(0) === " ") {
-        c = c.substring(1);
-      }
-      if (c.indexOf(name) === 0) {
-        return c.substring(name.length, c.length);
-      }
-    }
-    return "";
-  }
   getCookie("YW-session-token");
   function endSession() {
     if (session.length !== 0) {
@@ -59,7 +44,7 @@ function App() {
       setSession([]);
 
       setHomeContent("0");
-      // setPopupContent("Disconnected");
+      setPopupContent("Disconnected");
       // callBackPopUp();
     } else {
       // alert("your Session expired!");
@@ -194,29 +179,17 @@ function App() {
               case "5":
                 return (
                   <>
-                    {/*<button*/}
-                    {/*  className="btn small"*/}
-                    {/*  onClick={() => {*/}
-                    {/*    callBackPopUp();*/}
-                    {/*  }}*/}
-                    {/*>*/}
-                    {/*  here*/}
-                    {/*</button>*/}
-                    {session.length !== 0 ? (
-                      <Account
-                        allOptions={allOptions}
-                        session={session}
-                        setSession={setSession}
-                        setHomeContent={setHomeContent}
-                        isValidToken={isValidToken}
-                        setIsValidToken={setIsValidToken}
-                        // setPopupContent={setPopupContent}
-                        // setIsOpenPopup={setIsOpenedPopup}
-                        lang={lang}
-                      />
-                    ) : (
-                      setHomeContent(0)
-                    )}
+                    <Account
+                      allOptions={allOptions}
+                      session={session}
+                      setSession={setSession}
+                      setHomeContent={setHomeContent}
+                      // isValidToken={isValidToken}
+                      // setIsValidToken={setIsValidToken}
+                      // setPopupContent={setPopupContent}
+                      // setIsOpenPopup={setIsOpenedPopup}
+                      lang={lang}
+                    />
                   </>
                 );
               default:
@@ -246,6 +219,7 @@ function App() {
           lang={lang}
           allOptions={allOptions}
         />
+
         <MemberLoginandRegister
           showLogin={showLogin}
           setShowLogin={setShowLogin}

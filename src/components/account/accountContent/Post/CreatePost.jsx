@@ -3,24 +3,65 @@ import { useRef, useState } from "react";
 import useTrait from "../../../../hooks/useTrait";
 import "autoheight-textarea";
 import EditAutoCSearchbar from "../../../autoCSearchBar/EditAutoSearchBar";
+import { useFetch } from "../../../../hooks/useFetch";
 
-export default function CreatePost({ session, allTags, setAllTags }) {
+export default function CreatePost({
+  session,
+  allTags,
+  setAllTags,
+  setHomeContent,
+  setPostMessage,
+}) {
   const [eMessage, setEMessage] = useState("");
   const desc = useRef();
-  const [file, setFile] = useState(null);
+  let formData = new FormData();
+  const [file, setFile] = useState();
   const postTags = useTrait([]);
-  const [postContent, setPostContent] = useState("");
+  let postContent = useRef();
+  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+  const fetch = useFetch();
   //submit new post
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log(file, postTags.get(), postContent);
+    // console.log(postTags.get());
+
+    formData.append("text", postContent.current.value);
+    formData.append("image", file);
+    postTags.get().map((tag) => {
+      formData.append("tags[]", tag);
+    });
+    formData.append("tags", postTags.get());
+    // for (let [name, value] of formData) {
+    //   console.log(name, value); // key1 = value1, then key2 = value2
+    // }
+    submitPost();
   };
   //end submit new post
   //handle postContentChange
-  const handlePostContentChange = (event) => {
-    setPostContent(event.target.value);
-  };
+
   //end handle postContentChange
+  const submitPost = async () => {
+    try {
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "multipart/form-data" },
+        body: formData,
+      };
+      let url = PF + "/api/posts?token=" + session[0];
+      let res = await fetch(url, requestOptions).then((res) => res.json());
+      console.log(res);
+      if (res.success) {
+        setPostMessage(res.message);
+        setFile(null);
+        postTags.set([]);
+        postContent.current.value = "";
+      } else {
+        setHomeContent("0");
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
   return (
     <div className="account-content__post">
       <div className="account-content__postWrapper">
@@ -29,9 +70,7 @@ export default function CreatePost({ session, allTags, setAllTags }) {
             <textarea
               placeholder={"What's in your mind " + session[1] + "?"}
               className="account-content__postInput"
-              ref={desc}
-              value={postContent}
-              onChange={handlePostContentChange}
+              ref={postContent}
             />
           </autoheight-textarea>
         </div>
@@ -42,10 +81,6 @@ export default function CreatePost({ session, allTags, setAllTags }) {
               className="account-content__postImg"
               src={URL.createObjectURL(file)}
               alt=""
-            />
-            <Cancel
-              className="account-content__postCancelImg"
-              onClick={() => setFile(null)}
             />
           </div>
         )}

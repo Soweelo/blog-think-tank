@@ -37,8 +37,9 @@ export default function Post({
         // await getAllPosts();
       } else {
         // console.log(data);
-        setPostMessage(data.message);
+        // setPostMessage(data.message);
         // await getAllPosts();
+        setHomeContent("0");
       }
     } catch (e) {
       if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
@@ -118,7 +119,12 @@ export default function Post({
           />
         </div>
       )}
-      <CreatePost session={session} allTags={allTags} setAllTags={setAllTags} />
+      <CreatePost
+        session={session}
+        allTags={allTags}
+        setAllTags={setAllTags}
+        setPostMessage={setPostMessage}
+      />
 
       <UserPostList
         setIdToDelete={setIdToDelete}

@@ -28,6 +28,7 @@ export default function AccountContent({
   setMobileView,
   lang,
   setHomeContent,
+  isValidToken,
 }) {
   const [brandMessage, setBrandMessage] = useState("");
 
@@ -52,6 +53,7 @@ export default function AccountContent({
                 accountContent={accountContent}
                 lang={lang}
                 setHomeContent={setHomeContent}
+                isValidToken={isValidToken}
               />
             );
 
@@ -67,6 +69,8 @@ export default function AccountContent({
                 setAccountBrandForm={setAccountBrandForm}
                 brandContent={brandContent}
                 setBrandContent={setBrandContent}
+                isValidToken={isValidToken}
+                setHomeContent={setHomeContent}
               />
             );
           case 3:
@@ -83,12 +87,17 @@ export default function AccountContent({
                   setBackMessage={setBrandMessage}
                   setAccountContent={setAccountContent}
                   brandContent={brandContent}
+                  isValidToken={isValidToken}
                 />
               </div>
             );
           default:
             return (
-              <AccountParams session={session} setMobileView={setMobileView} />
+              <AccountParams
+                session={session}
+                setMobileView={setMobileView}
+                isValidToken={isValidToken}
+              />
             );
         }
       })()}

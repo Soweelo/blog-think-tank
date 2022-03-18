@@ -21,6 +21,8 @@ export default function Brand({
   setAccountBrandForm,
   brandContent,
   setBrandContent,
+  isValidToken,
+  setHomeContent,
 }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
@@ -30,11 +32,16 @@ export default function Brand({
   const allBrands = useTrait([]);
   const getAllBrands = async () => {
     // console.log("in getallbrands");
+
     try {
       const response = await fetch(PF + "/api/brands/list?token=" + session[0]);
       const data = await response.json();
       // console.log(data.data);
-      allBrands.set(data.data);
+      if (data.success) {
+        allBrands.set(data.data);
+      } else {
+        setHomeContent("0");
+      }
     } catch (e) {
       if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
         console.error(e);
