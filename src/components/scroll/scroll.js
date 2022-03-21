@@ -39,7 +39,7 @@ const Scroll = ({ showBelow, scrollAnchor, scrollContainer }) => {
         // return () =>
         //   document
         //     .getElementById(scrollContainer)
-        //     .removeEventListener(`scroll`, handleScroll); 
+        //     .removeEventListener(`scroll`, handleScroll);
       } else {
         window.addEventListener(`scroll`, handleScroll);
         return () => window.removeEventListener(`scroll`, handleScroll);
