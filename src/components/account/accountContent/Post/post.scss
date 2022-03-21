@@ -58,8 +58,11 @@
 }
 
 .account-content__postHr {
-  margin-bottom: 20px;
+  margin-bottom: 5px;
   color: $tertiary;
+  width: 100%;
+  margin-left: 0;
+  opacity:0.3
 }
 
 .account-content__postBottom {
@@ -71,18 +74,29 @@
 
 .account-content__postOptions{
   display: flex;
-  margin-left: 20px;
+  //margin-left: 20px;
   max-width: 100%;
   flex-wrap: wrap;
   flex-direction: column;
+  @include mobile{
+    margin-left:5px;
+  }
 }
 
 .account-content__postOption{
   display: flex;
+  align-content: baseline;
   //align-items: center;
-  margin-right: 15px;
+  margin-right: 0;
   cursor: pointer;
-  margin-top:1rem;
+  margin-top:0.4rem;
+  flex-wrap: wrap;
+  .account-content__postOption-label-wrapper{
+    display: flex;
+    align-items: center;
+    margin-top:10px
+    ;max-height: 45px;
+  }
 }
 
 .account-content__postIcon{
@@ -99,10 +113,11 @@
 .account-content__postOptionText{
   font-size: 14px;
   font-weight: 500;
-  margin: 0.5rem 1rem 0 0;
+  margin: auto 5px auto;
 }
 .account-content__postEditAutoSearch-Wrapper{
   width: min(100%,580px);
+  margin-top: 0.5rem;
 }
 .account-content__postButton{
   margin-right: 1rem;
@@ -127,11 +142,17 @@ width:7rem;
     background-color: $shadow;
     color: $primary;
   }
+  &.display-none{
+    display: none;
+  }
 }
 
 .account-content__postImgContainer{
-  padding: 0 20px 10px 20px;
+  padding: 20px 10px ;
   position: relative;
+  @include mobile{
+
+  }
 }
 
 .account-content__postImg{
@@ -159,6 +180,7 @@ width: 100%;
     box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.38);
     width: min(98%,650px);
     margin: 1rem auto;
+    padding: 1rem;
 
     .account-content__top{
       display: flex;

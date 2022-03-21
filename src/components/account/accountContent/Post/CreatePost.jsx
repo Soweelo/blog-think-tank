@@ -30,10 +30,10 @@ export default function CreatePost({
     postTags.get().map((tag) => {
       formData.append("tags[]", tag);
     });
-    formData.append("tags", postTags.get());
-    // for (let [name, value] of formData) {
-    //   console.log(name, value); // key1 = value1, then key2 = value2
-    // }
+    // formData.append("tags", postTags.get());
+    for (let [name, value] of formData) {
+      console.log(name, value); // key1 = value1, then key2 = value2
+    }
     submitPost();
   };
   //end submit new post
@@ -42,11 +42,12 @@ export default function CreatePost({
   //end handle postContentChange
   const submitPost = async () => {
     try {
+      console.log(formData.values());
       const requestOptions = {
         method: "POST",
-        headers: { "Content-Type": "multipart/form-data" },
         body: formData,
       };
+
       let url = PF + "/api/posts?token=" + session[0];
       let res = await fetch(url, requestOptions).then((res) => res.json());
       console.log(res);
@@ -57,6 +58,7 @@ export default function CreatePost({
         postContent.current.value = "";
       } else {
         setHomeContent("0");
+        // console.log(res.message)
       }
     } catch (e) {
       console.log(e);
@@ -100,9 +102,13 @@ export default function CreatePost({
                 onChange={(e) => setFile(e.target.files[0])}
               />
             </label>
+            <hr className="account-content__postHr" />
             <div className="account-content__postOption">
-              <Label className="account-content__postIcon blue" />
-              <span className="account-content__postOptionText">Tag</span>
+              <div className="account-content__postOption-label-wrapper">
+                <Label className="account-content__postIcon blue" />
+                <span className="account-content__postOptionText">Tag</span>
+              </div>
+
               <div className="account-content__postEditAutoSearch-Wrapper">
                 <EditAutoCSearchbar
                   selectedItems={postTags.get()}

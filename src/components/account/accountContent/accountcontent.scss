@@ -9,7 +9,11 @@
     @include mobile{
       display: flex;
       cursor: pointer;
+
     }
+  }
+  @include mobile{
+    padding: 1rem 0.1rem;
   }
   //.account-content__message{
   //  background-color: $validate;
@@ -95,7 +99,10 @@
     background-color: rgba(0, 128, 0, 1);
     padding: 0.7rem;
     border-radius: 20px;
-    right: 33%;
+    right: 50vw;
+    z-index: 10;
+    opacity: 1;
+    transform: translateX(50%);
     z-index: 10;
     opacity:1;
   }

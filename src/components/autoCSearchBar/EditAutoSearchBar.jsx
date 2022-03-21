@@ -17,12 +17,17 @@ export default function EditAutoCSearchbar({
 }) {
   const [isSuggestion, setIsSuggestion] = useState(false);
   const searchText = useTrait("");
+
   const updateSuggestion = (e) => {
     setIsSuggestion(false);
     if (e.target.value.length > 1) {
-      // console.log("ici aussi?");
+      console.log("ici aussi?");
       searchText.set(e.target.value);
       setIsSuggestion(true);
+    }
+    if (!e) {
+      searchText.set("");
+      console.log("et voilàs");
     }
   };
   const toObjectArray = (array) => {
@@ -36,6 +41,7 @@ export default function EditAutoCSearchbar({
 
   const addItem = (e) => {
     // console.log(max, selectedItems.length);
+    console.log(e);
     if (max === 0 || selectedItems.length < max) {
       setEMessage("");
       let input =
@@ -58,10 +64,13 @@ export default function EditAutoCSearchbar({
             setAddTag([true, e.target.attributes["tagsuggest"].value, postId]);
           }
           //attention ici problème probable car avec cette classe dès que le composant est utilisé deux fois
-          document.getElementsByClassName("tagcontainer--input" + id)[0].value =
-            "";
+          // console.log(e.target.getAttribute("data-postid"));
+          document.getElementsByClassName(
+            "tagcontainer--input" + id + e.target.getAttribute("data-postid")
+          )[0].value = "";
           e.target.value = "";
           searchText.set("");
+          // console.log(searchText.get());
           setIsSuggestion(false);
           // console.log("ici!!", searchText.get(), e.target.value);
         } else {
@@ -94,6 +103,7 @@ export default function EditAutoCSearchbar({
               setIsSuggestion(false);
               setEMessage("Congrats! You created a new tag.");
               searchText.set("");
+              // console.log(searchText.get());
             } else {
               setEMessage(
                 "Sorry, your tag name is currently " +
@@ -162,7 +172,7 @@ export default function EditAutoCSearchbar({
         })}
 
         <input
-          className={"tagcontainer--input" + id}
+          className={"tagcontainer--input" + id + postId}
           onKeyDown={addItem}
           type="text"
           onChange={(e) => updateSuggestion(e)}
@@ -185,6 +195,7 @@ export default function EditAutoCSearchbar({
                 key={i}
                 className="suggestion-select-item"
                 tagsuggest={option.name}
+                data-postid={postId}
                 onClick={addItem}
               >
                 #{option.name}{" "}

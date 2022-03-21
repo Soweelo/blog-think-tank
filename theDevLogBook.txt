@@ -26,10 +26,21 @@ ex: variable  langue, session (token valide),  etc.
 *** Gestion des requêtes impliquant un token dans l'url ou les paramètres d'envoi, mettre un redirect dans tous les catch(e): quand le token est undefined, un redirige l'utilisateur vers des composants à l'affichage adapté.
 
 *** Pour les forms:
-    + On peut traiter les valeurs des input avec des variables définoes avec useState mais attention, à chaque changement d'état le composant sera
+    + On peut traiter les valeurs des input avec des variables définies avec useState mais attention, à chaque changement d'état le composant sera
       re-rendu, or il faut éviter les rendus inutiles.
-      Une solution autre que le hokk useStae peut être d'utiliser useRef (lamadev, https://www.youtube.com/watch?v=pFHyZvVxce0&t=8699s  1:01:00)
+      Une solution autre que le hook useStae peut être d'utiliser useRef (lamadev, https://www.youtube.com/watch?v=pFHyZvVxce0&t=8699s  1:01:00)
 
     + Ne pas hésiter à utiliser les attributs minLength, maxLength, required et type pour les différents input. Le submit est annulé et le              navigateur affiche automatiquement à l'utilisateur des messages d'erreur adaptés, traduits et esthétiques !!
+
+
+*** Envoyer une requête en POST avec un body d'options de type FormData, il st tentant de mettre  en header l'intitulé multipart form data:
+        const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "multipart/form-data" },
+        body: formData,
+        };
+    Malheureusement j'ai pu constater que cela envoi des champs nuls pour les données ainsi envoyées.
+    SUPPRIMER LE HEADER permet de régler le problème!
+    Attention aussi à la fonction d'où part le fetch. Dans un submit directement cela semble poser problème pour la transmission du data ...
 
 

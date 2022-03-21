@@ -6,6 +6,8 @@ import { format } from "timeago.js";
 import EditAutoCSearchbar from "../../../autoCSearchBar/EditAutoSearchBar";
 import "autoheight-textarea";
 import { Cancel, PermMedia } from "@material-ui/icons";
+import { useFetch } from "../../../../hooks/useFetch";
+import { CircularProgress } from "@material-ui/core";
 // import { Editor } from "@tinymce/tinymce-react";
 
 export default function UserPostList({
@@ -27,9 +29,12 @@ export default function UserPostList({
   const [eMessage, setEMessage] = useState("");
   const [postContentMemo, setPostContentMemo] = useState("");
   const allPosts = useTrait([]);
-  const [file, setFile] = useState();
-  const [changedImgPostId, setChangedImgPostId] = useState(-1);
+  const [file, setFile] = useState(null);
+  let formDataUpdate = new FormData();
+  const changedImgPostId = useTrait(-1);
+  const [isFetching, setIsFetching] = useState(false);
   const desc = useRef();
+  const fetch = useFetch();
   // const editorRef = useRef(null);
   const [addATag, setAddATag] = useState([false, "", -1]);
   const [deleteATag, setDeleteATag] = useState([false, "", -1]);
@@ -73,7 +78,7 @@ export default function UserPostList({
       }
     } else {
       setPostMessage("Your post content length is not valid");
-      console.log(postContent[1].length);
+      // console.log(postContent[1].length);
     }
   };
   //*** end edit Content
@@ -183,10 +188,7 @@ export default function UserPostList({
   const handleContentChange = (event, id) => {
     setPostContent([id, event.target.value]);
   };
-  // const handleFileChange = (event, id) => {
-  //   console.log(event.target.files[0]);
-  //   setFile([id, event.target.files[0]]);
-  // };
+
   const undoChangeContent = () => {
     setPostContent([-1, postContentMemo]);
     setPostContentButton([-1, false]);
@@ -240,8 +242,69 @@ export default function UserPostList({
         console.error(e);
       }
     }
+    setFile(null);
   };
   //***end deleteImg
+  //*** update img
+  const handleFileChange = (event) => {
+    // console.log(event.target.files[0]);
+    setFile(event.target.files[0]);
+  };
+  const submitHandlerPostImg = (e) => {
+    e.preventDefault(e);
+    formDataUpdate.append("image", file);
+    formDataUpdate.append("images", file);
+    formDataUpdate.append("file", file);
+    // console.log("file", file, "etarget", file);
+    // for (let [name, value] of formDataUpdate) {
+    //   console.log(name, value); // key1 = value1, then key2 = value2
+    // }
+    updatePostImg();
+
+    // console.
+  };
+  const updatePostImg = async () => {
+    try {
+      setIsFetching(true);
+      const requestOptions = {
+        method: "POST",
+        // headers: { "Content-Type": "multipart/form-data" },
+        body: formDataUpdate,
+      };
+      // console.log(formDataUpdate);
+      const url =
+        PF +
+        "/api/posts/" +
+        changedImgPostId.get() +
+        "/updateImage?token=" +
+        session[0];
+      const response = await fetch(url, requestOptions).then((res) =>
+        res.json()
+      );
+      let data = await response;
+      // console.log(data);
+      if (data.success == true) {
+        // console.log(response);
+        setPostMessage(data.message);
+        // setAccountContent(2);
+      } else {
+        // console.log(response);
+        // for (let [name, value] of formDataUpdate) {
+        //   console.log(name, value); // key1 = value1, then key2 = value2
+        // }
+        setHomeContent("0");
+      }
+      setIsFetching(false);
+    } catch (e) {
+      if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
+        console.error(e);
+      }
+      // for (let [name, value] of formDataUpdate) {
+      //   console.log(name, value); // key1 = value1, then key2 = value2
+      // }
+    }
+  };
+  //*** end update img
   return (
     <div className="account-content__post-wrapper">
       {allPosts.get().map((post, i) => {
@@ -309,7 +372,7 @@ export default function UserPostList({
                 </div>
               </div>
             </div>
-            <form action="submitPostImage">
+            <form onSubmit={submitHandlerPostImg}>
               <label
                 htmlFor={"file-" + post.id}
                 className="account-content__postOption"
@@ -326,36 +389,57 @@ export default function UserPostList({
                   accept=".png,.jpeg,.jpg"
                   onChange={(e) => {
                     setFile(e.target.files[0]);
-                    setChangedImgPostId(post.id);
+                    changedImgPostId.set(post.id);
+                    handleFileChange(e);
                   }}
                   // onChange={(e) => setFile([e.target.files[0]])}
                   // value={file[0] == post.id ? file[1] : post.file}
                 />
               </label>
-              <button className="btn account-content__postButton" type="submit">
-                SAVE
-              </button>
-            </form>
-
-            <div className="account-content__postImgContainer">
-              <div
-                className="account-content__postImgContainer"
-                onClick={(e) => console.log(post.id)}
-              >
-                {changedImgPostId == post.id ? (
-                  file ? (
+              <div className="account-content__postImgContainer">
+                <div
+                  className="account-content__postImgContainer"
+                  // onClick={(e) => console.log(post.id)}
+                >
+                  {changedImgPostId.get() == post.id ? (
+                    file ? (
+                      <>
+                        <img
+                          className="account-content__postImg"
+                          src={URL.createObjectURL(file)}
+                          alt=""
+                        />
+                        <Cancel
+                          className="account-content__postCancelImg"
+                          onClick={() => {
+                            deletePostImg(post.id);
+                            setFile(null);
+                            // changedImgPostId.set(-1);
+                          }}
+                        />
+                      </>
+                    ) : (
+                      <p>
+                        This post has no image. <b>Your world 3.0</b> I'll
+                        display a default image
+                      </p>
+                    )
+                  ) : post.images ? (
                     <>
                       <img
                         className="account-content__postImg"
-                        src={URL.createObjectURL(file)}
-                        alt=""
+                        src={PF + "/" + post.images.small}
+                        srcSet={`${PF + "/" + post.images.thumb} 768w, ${
+                          PF + "/" + post.images.small
+                        } 3200w`}
+                        // alt={title}
                       />
                       <Cancel
                         className="account-content__postCancelImg"
                         onClick={() => {
                           deletePostImg(post.id);
+                          changedImgPostId.set(post.id);
                           setFile(null);
-                          setChangedImgPostId(-1);
                         }}
                       />
                     </>
@@ -364,33 +448,25 @@ export default function UserPostList({
                       This post has no image. <b>Your world 3.0</b> I'll display
                       a default image
                     </p>
-                  )
-                ) : post.images ? (
-                  <>
-                    <img
-                      className="account-content__postImg"
-                      src={PF + "/" + post.images.small}
-                      srcSet={`${PF + "/" + post.images.thumb} 768w, ${
-                        PF + "/" + post.images.small
-                      } 3200w`}
-                      // alt={title}
-                    />
-                    <Cancel
-                      className="account-content__postCancelImg"
-                      onClick={() => {
-                        deletePostImg(post.id);
-                        setChangedImgPostId(post.id);
-                      }}
-                    />
-                  </>
-                ) : (
-                  <p>
-                    This post has no image. <b>Your world 3.0</b> I'll display a
-                    default image
-                  </p>
-                )}
+                  )}
+                </div>
               </div>
-            </div>
+              <button
+                className={
+                  "btn account-content__postButton " +
+                  (changedImgPostId.get() == post.id && file
+                    ? null
+                    : "display-none")
+                }
+                disabled={isFetching}
+                type="submit"
+                // style="margin-left: calc(50% - 43px)"
+                style={{ marginLeft: "calc(50% - 43px)" }}
+              >
+                {isFetching ? <CircularProgress size="20px" /> : "SAVE"}
+              </button>
+            </form>
+
             <div
               className="account-content__postTagContainer"
               onClick={() => {
