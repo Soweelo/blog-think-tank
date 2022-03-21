@@ -1,10 +1,11 @@
 import "./post.scss";
 import { ArrowBack, Close } from "@material-ui/icons";
-import { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import "autoheight-textarea";
 import UserPostList from "./UserPostList";
 import CreatePost from "./CreatePost";
+import Scroll from "../../../scroll/scroll";
 export default function Post({
   mobileView,
   setMobileView,
@@ -76,7 +77,13 @@ export default function Post({
     element.style.height = element.scrollHeight + "px";
   }
   return (
-    <div>
+    <div id={"account-content__scrolling-wrapper"}>
+      <Scroll
+        showBelow={400}
+        scrollAnchor={"account-content__top"}
+        scrollContainer={"account-content__scrolling-wrapper"}
+      />
+
       <ArrowBack
         className="account-content__mobileView"
         onClick={() => {
@@ -119,12 +126,14 @@ export default function Post({
           />
         </div>
       )}
-      <CreatePost
-        session={session}
-        allTags={allTags}
-        setAllTags={setAllTags}
-        setPostMessage={setPostMessage}
-      />
+      <div id="account-content__top">
+        <CreatePost
+          session={session}
+          allTags={allTags}
+          setAllTags={setAllTags}
+          setPostMessage={setPostMessage}
+        />
+      </div>
 
       <UserPostList
         setIdToDelete={setIdToDelete}

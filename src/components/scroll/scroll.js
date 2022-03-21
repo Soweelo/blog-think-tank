@@ -3,7 +3,7 @@ import "./scroll.scss";
 import IconButton from "@material-ui/core/IconButton";
 import { ExpandLess } from "@material-ui/icons";
 
-const Scroll = ({ showBelow }) => {
+const Scroll = ({ showBelow, scrollAnchor, scrollContainer }) => {
   const [show, setShow] = useState(showBelow ? false : true);
   const isMounted = useRef(false);
   useEffect(() => {
@@ -12,23 +12,50 @@ const Scroll = ({ showBelow }) => {
 
   const handleScroll = () => {
     if (isMounted) {
-      if (window.pageYOffset > showBelow) {
-        if (!show) setShow(true);
+      if (scrollContainer) {
+        console.log(document.getElementById(scrollContainer).pageYOffset);
+        if (document.getElementById(scrollContainer).pageYOffset > showBelow) {
+          if (!show) setShow(true);
+        } else {
+          if (show) setShow(false);
+        }
       } else {
-        if (show) setShow(false);
+        if (window.pageYOffset > showBelow) {
+          if (!show) setShow(true);
+        } else {
+          if (show) setShow(false);
+        }
       }
     }
   };
 
   useEffect(() => {
     if (showBelow) {
-      window.addEventListener(`scroll`, handleScroll);
-      return () => window.removeEventListener(`scroll`, handleScroll);
+      if (scrollContainer) {
+        // // console.log(document.getElementById(scrollContainer));
+        // document
+        //   .getElementById(scrollContainer)
+        //   .addEventListener(`scroll`, handleScroll);
+        // return () =>
+        //   document
+        //     .getElementById(scrollContainer)
+        //     .removeEventListener(`scroll`, handleScroll); 
+      } else {
+        window.addEventListener(`scroll`, handleScroll);
+        return () => window.removeEventListener(`scroll`, handleScroll);
+      }
     }
   }, []);
 
   const handleClick = () => {
-    window[`scrollTo`]({ top: 0, behavior: `smooth` });
+    if (scrollAnchor) {
+      let aim = document.getElementById(scrollAnchor).offsetHeight;
+      document
+        .getElementById(scrollAnchor)
+        .scrollIntoView({ behavior: "smooth" });
+    } else {
+      window[`scrollTo`]({ top: 0, behavior: `smooth` });
+    }
   };
 
   return (
