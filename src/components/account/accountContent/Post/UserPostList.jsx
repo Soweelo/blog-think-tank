@@ -8,6 +8,7 @@ import "autoheight-textarea";
 import { Cancel, PermMedia } from "@material-ui/icons";
 import { useFetch } from "../../../../hooks/useFetch";
 import { CircularProgress } from "@material-ui/core";
+import outDateCookieSession from "../../../../functions/cookiesController/outDateCookieSession";
 // import { Editor } from "@tinymce/tinymce-react";
 
 export default function UserPostList({
@@ -20,13 +21,14 @@ export default function UserPostList({
   reRenderPostsList,
   setRerenderPostsList,
   setHomeContent,
+  setIsValidToken,
 }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [postContentButton, setPostContentButton] = useState([-1, false]);
   const [postContent, setPostContent] = useState([-1, ""]);
   const postTagsToChange = useTrait(-1);
   const postTags = useTrait([]);
-  const [eMessage, setEMessage] = useState("");
+  const [eMessage, setEMessage] = useState(["", "blue"]);
   const [postContentMemo, setPostContentMemo] = useState("");
   const allPosts = useTrait([]);
   const [file, setFile] = useState(null);
@@ -74,7 +76,11 @@ export default function UserPostList({
       if (data.success) {
         setPostMessage(data.message);
       } else {
-        setHomeContent("0");
+        if (data.message === "This session token is not valid") {
+          outDateCookieSession(session[0], session[1]);
+          setHomeContent("0");
+          setIsValidToken(false);
+        }
       }
     } else {
       setPostMessage("Your post content length is not valid");
@@ -105,8 +111,11 @@ export default function UserPostList({
         setPostMessage(data.message);
         // setAccountContent(2);
       } else {
-        // console.log(response);
-        setHomeContent("0");
+        if (data.message === "This session token is not valid") {
+          outDateCookieSession(session[0], session[1]);
+          setHomeContent("0");
+          setIsValidToken(false);
+        }
       }
     } catch (e) {
       if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
@@ -234,8 +243,11 @@ export default function UserPostList({
         // getAllPosts();
         // setAccountContent(2);
       } else {
-        // console.log(response);
-        setHomeContent("0");
+        if (data.message === "This session token is not valid") {
+          outDateCookieSession(session[0], session[1]);
+          setIsValidToken(false);
+          setHomeContent("0");
+        }
       }
     } catch (e) {
       if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
@@ -288,11 +300,11 @@ export default function UserPostList({
         setPostMessage(data.message);
         // setAccountContent(2);
       } else {
-        // console.log(response);
-        // for (let [name, value] of formDataUpdate) {
-        //   console.log(name, value); // key1 = value1, then key2 = value2
-        // }
-        setHomeContent("0");
+        if (data.message === "This session token is not valid") {
+          outDateCookieSession(session[0], session[1]);
+          setIsValidToken(false);
+          setHomeContent("0");
+        }
       }
       setIsFetching(false);
     } catch (e) {
@@ -473,14 +485,14 @@ export default function UserPostList({
                 // e.preventDefault();
                 if (postTagsToChange.get() !== post.id) {
                   postTags.set(post.tags);
-                  setEMessage("");
+                  setEMessage(["", "blue"]);
                 }
                 postTagsToChange.set(post.id);
                 // postTags.set(post.tags);
               }}
             >
-              <div className="message">
-                {postTagsToChange.get() == post.id && eMessage}
+              <div className="message" style={{ color: eMessage[1] }}>
+                {postTagsToChange.get() == post.id && eMessage[0]}
               </div>
               <EditAutoCSearchbar
                 selectedItems={

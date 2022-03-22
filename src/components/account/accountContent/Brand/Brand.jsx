@@ -10,6 +10,7 @@ import {
 } from "@material-ui/icons";
 import { useEffect, useState } from "react";
 import useTrait from "../../../../hooks/useTrait";
+import outDateCookieSession from "../../../../functions/cookiesController/outDateCookieSession";
 
 export default function Brand({
   setMobileView,
@@ -22,6 +23,7 @@ export default function Brand({
   brandContent,
   setBrandContent,
   isValidToken,
+  setIsValidToken,
   setHomeContent,
 }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
@@ -40,7 +42,11 @@ export default function Brand({
       if (data.success) {
         allBrands.set(data.data);
       } else {
-        setHomeContent("0");
+        if (data.message === "This session token is not valid") {
+          outDateCookieSession(session[0], session[1]);
+          setIsValidToken(false);
+          setHomeContent("0");
+        }
       }
     } catch (e) {
       if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
@@ -88,8 +94,14 @@ export default function Brand({
         await getAllBrands();
       } else {
         // console.log(data);
-        setBrandMessage(data.message);
-        await getAllBrands();
+        if (data.message === "This session token is not valid") {
+          outDateCookieSession(session[0], session[1]);
+          setIsValidToken(false);
+          setHomeContent("0");
+        } else {
+          setBrandMessage(data.message);
+          await getAllBrands();
+        }
       }
     } catch (e) {
       if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {

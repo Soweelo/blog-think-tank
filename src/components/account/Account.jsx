@@ -40,6 +40,7 @@ export default function Account({
       // alert("your Session expired!");
       setHomeContent("0");
       setSession([]);
+
       setIsValidToken(false);
     }
   }
@@ -119,6 +120,7 @@ export default function Account({
             lang={lang}
             setHomeContent={setHomeContent}
             isValidToken={isValidToken}
+            setIsValidToken={setIsValidToken}
           />
         </div>
       </div>

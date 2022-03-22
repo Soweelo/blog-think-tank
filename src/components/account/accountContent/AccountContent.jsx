@@ -1,25 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import "./accountcontent.scss";
 import AutoCSearchbar from "../../autoCSearchBar/AutoCSearchbar";
-import { useFetch } from "../../../hooks/useFetch";
+// import { useFetch } from "../../../hooks/useFetch";
 import AccountBrandForm from "./Brand/AccountBrandForm";
 import useTrait from "../../../hooks/useTrait";
 import Post from "./Post/Post";
 import Brand from "./Brand/Brand";
 import AccountParams from "./AccountParams/AccountParams";
-import {
-  PersonOutline,
-  LockOpen,
-  MailOutline,
-  StarOutline,
-  ArrowBack,
-  Close,
-  PermMedia,
-  Room,
-  Label,
-  Cancel,
-  EmojiEmotions,
-} from "@material-ui/icons";
+import { ArrowBack } from "@material-ui/icons";
 export default function AccountContent({
   accountContent,
   session,
@@ -29,11 +17,12 @@ export default function AccountContent({
   lang,
   setHomeContent,
   isValidToken,
+  setIsValidToken,
 }) {
   const [brandMessage, setBrandMessage] = useState("");
 
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-  const fetch = useFetch();
+  // const fetch = useFetch();
   const [accountBrandForm, setAccountBrandForm] = useState(1);
   // const [accountPostForm, setAccountPostForm] = useState(1);
   const [brandContent, setBrandContent] = useState([]);
@@ -54,6 +43,7 @@ export default function AccountContent({
                 lang={lang}
                 setHomeContent={setHomeContent}
                 isValidToken={isValidToken}
+                setIsValidToken={setIsValidToken}
               />
             );
 
@@ -70,6 +60,7 @@ export default function AccountContent({
                 brandContent={brandContent}
                 setBrandContent={setBrandContent}
                 isValidToken={isValidToken}
+                setIsValidToken={setIsValidToken}
                 setHomeContent={setHomeContent}
               />
             );
@@ -88,6 +79,9 @@ export default function AccountContent({
                   setAccountContent={setAccountContent}
                   brandContent={brandContent}
                   isValidToken={isValidToken}
+                  setIsValidToken={setIsValidToken}
+                  session={session}
+                  setHomeContent={setHomeContent}
                 />
               </div>
             );
@@ -97,6 +91,8 @@ export default function AccountContent({
                 session={session}
                 setMobileView={setMobileView}
                 isValidToken={isValidToken}
+                setIsValidToken={setIsValidToken}
+                setHomeContent={setHomeContent}
               />
             );
         }

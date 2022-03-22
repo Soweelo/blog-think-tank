@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { Mail, Close } from "@material-ui/icons";
+import outDateCookieSession from "../../../../functions/cookiesController/outDateCookieSession";
 // Styling a regular HTML input
 const StyledInput = styled.input`
   display: block;
@@ -21,6 +22,9 @@ export default function AccountBrandForm({
   setBackMessage,
   setAccountContent,
   brandContent,
+  session,
+  setHomeContent,
+  setIsValidToken,
 }) {
   console.log(formContent);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
@@ -76,6 +80,11 @@ export default function AccountBrandForm({
       } else {
         console.log(response);
         setMessage(data.message);
+        if (data.message === "This session token is not valid") {
+          outDateCookieSession(session[0], session[1]);
+          setIsValidToken(false);
+          setHomeContent("0");
+        }
       }
 
       // }catch(e) {
@@ -121,6 +130,11 @@ export default function AccountBrandForm({
       } else {
         // console.log(response);
         setMessage(data.message);
+        if (data.message === "This session token is not valid") {
+          outDateCookieSession(session[0], session[1]);
+          setIsValidToken(false);
+          setHomeContent("0");
+        }
       }
 
       // }catch(e) {

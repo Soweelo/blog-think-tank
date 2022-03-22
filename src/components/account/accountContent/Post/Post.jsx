@@ -6,12 +6,14 @@ import "autoheight-textarea";
 import UserPostList from "./UserPostList";
 import CreatePost from "./CreatePost";
 import Scroll from "../../../scroll/scroll";
+import outDateCookieSession from "../../../../functions/cookiesController/outDateCookieSession";
 export default function Post({
   mobileView,
   setMobileView,
   session,
   lang,
   setHomeContent,
+  setIsValidToken,
 }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [postMessage, setPostMessage] = useState("");
@@ -37,10 +39,11 @@ export default function Post({
         setPostMessage(data.message);
         // await getAllPosts();
       } else {
-        // console.log(data);
-        // setPostMessage(data.message);
-        // await getAllPosts();
-        setHomeContent("0");
+        if (data.message === "This session token is not valid") {
+          outDateCookieSession(session[0], session[1]);
+          setIsValidToken(false);
+          setHomeContent("0");
+        }
       }
     } catch (e) {
       if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
@@ -93,8 +96,7 @@ export default function Post({
       {openConfirm && (
         <div className="account__message--delete">
           <div className="account__message-delete-text">
-            You have ... posts with this tag.
-            <br /> Still want to delete?
+            Are you sure you want to delete this Post?
           </div>
           <div className="account__message-delete-btn">
             <button
@@ -132,6 +134,7 @@ export default function Post({
           allTags={allTags}
           setAllTags={setAllTags}
           setPostMessage={setPostMessage}
+          setIsValidToken={setIsValidToken}
         />
       </div>
 
@@ -145,6 +148,7 @@ export default function Post({
         reRenderPostsList={rerenderPostsList}
         setRerenderPostsList={setRerenderPostsList}
         setHomeContent={setHomeContent}
+        setIsValidToken={setIsValidToken}
       />
     </div>
   );

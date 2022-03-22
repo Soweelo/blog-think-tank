@@ -4,6 +4,7 @@ import useTrait from "../../../../hooks/useTrait";
 import "autoheight-textarea";
 import EditAutoCSearchbar from "../../../autoCSearchBar/EditAutoSearchBar";
 import { useFetch } from "../../../../hooks/useFetch";
+import outDateCookieSession from "../../../../functions/cookiesController/outDateCookieSession";
 
 export default function CreatePost({
   session,
@@ -11,6 +12,7 @@ export default function CreatePost({
   setAllTags,
   setHomeContent,
   setPostMessage,
+  setIsValidToken,
 }) {
   const [eMessage, setEMessage] = useState("");
   const desc = useRef();
@@ -57,8 +59,11 @@ export default function CreatePost({
         postTags.set([]);
         postContent.current.value = "";
       } else {
-        setHomeContent("0");
-        // console.log(res.message)
+        if (res.message === "This session token is not valid") {
+          outDateCookieSession(session[0], session[1]);
+          setHomeContent("0");
+          setIsValidToken(false);
+        }
       }
     } catch (e) {
       console.log(e);
@@ -121,7 +126,9 @@ export default function CreatePost({
                   editing={true}
                   setEMessage={setEMessage}
                 />
-                <div className="message">{eMessage}</div>
+                <div className="message" style={{ color: eMessage[1] }}>
+                  {eMessage[0]}
+                </div>
               </div>
             </div>
           </div>

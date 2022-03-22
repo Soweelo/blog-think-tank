@@ -2,6 +2,7 @@ import "./autocsearchbar.scss";
 import { useState, useEffect } from "react";
 import { MdClose } from "react-icons/md";
 import useTrait from "../../hooks/useTrait";
+
 export default function EditAutoCSearchbar({
   selectedItems,
   postTags,
@@ -43,7 +44,7 @@ export default function EditAutoCSearchbar({
     // console.log(max, selectedItems.length);
     console.log(e);
     if (max === 0 || selectedItems.length < max) {
-      setEMessage("");
+      setEMessage(["", "blue"]);
       let input =
         e.target.className === "suggestion-select-item"
           ? e.target.attributes["tagsuggest"].value
@@ -74,7 +75,7 @@ export default function EditAutoCSearchbar({
           setIsSuggestion(false);
           // console.log("ici!!", searchText.get(), e.target.value);
         } else {
-          setEMessage("You already selected this tag");
+          setEMessage(["You already selected this tag", "red"]);
         }
       }
       if (e.key === "Enter" && e.target.value.length > 0) {
@@ -88,7 +89,7 @@ export default function EditAutoCSearchbar({
             setIsSuggestion(false);
             searchText.set("");
           } else {
-            setEMessage("You already selected this tag");
+            setEMessage(["You already selected this tag", "red"]);
           }
         } else {
           if (editing) {
@@ -101,23 +102,24 @@ export default function EditAutoCSearchbar({
               }
               e.target.value = "";
               setIsSuggestion(false);
-              setEMessage("Congrats! You created a new tag.");
+              setEMessage(["Congrats! You created a new tag.", "green"]);
               searchText.set("");
               // console.log(searchText.get());
             } else {
-              setEMessage(
+              setEMessage([
                 "Sorry, your tag name is currently " +
                   newTagName.length +
-                  "  characters long. It should be longer than 3 characters and shorter than 40 characters"
-              );
+                  "  characters long. It should be longer than 3 characters and shorter than 40 characters",
+                "red",
+              ]);
             }
           } else {
-            setEMessage("This tag still does not exist");
+            setEMessage(["This tag still does not exist", "red"]);
           }
         }
       }
     } else {
-      setEMessage("You can select a maximum of " + max + " tags ");
+      setEMessage(["You can select a maximum of " + max + " tags ", "red"]);
       setIsSuggestion(false);
     }
   };
@@ -185,6 +187,10 @@ export default function EditAutoCSearchbar({
         style={{ position: "relative" }}
       >
         {/*{console.log(toObjectArray(allItems))}*/}
+        <div className="suggestion-select-item new-item-wrapper">
+          <p>#{searchText.get()}</p>
+          <span>New Tag</span>
+        </div>
         {toObjectArray(allItems)
           .filter(
             ({ name }) => name.indexOf(searchText.get().toLowerCase()) > -1

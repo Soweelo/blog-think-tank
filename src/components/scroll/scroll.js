@@ -3,7 +3,7 @@ import "./scroll.scss";
 import IconButton from "@material-ui/core/IconButton";
 import { ExpandLess } from "@material-ui/icons";
 
-const Scroll = ({ showBelow, scrollAnchor, scrollContainer }) => {
+const Scroll = ({ showBelow, scrollAnchor }) => {
   const [show, setShow] = useState(showBelow ? false : true);
   const isMounted = useRef(false);
   useEffect(() => {
@@ -12,38 +12,18 @@ const Scroll = ({ showBelow, scrollAnchor, scrollContainer }) => {
 
   const handleScroll = () => {
     if (isMounted) {
-      if (scrollContainer) {
-        console.log(document.getElementById(scrollContainer).pageYOffset);
-        if (document.getElementById(scrollContainer).pageYOffset > showBelow) {
-          if (!show) setShow(true);
-        } else {
-          if (show) setShow(false);
-        }
+      if (window.pageYOffset > showBelow) {
+        if (!show) setShow(true);
       } else {
-        if (window.pageYOffset > showBelow) {
-          if (!show) setShow(true);
-        } else {
-          if (show) setShow(false);
-        }
+        if (show) setShow(false);
       }
     }
   };
 
   useEffect(() => {
     if (showBelow) {
-      if (scrollContainer) {
-        // // console.log(document.getElementById(scrollContainer));
-        // document
-        //   .getElementById(scrollContainer)
-        //   .addEventListener(`scroll`, handleScroll);
-        // return () =>
-        //   document
-        //     .getElementById(scrollContainer)
-        //     .removeEventListener(`scroll`, handleScroll);
-      } else {
-        window.addEventListener(`scroll`, handleScroll);
-        return () => window.removeEventListener(`scroll`, handleScroll);
-      }
+      window.addEventListener(`scroll`, handleScroll);
+      return () => window.removeEventListener(`scroll`, handleScroll);
     }
   }, []);
 
