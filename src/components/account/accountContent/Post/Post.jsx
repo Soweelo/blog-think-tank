@@ -20,8 +20,8 @@ export default function Post({
   const [idToDelete, setIdToDelete] = useState(null);
   const [allTags, setAllTags] = useState([]);
   const [openConfirm, setOpenConfirm] = useState(false);
-  const [rerenderPostsList, setRerenderPostsList] = useState("true");
-
+  const [rerenderPostsList, setRerenderPostsList] = useState(true);
+  const [newPost, setNewPost] = useState({});
   //delete post
   const deletePost = async (id) => {
     try {
@@ -53,6 +53,7 @@ export default function Post({
     setIdToDelete(null);
     setOpenConfirm(false);
     setRerenderPostsList(true);
+    setNewPost({});
   };
   // end delete post
   //getTags
@@ -135,6 +136,8 @@ export default function Post({
           setAllTags={setAllTags}
           setPostMessage={setPostMessage}
           setIsValidToken={setIsValidToken}
+          newPost={newPost}
+          setNewPost={setNewPost}
         />
       </div>
 
@@ -149,6 +152,8 @@ export default function Post({
         setRerenderPostsList={setRerenderPostsList}
         setHomeContent={setHomeContent}
         setIsValidToken={setIsValidToken}
+        newPost={newPost}
+        setNewPost={setNewPost}
       />
     </div>
   );

@@ -66,6 +66,20 @@
       background-color: lightgrey;
       font-weight: bold;
     }
+    &.new-item-wrapper{
+      background-color: $tertiary;
+      display:flex;
+      justify-content: space-between;
+      p{
+        margin:0;
+      }
+      span{
+        color:$validate;
+        border: 1px solid $validate ;
+        padding:0.2rem;
+        font-size: 0.9rem;
+      }
+    }
   }
   &.active{
     display: block;

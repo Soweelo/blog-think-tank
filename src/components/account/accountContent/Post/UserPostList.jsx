@@ -22,6 +22,8 @@ export default function UserPostList({
   setRerenderPostsList,
   setHomeContent,
   setIsValidToken,
+  newPost,
+  setNewPost,
 }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [postContentButton, setPostContentButton] = useState([-1, false]);
@@ -176,6 +178,7 @@ export default function UserPostList({
   };
   const getAllPosts = async () => {
     // console.log("in getallposts", session);
+    // setNewPost({})
     try {
       const response = await fetch(
         PF + "/api/posts/postsList?token=" + session[0]
@@ -205,22 +208,19 @@ export default function UserPostList({
 
   useEffect(() => {
     if (reRenderPostsList && session[0]) {
+      // console.log(reRenderPostsList);
       getAllPosts();
     }
     if (!session[0]) {
       setHomeContent("0");
     }
   }, [reRenderPostsList]);
+
   function auto_grow(element) {
     element.style.height = "5px";
     element.style.height = element.scrollHeight + "px";
   }
-  //display editor tiny mce
-  // const log = () => {
-  //   if (editorRef.current) {
-  //     console.log(editorRef.current.getContent());
-  //   }
-  // };
+
   //***deleteImg
   const deletePostImg = async (id) => {
     // console.log("delete");
@@ -317,9 +317,211 @@ export default function UserPostList({
     }
   };
   //*** end update img
+  // console.log(newPost, newPost.id);
   return (
     <div className="account-content__post-wrapper">
+      {newPost.id && (
+        <div className="account-content__post-container">
+          <div className="account-content__top">
+            <div className="account-content__post-date">
+              {format(newPost.updated_at)}
+            </div>
+            <div
+              className="btn account-content__buttons-btn-delete"
+              data-value={newPost.id}
+              onClick={(e) => askConfirm(e)}
+            >
+              DELETE POST
+            </div>
+          </div>
+
+          <div className="account-content__content-input">
+            <autoheight-textarea>
+              <textarea
+                // oninput="auto_grow(this)"
+                data-postid={newPost.id}
+                className="account-content__text"
+                value={
+                  postContent[0] == newPost.id
+                    ? postContent[1]
+                    : newPost.content
+                }
+                // placeholder={post.content.substr(1, 30) + "..."}
+                onClick={(e) => {
+                  setPostContentButton([
+                    e.target.attributes["data-postid"].value,
+                    true,
+                  ]);
+                }}
+                onChange={(e) => handleContentChange(e, newPost.id)}
+                onFocus={(e) => {
+                  setPostContentMemo(newPost.content);
+                }}
+              />
+            </autoheight-textarea>
+
+            <div
+              className={
+                "account-content__buttons " +
+                (postContentButton[0] == newPost.id && " visible")
+              }
+            >
+              <div
+                className="btn account-content__buttons-btn-save"
+                data-value={newPost.id}
+                onClick={(e) => {
+                  submitEditContent(e);
+                  // console.log("ok");
+                }}
+              >
+                SAVE
+              </div>
+              <div
+                className="btn account-content__buttons-btn-delete"
+                onClick={() => {
+                  undoChangeContent();
+                }}
+              >
+                UNDO
+              </div>
+            </div>
+          </div>
+          <form onSubmit={submitHandlerPostImg}>
+            <label
+              htmlFor={"file-" + newPost.id}
+              className="account-content__postOption"
+            >
+              <PermMedia className="account-content__postIcon red" />
+              <span className="account-content__postOptionText">
+                Photo or Video
+              </span>
+
+              <input
+                style={{ display: "none" }}
+                type="file"
+                id={"file-" + newPost.id}
+                accept=".png,.jpeg,.jpg"
+                onChange={(e) => {
+                  setFile(e.target.files[0]);
+                  changedImgPostId.set(newPost.id);
+                  handleFileChange(e);
+                }}
+                // onChange={(e) => setFile([e.target.files[0]])}
+                // value={file[0] == post.id ? file[1] : post.file}
+              />
+            </label>
+            <div className="account-content__postImgContainer">
+              <div
+                className="account-content__postImgContainer"
+                // onClick={(e) => console.log(post.id)}
+              >
+                {changedImgPostId.get() == newPost.id ? (
+                  file ? (
+                    <>
+                      <img
+                        className="account-content__postImg"
+                        src={URL.createObjectURL(file)}
+                        alt=""
+                      />
+                      <Cancel
+                        className="account-content__postCancelImg"
+                        onClick={() => {
+                          deletePostImg(newPost.id);
+                          setFile(null);
+                          // changedImgPostId.set(-1);
+                        }}
+                      />
+                    </>
+                  ) : (
+                    <p>
+                      This post has no image. <b>Your world 3.0</b> I'll display
+                      a default image
+                    </p>
+                  )
+                ) : newPost.images ? (
+                  <>
+                    <img
+                      className="account-content__postImg"
+                      src={URL.createObjectURL(newPost.images)}
+                      alt=""
+                    />
+                    {/*{console.log(newPost.tags)}*/}
+                    <Cancel
+                      className="account-content__postCancelImg"
+                      onClick={() => {
+                        deletePostImg(newPost.id);
+                        changedImgPostId.set(newPost.id);
+                        setFile(null);
+                      }}
+                    />
+                  </>
+                ) : (
+                  <p>
+                    This post has no image. <b>Your world 3.0</b> I'll display a
+                    default image
+                  </p>
+                )}
+              </div>
+            </div>
+            <button
+              className={
+                "btn account-content__postButton " +
+                (changedImgPostId.get() == newPost.id && file
+                  ? null
+                  : "display-none")
+              }
+              disabled={isFetching}
+              type="submit"
+              // style="margin-left: calc(50% - 43px)"
+              style={{ marginLeft: "calc(50% - 43px)" }}
+            >
+              {isFetching ? <CircularProgress size="20px" /> : "SAVE"}
+            </button>
+          </form>
+
+          <div
+            className="account-content__postTagContainer"
+            onClick={() => {
+              // e.preventDefault();
+              if (postTagsToChange.get() !== newPost.id) {
+                postTags.set(newPost.tags);
+                setEMessage(["", "blue"]);
+              }
+              postTagsToChange.set(newPost.id);
+              // postTags.set(post.tags);
+            }}
+          >
+            <div className="message" style={{ color: eMessage[1] }}>
+              {postTagsToChange.get() == newPost.id && eMessage[0]}
+            </div>
+            <EditAutoCSearchbar
+              selectedItems={
+                postTagsToChange.get() == newPost.id
+                  ? postTags.get()
+                  : newPost.tags
+                // newPost.tags
+              }
+              postTags={postTags}
+              allItems={allTags}
+              id={5}
+              setAllItems={setAllTags}
+              max={3}
+              editing={true}
+              setEMessage={setEMessage}
+              setAddTag={setAddATag}
+              setDeleteATag={setDeleteATag}
+              deleteATag={deleteATag}
+              postId={newPost.id}
+            />
+            {/*{console.log(newPost.tags)}*/}
+          </div>
+        </div>
+      )}
+
       {allPosts.get().map((post, i) => {
+        {
+          // console.log(post);
+        }
         return (
           <div className="account-content__post-container" key={i}>
             <div className="account-content__top">
@@ -510,6 +712,7 @@ export default function UserPostList({
                 deleteATag={deleteATag}
                 postId={post.id}
               />
+              {/*{console.log(post.tags)}*/}
             </div>
           </div>
         );

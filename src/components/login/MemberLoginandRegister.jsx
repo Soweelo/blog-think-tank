@@ -202,18 +202,7 @@ export default function MemberLoginandRegister({
       }
     }
   };
-  // const handleLoginSubmit = async (e) => {
-  //   e.preventDefault();
-  //   let hashedPsw = await sha512(loginPassword.current.value);
-  //   loginCall(
-  //     {
-  //       email: loginEmail.current.value,
-  //       password: hashedPsw,
-  //     },
-  //     dispatch
-  //   );
-  // };
-  // console.log(user);
+
   const handleLoginSubmit = async (event) => {
     event.preventDefault();
     try {

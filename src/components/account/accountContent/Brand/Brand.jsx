@@ -31,6 +31,7 @@ export default function Brand({
   const [brandMessage, setBrandMessage] = useState("");
   const [openConfirm, setOpenConfirm] = useState(false);
   const [idToDelete, setIdToDelete] = useState(null);
+  const [nb_postsToDelete, setnb_postsIdToDelete] = useState(0);
   const allBrands = useTrait([]);
   const getAllBrands = async () => {
     // console.log("in getallbrands");
@@ -58,7 +59,9 @@ export default function Brand({
   const askConfirm = (e) => {
     e.preventDefault();
     const id = e.target.attributes["data-value"].value;
+    const np_posts = e.target.attributes["data-nb_posts"].value;
     setIdToDelete(id);
+    setnb_postsIdToDelete(np_posts);
     setOpenConfirm(true);
   };
   const getBrandById = (id) => {
@@ -95,6 +98,7 @@ export default function Brand({
       } else {
         // console.log(data);
         if (data.message === "This session token is not valid") {
+          console.log("session expired");
           outDateCookieSession(session[0], session[1]);
           setIsValidToken(false);
           setHomeContent("0");
@@ -109,6 +113,7 @@ export default function Brand({
       }
     }
     setIdToDelete(null);
+    setnb_postsIdToDelete(0);
     setOpenConfirm(false);
   };
   useEffect(() => {
@@ -124,10 +129,18 @@ export default function Brand({
       />
       {openConfirm && (
         <div className="account__message--delete">
-          <div className="account__message-delete-text">
-            You have ... posts with this tag.
-            <br /> Still want to delete?
-          </div>
+          {nb_postsToDelete !== "0" ? (
+            <div className="account__message-delete-text">
+              You have {nb_postsToDelete} posts tagged with this brand.
+              <br /> Still want to delete?
+            </div>
+          ) : (
+            <div className="account__message-delete-text">
+              Delete this brand?
+              <br /> None of your posts is tagged with this brand.
+            </div>
+          )}
+
           <div className="account__message-delete-btn">
             <button
               onClick={() => {
@@ -141,6 +154,7 @@ export default function Brand({
               onClick={() => {
                 setOpenConfirm(false);
                 setIdToDelete(null);
+                setnb_postsIdToDelete(0);
               }}
             >
               No
@@ -197,6 +211,7 @@ export default function Brand({
                 <div
                   className="btn account-content__buttons-btn-delete"
                   data-value={brand.id}
+                  data-nb_posts={brand.nb_posts}
                   onClick={(e) => askConfirm(e)}
                 >
                   DELETE

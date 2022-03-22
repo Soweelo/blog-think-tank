@@ -13,6 +13,8 @@ export default function CreatePost({
   setHomeContent,
   setPostMessage,
   setIsValidToken,
+  newPost,
+  setNewPost,
 }) {
   const [eMessage, setEMessage] = useState("");
   const desc = useRef();
@@ -33,9 +35,9 @@ export default function CreatePost({
       formData.append("tags[]", tag);
     });
     // formData.append("tags", postTags.get());
-    for (let [name, value] of formData) {
-      console.log(name, value); // key1 = value1, then key2 = value2
-    }
+    // for (let [name, value] of formData) {
+    //   console.log(name, value); // key1 = value1, then key2 = value2
+    // }
     submitPost();
   };
   //end submit new post
@@ -44,7 +46,7 @@ export default function CreatePost({
   //end handle postContentChange
   const submitPost = async () => {
     try {
-      console.log(formData.values());
+      // console.log(formData.values());
       const requestOptions = {
         method: "POST",
         body: formData,
@@ -52,12 +54,25 @@ export default function CreatePost({
 
       let url = PF + "/api/posts?token=" + session[0];
       let res = await fetch(url, requestOptions).then((res) => res.json());
-      console.log(res);
+      // console.log(res);
       if (res.success) {
         setPostMessage(res.message);
+        setEMessage(["", "red"]);
         setFile(null);
         postTags.set([]);
         postContent.current.value = "";
+        let tagsArray = [];
+        res.data.tags.map((item) => {
+          tagsArray.push(item.name);
+        });
+        setNewPost({
+          updated_at: res.data.updated_at,
+          content: res.data.content,
+          brand: res.data.brand,
+          id: res.data.id,
+          images: file,
+          tags: tagsArray,
+        });
       } else {
         if (res.message === "This session token is not valid") {
           outDateCookieSession(session[0], session[1]);

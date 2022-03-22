@@ -20,15 +20,20 @@ export default function EditAutoCSearchbar({
   const searchText = useTrait("");
 
   const updateSuggestion = (e) => {
+    console.log("in update sugg", "e.key", e);
     setIsSuggestion(false);
     if (e.target.value.length > 1) {
-      console.log("ici aussi?");
+      // console.log("ici aussi?");
       searchText.set(e.target.value);
       setIsSuggestion(true);
+      if (e.key === "Enter") {
+        addItem(e);
+      }
     }
     if (!e) {
       searchText.set("");
-      console.log("et voilàs");
+
+      // console.log("et voilàs");
     }
   };
   const toObjectArray = (array) => {
@@ -42,7 +47,7 @@ export default function EditAutoCSearchbar({
 
   const addItem = (e) => {
     // console.log(max, selectedItems.length);
-    console.log(e);
+    console.log("in additem", e);
     if (max === 0 || selectedItems.length < max) {
       setEMessage(["", "blue"]);
       let input =
@@ -64,8 +69,7 @@ export default function EditAutoCSearchbar({
           if (postId) {
             setAddTag([true, e.target.attributes["tagsuggest"].value, postId]);
           }
-          //attention ici problème probable car avec cette classe dès que le composant est utilisé deux fois
-          // console.log(e.target.getAttribute("data-postid"));
+
           document.getElementsByClassName(
             "tagcontainer--input" + id + e.target.getAttribute("data-postid")
           )[0].value = "";
@@ -175,9 +179,8 @@ export default function EditAutoCSearchbar({
 
         <input
           className={"tagcontainer--input" + id + postId}
-          onKeyDown={addItem}
           type="text"
-          onChange={(e) => updateSuggestion(e)}
+          onKeyPress={(e) => updateSuggestion(e)}
           onFocus={(e) => setOpenToCenter(e)}
         />
       </div>
@@ -186,7 +189,11 @@ export default function EditAutoCSearchbar({
         className={"suggestion " + (isSuggestion && "active")}
         style={{ position: "relative" }}
       >
-        {/*{console.log(toObjectArray(allItems))}*/}
+        {console.log(
+          toObjectArray(allItems).filter(
+            ({ name }) => name.indexOf(searchText.get().toLowerCase()) > -1
+          )
+        )}
         <div className="suggestion-select-item new-item-wrapper">
           <p>#{searchText.get()}</p>
           <span>New Tag</span>

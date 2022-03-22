@@ -43,4 +43,10 @@ ex: variable  langue, session (token valide),  etc.
     SUPPRIMER LE HEADER permet de régler le problème!
     Attention aussi à la fonction d'où part le fetch. Dans un submit directement cela semble poser problème pour la transmission du data ...
 
+***affichage du post nouvellement créé directement dans la post list.
+    Avec stéphane nous avons vu de sorte à ce que cela se fasse sans re-render de tous les posts.
+    Deux solutions:
+        ** afficher juste les infos postés: dans ce cas c'est rapide, on met à jour une variable nouveau post, mais on n'a pas encore sont                    id, son updated_at etc... donc le post affiché tel quel n'a pas les éléments pour être mis à jour
+        ** afficher les infos récupérées dans la réponse positive du serveur. dans ce cas c'est un peu plus long(le temps d'enregistrement du post),
+        mais il y a toutes les données nécéssaires à sa modification sans re-render. Je privilégie cette piste.
 
