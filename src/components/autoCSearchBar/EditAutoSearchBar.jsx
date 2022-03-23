@@ -18,9 +18,9 @@ export default function EditAutoCSearchbar({
 }) {
   const [isSuggestion, setIsSuggestion] = useState(false);
   const searchText = useTrait("");
-
+  console.log("in editsearcbar all items", allItems);
   const updateSuggestion = (e) => {
-    console.log("in update sugg", "e.key", e);
+    // console.log("in update sugg", "e.key", e);
     setIsSuggestion(false);
     if (e.target.value.length > 1) {
       // console.log("ici aussi?");
@@ -47,8 +47,8 @@ export default function EditAutoCSearchbar({
 
   const addItem = (e) => {
     // console.log(max, selectedItems.length);
-    console.log("in additem", e);
-    if (max === 0 || selectedItems.length < max) {
+    // console.log("in additem", e);
+    if (selectedItems.length < max) {
       setEMessage(["", "blue"]);
       let input =
         e.target.className === "suggestion-select-item"
@@ -190,10 +190,13 @@ export default function EditAutoCSearchbar({
         style={{ position: "relative" }}
       >
         {console.log(
+          "searchTaxt",
+          searchText.get(),
           toObjectArray(allItems).filter(
             ({ name }) => name.indexOf(searchText.get().toLowerCase()) > -1
           )
         )}
+
         <div className="suggestion-select-item new-item-wrapper">
           <p>#{searchText.get()}</p>
           <span>New Tag</span>
@@ -211,7 +214,7 @@ export default function EditAutoCSearchbar({
                 data-postid={postId}
                 onClick={addItem}
               >
-                #{option.name}{" "}
+                #{option.name}
               </div>
             );
           })}

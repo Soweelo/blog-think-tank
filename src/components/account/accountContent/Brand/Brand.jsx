@@ -11,6 +11,7 @@ import {
 import { useEffect, useState } from "react";
 import useTrait from "../../../../hooks/useTrait";
 import outDateCookieSession from "../../../../functions/cookiesController/outDateCookieSession";
+import { useFetch } from "../../../../hooks/useFetch";
 
 export default function Brand({
   setMobileView,
@@ -25,6 +26,8 @@ export default function Brand({
   isValidToken,
   setIsValidToken,
   setHomeContent,
+  getAllBrands,
+  allBrands,
 }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
@@ -32,29 +35,8 @@ export default function Brand({
   const [openConfirm, setOpenConfirm] = useState(false);
   const [idToDelete, setIdToDelete] = useState(null);
   const [nb_postsToDelete, setnb_postsIdToDelete] = useState(0);
-  const allBrands = useTrait([]);
-  const getAllBrands = async () => {
-    // console.log("in getallbrands");
 
-    try {
-      const response = await fetch(PF + "/api/brands/list?token=" + session[0]);
-      const data = await response.json();
-      // console.log(data.data);
-      if (data.success) {
-        allBrands.set(data.data);
-      } else {
-        if (data.message === "This session token is not valid") {
-          outDateCookieSession(session[0], session[1]);
-          setIsValidToken(false);
-          setHomeContent("0");
-        }
-      }
-    } catch (e) {
-      if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
-        console.error(e);
-      }
-    }
-  };
+  const fetch = useFetch();
 
   const askConfirm = (e) => {
     e.preventDefault();

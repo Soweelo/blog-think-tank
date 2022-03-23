@@ -14,6 +14,7 @@ export default function Post({
   lang,
   setHomeContent,
   setIsValidToken,
+  allBrands,
 }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [postMessage, setPostMessage] = useState("");
@@ -57,29 +58,37 @@ export default function Post({
   };
   // end delete post
   //getTags
-  useEffect(() => {
-    const getTags = async () => {
-      try {
-        const response = await fetch(PF + "/api/tags?lang=" + lang, {
-          enabled: !!lang,
-        }).then((r) => r.json());
-        setAllTags(response.data);
-      } catch (e) {
-        if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
-          console.error(e);
-        }
-      }
-    };
-    if (lang) {
-      getTags();
-    }
-  }, [lang]);
-  //end getTags
 
+  const getTags = async () => {
+    try {
+      const response = await fetch(PF + "/api/tags?lang=" + lang).then((r) =>
+        r.json()
+      );
+
+      allBrands.get().map((brand) => {
+        response.data.push({
+          name: brand.name.toLowerCase().replace(/\s/g, ""),
+        });
+      });
+
+      setAllTags(response.data);
+      // console.log(response.data);
+    } catch (e) {
+      if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
+        console.error(e);
+      }
+    }
+  };
+
+  //end getTags
+  useEffect(async () => {
+    await getTags();
+  }, [lang]);
   function auto_grow(element) {
     element.style.height = "5px";
     element.style.height = element.scrollHeight + "px";
   }
+  // console.log(allTags);
   return (
     <div id={"account-content__scrolling-wrapper"}>
       <Scroll

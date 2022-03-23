@@ -8,6 +8,8 @@ import Post from "./Post/Post";
 import Brand from "./Brand/Brand";
 import AccountParams from "./AccountParams/AccountParams";
 import { ArrowBack } from "@material-ui/icons";
+import outDateCookieSession from "../../../functions/cookiesController/outDateCookieSession";
+import { useFetch } from "../../../hooks/useFetch";
 export default function AccountContent({
   accountContent,
   session,
@@ -22,10 +24,33 @@ export default function AccountContent({
   const [brandMessage, setBrandMessage] = useState("");
 
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-  // const fetch = useFetch();
+  const fetch = useFetch();
   const [accountBrandForm, setAccountBrandForm] = useState(1);
   // const [accountPostForm, setAccountPostForm] = useState(1);
   const [brandContent, setBrandContent] = useState([]);
+  const allBrands = useTrait([]);
+  const getAllBrands = async () => {
+    // console.log("in getallbrands");
+
+    try {
+      const response = await fetch(PF + "/api/brands/list?token=" + session[0]);
+      const data = await response.json();
+      // console.log(data.data);
+      if (data.success) {
+        allBrands.set(data.data);
+      } else {
+        if (data.message === "This session token is not valid") {
+          outDateCookieSession(session[0], session[1]);
+          setIsValidToken(false);
+          setHomeContent("0");
+        }
+      }
+    } catch (e) {
+      if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
+        console.error(e);
+      }
+    }
+  };
 
   return (
     <div className="account-content__wrapper">
@@ -44,6 +69,7 @@ export default function AccountContent({
                 setHomeContent={setHomeContent}
                 isValidToken={isValidToken}
                 setIsValidToken={setIsValidToken}
+                allBrands={allBrands}
               />
             );
 
@@ -62,6 +88,8 @@ export default function AccountContent({
                 isValidToken={isValidToken}
                 setIsValidToken={setIsValidToken}
                 setHomeContent={setHomeContent}
+                getAllBrands={getAllBrands}
+                allBrands={allBrands}
               />
             );
           case 3:
