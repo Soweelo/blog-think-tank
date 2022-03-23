@@ -1,5 +1,5 @@
 import "./autocsearchbar.scss";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { MdClose } from "react-icons/md";
 import useTrait from "../../hooks/useTrait";
 
@@ -10,7 +10,6 @@ export default function EditAutoCSearchbar({
   setAllItems,
   id,
   max,
-  editing,
   postId,
   setEMessage,
   setAddTag,
@@ -18,22 +17,37 @@ export default function EditAutoCSearchbar({
 }) {
   const [isSuggestion, setIsSuggestion] = useState(false);
   const searchText = useTrait("");
-  console.log("in editsearcbar all items", allItems);
+  // console.log(allItems);
+  // const removeDuplicates = (arr) => {
+  //   const map = new Map();
+  //   arr.forEach((v) => map.set(v.abc_buildingid, v)); // having `abc_buildingid` is always unique
+  //   return [...map.values()];
+  // };
+
+  function getUnique(arr, comp) {
+    // store the comparison  values in array
+    const unique = arr
+      .map((e) => e[comp])
+
+      // store the indexes of the unique objects
+      .map((e, i, final) => final.indexOf(e) === i && i)
+
+      // eliminate the false indexes & return unique objects
+      .filter((e) => arr[e])
+      .map((e) => arr[e]);
+
+    return unique;
+  }
+
   const updateSuggestion = (e) => {
-    // console.log("in update sugg", "e.key", e);
+    // console.log("in update sugg", "e.key", e.target.value);
     setIsSuggestion(false);
     if (e.target.value.length > 1) {
-      // console.log("ici aussi?");
       searchText.set(e.target.value);
       setIsSuggestion(true);
-      if (e.key === "Enter") {
-        addItem(e);
-      }
     }
     if (!e) {
       searchText.set("");
-
-      // console.log("et voilàs");
     }
   };
   const toObjectArray = (array) => {
@@ -44,12 +58,15 @@ export default function EditAutoCSearchbar({
     });
     return result;
   };
-
   const addItem = (e) => {
     // console.log(max, selectedItems.length);
     // console.log("in additem", e);
+
     if (selectedItems.length < max) {
-      setEMessage(["", "blue"]);
+      console.log(
+        e.target.className,
+        e.target.className === "suggestion-select-item"
+      );
       let input =
         e.target.className === "suggestion-select-item"
           ? e.target.attributes["tagsuggest"].value
@@ -96,35 +113,32 @@ export default function EditAutoCSearchbar({
             setEMessage(["You already selected this tag", "red"]);
           }
         } else {
-          if (editing) {
-            let newTagName = e.target.value;
-            if (newTagName.length > 3 && newTagName.length < 40) {
-              postTags.set([...selectedItems, newTagName]);
-              setAllItems([...allItems, { name: newTagName }]);
-              if (postId) {
-                setAddTag([true, newTagName, postId]);
-              }
-              e.target.value = "";
-              setIsSuggestion(false);
-              setEMessage(["Congrats! You created a new tag.", "green"]);
-              searchText.set("");
-              // console.log(searchText.get());
-            } else {
-              setEMessage([
-                "Sorry, your tag name is currently " +
-                  newTagName.length +
-                  "  characters long. It should be longer than 3 characters and shorter than 40 characters",
-                "red",
-              ]);
+          let newTagName = e.target.value;
+          if (newTagName.length > 3 && newTagName.length < 40) {
+            postTags.set([...selectedItems, newTagName]);
+            setAllItems([...allItems, { name: newTagName }]);
+            if (postId) {
+              setAddTag([true, newTagName, postId]);
             }
+            e.target.value = "";
+            setIsSuggestion(false);
+            setEMessage(["Congrats! You created a new tag.", "green"]);
+            searchText.set("");
+            // console.log(searchText.get());
           } else {
-            setEMessage(["This tag still does not exist", "red"]);
+            setEMessage([
+              "Sorry, your tag name is currently " +
+                newTagName.length +
+                "  characters long. It should be longer than 3 characters and shorter than 40 characters",
+              "red",
+            ]);
           }
         }
       }
     } else {
       setEMessage(["You can select a maximum of " + max + " tags ", "red"]);
       setIsSuggestion(false);
+      searchText.set("");
     }
   };
 
@@ -160,9 +174,7 @@ export default function EditAutoCSearchbar({
       }
     });
   }
-  // useEffect(() => {
-  //   console.log("selectedItems", selectedItems, "posttags", postTags.get());
-  // }, [postTags]);
+
   return (
     <>
       <div className="tag-container">
@@ -180,7 +192,15 @@ export default function EditAutoCSearchbar({
         <input
           className={"tagcontainer--input" + id + postId}
           type="text"
-          onKeyPress={(e) => updateSuggestion(e)}
+          onKeyPress={(e) => {
+            if (e.key === "Enter") {
+              addItem(e);
+            }
+          }}
+          onChange={(e) => {
+            updateSuggestion(e);
+            setEMessage(["", "black"]);
+          }}
           onFocus={(e) => setOpenToCenter(e)}
         />
       </div>
@@ -189,34 +209,33 @@ export default function EditAutoCSearchbar({
         className={"suggestion " + (isSuggestion && "active")}
         style={{ position: "relative" }}
       >
-        {console.log(
-          "searchTaxt",
-          searchText.get(),
-          toObjectArray(allItems).filter(
-            ({ name }) => name.indexOf(searchText.get().toLowerCase()) > -1
-          )
-        )}
-
         <div className="suggestion-select-item new-item-wrapper">
           <p>#{searchText.get()}</p>
           <span>New Tag</span>
         </div>
+        {/*{console.log("all items", allItems, removeDuplicates(allItems))}*/}
         {toObjectArray(allItems)
           .filter(
             ({ name }) => name.indexOf(searchText.get().toLowerCase()) > -1
           )
-          .map((option, i) => {
-            return (
-              <div
-                key={i}
-                className="suggestion-select-item"
-                tagsuggest={option.name}
-                data-postid={postId}
-                onClick={addItem}
-              >
-                #{option.name}
-              </div>
-            );
+          .map((option, i, arr) => {
+            // don't display twice the same tag or brand:;
+            const previousOption = arr[i - 1];
+            if (previousOption && previousOption.name == option.name) {
+              return null;
+            } else {
+              return (
+                <div
+                  key={i}
+                  className="suggestion-select-item"
+                  tagsuggest={option.name}
+                  data-postid={postId}
+                  onClick={addItem}
+                >
+                  #{option.name}
+                </div>
+              );
+            }
           })}
       </div>
     </>

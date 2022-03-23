@@ -50,3 +50,11 @@ ex: variable  langue, session (token valide),  etc.
         ** afficher les infos récupérées dans la réponse positive du serveur. dans ce cas c'est un peu plus long(le temps d'enregistrement du post),
         mais il y a toutes les données nécéssaires à sa modification sans re-render. Je privilégie cette piste.
 
+*** dans un formulaire sur un input, le detecteur onKeypress permet de saisir les  valeurs  des lettres saisies au clavier mais:
+    - saisit "Enter"
+    - il y a un retard d'un caractère.
+    - il ne saisit pas le changemnt si on tape la touche delete
+
+       Onchange permet de saisir le juste nombre de caractère:
+       - la value saisie est à jour, même après un delete
+       - ne saisit pas "Enter"
