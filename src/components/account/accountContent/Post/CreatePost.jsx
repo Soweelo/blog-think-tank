@@ -5,6 +5,8 @@ import "autoheight-textarea";
 import EditAutoCSearchbar from "../../../autoCSearchBar/EditAutoSearchBar";
 import { useFetch } from "../../../../hooks/useFetch";
 import outDateCookieSession from "../../../../functions/cookiesController/outDateCookieSession";
+import { CircularProgress } from "@material-ui/core";
+import { green } from "@material-ui/core/colors";
 
 export default function CreatePost({
   session,
@@ -17,6 +19,7 @@ export default function CreatePost({
   setNewPost,
 }) {
   const [eMessage, setEMessage] = useState("");
+  const [isFetching, setIsFetching] = useState(false);
   const desc = useRef();
   let formData = new FormData();
   const [file, setFile] = useState();
@@ -41,6 +44,7 @@ export default function CreatePost({
   //end handle postContentChange
   const submitPost = async () => {
     try {
+      setIsFetching(true);
       // console.log(formData.values());
       const requestOptions = {
         method: "POST",
@@ -75,6 +79,7 @@ export default function CreatePost({
           setIsValidToken(false);
         }
       }
+      setIsFetching(false);
     } catch (e) {
       console.log(e);
     }
@@ -143,7 +148,11 @@ export default function CreatePost({
           </div>
 
           <button className="btn account-content__postButton" type="submit">
-            post
+            {isFetching ? (
+              <CircularProgress color={"green"} size="20px" />
+            ) : (
+              "POST"
+            )}
           </button>
         </form>
       </div>
