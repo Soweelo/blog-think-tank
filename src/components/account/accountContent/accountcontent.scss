@@ -14,6 +14,9 @@
   }
   @include mobile{
     padding: 1rem 0.1rem;
+    .account-content__account-params-wrapper,.account-content__brands-wrapper{
+      padding:0 1rem;
+    }
   }
   //.account-content__message{
   //  background-color: $validate;

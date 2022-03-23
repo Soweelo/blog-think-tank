@@ -102,7 +102,7 @@ export default function Brand({
     getAllBrands();
   }, [accountBrandForm]);
   return (
-    <div>
+    <div className="account-content__brands-wrapper">
       <ArrowBack
         className="mobileView"
         onClick={() => {

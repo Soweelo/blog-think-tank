@@ -65,7 +65,7 @@ export default function AccountParams({
   }, [changeUserInfo]);
 
   return (
-    <div>
+    <div className="account-content__account-params-wrapper">
       <ArrowBack
         className="mobileView"
         onClick={() => {

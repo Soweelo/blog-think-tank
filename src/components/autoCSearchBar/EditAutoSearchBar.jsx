@@ -45,10 +45,10 @@ export default function EditAutoCSearchbar({
 
   const addItem = (e) => {
     if (selectedItems.length < max) {
-      let newTagName =
-        e.target.className === "suggestion-select-item"
-          ? e.target.attributes["tagsuggest"].value
-          : e.target.value;
+      console.log(e.target.className.includes("suggestion-select-item"));
+      let newTagName = e.target.className.includes("suggestion-select-item")
+        ? e.target.attributes["tagsuggest"].value
+        : e.target.value;
       //**add tag to container
       postTags.set([...postTags.get(), newTagName]);
       //**send signal to parent for updating the post
@@ -137,7 +137,11 @@ export default function EditAutoCSearchbar({
         style={{ position: "relative" }}
       >
         {isNewTag.get() && (
-          <div className="suggestion-select-item new-item-wrapper">
+          <div
+            className="suggestion-select-item new-item-wrapper"
+            onClick={addItem}
+            tagsuggest={searchText.get()}
+          >
             <p>#{searchText.get()}</p>
             <span>New Tag</span>
           </div>
