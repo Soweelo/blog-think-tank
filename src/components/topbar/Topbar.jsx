@@ -92,7 +92,7 @@ export default memo(function Topbar({
   function openLoginInterface() {
     // console.log("session", session, "isValidToken", isValidToken);
     if (session.length !== 0) {
-      console.log(isValidToken);
+      // console.log(isValidToken);
       // console.log("1");
       if (isValidToken) {
         setHomeContent("5");

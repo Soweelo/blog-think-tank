@@ -27,17 +27,12 @@ export default function CreatePost({
   //submit new post
   const submitHandler = (e) => {
     e.preventDefault();
-    // console.log(postTags.get());
-
     formData.append("text", postContent.current.value);
     formData.append("image", file);
     postTags.get().map((tag) => {
       formData.append("tags[]", tag);
     });
-    // formData.append("tags", postTags.get());
-    // for (let [name, value] of formData) {
-    //   console.log(name, value); // key1 = value1, then key2 = value2
-    // }
+
     submitPost();
   };
   //end submit new post
@@ -138,7 +133,6 @@ export default function CreatePost({
                   id={7}
                   max={3}
                   postId={null}
-                  editing={true}
                   setEMessage={setEMessage}
                 />
                 <div className="message" style={{ color: eMessage[1] }}>
