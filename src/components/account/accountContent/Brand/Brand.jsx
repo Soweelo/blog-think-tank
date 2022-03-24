@@ -8,36 +8,30 @@ import {
   PermMedia,
   Room,
 } from "@material-ui/icons";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import useTrait from "../../../../hooks/useTrait";
 import outDateCookieSession from "../../../../functions/cookiesController/outDateCookieSession";
 import { useFetch } from "../../../../hooks/useFetch";
+import { AuthContext } from "../../../../context/AuthContext";
+import { logout } from "../../../../apiCalls";
 
 export default function Brand({
   setMobileView,
-  mobileView,
-  session,
-  accountContent,
   setAccountContent,
   accountBrandForm,
   setAccountBrandForm,
   brandContent,
   setBrandContent,
-  isValidToken,
-  setIsValidToken,
-  setHomeContent,
   getAllBrands,
   allBrands,
 }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-
+  const { user, dispatch } = useContext(AuthContext);
   const [brandMessage, setBrandMessage] = useState("");
   const [openConfirm, setOpenConfirm] = useState(false);
   const [idToDelete, setIdToDelete] = useState(null);
   const [nb_postsToDelete, setnb_postsIdToDelete] = useState(0);
-
   const fetch = useFetch();
-
   const askConfirm = (e) => {
     e.preventDefault();
     const id = e.target.attributes["data-value"].value;
@@ -58,32 +52,19 @@ export default function Brand({
     return brandContent;
   };
   const deleteBrand = async (id) => {
-    // e.preventDefault();
-    // // console.log(e.target.attributes["data-value"].value);
-    // const id = e.target.attributes["data-value"].value;
-    // console.log("delete");
     try {
-      // console.log("in try", "id", id, "session", session[0]);
-
       const response = await fetch(
-        PF + "/api/brands/" + id + "?token=" + session[0],
+        PF + "/api/brands/" + id + "?token=" + user.session,
         { method: "DELETE" }
       );
 
       const data = await response.json();
-      // console.log("data", data);
-      // console.log("response", response, id);
       if (data.success) {
-        // console.log(data);
         setBrandMessage(data.message);
         await getAllBrands();
       } else {
-        // console.log(data);
         if (data.message === "This session token is not valid") {
-          console.log("session expired");
-          outDateCookieSession(session[0], session[1]);
-          setIsValidToken(false);
-          setHomeContent("0");
+          logout(dispatch);
         } else {
           setBrandMessage(data.message);
           await getAllBrands();

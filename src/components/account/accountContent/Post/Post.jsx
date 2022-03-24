@@ -1,21 +1,22 @@
 import "./post.scss";
 import { ArrowBack, Close } from "@material-ui/icons";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 
 import "autoheight-textarea";
 import UserPostList from "./UserPostList";
 import CreatePost from "./CreatePost";
 import Scroll from "../../../scroll/scroll";
 import outDateCookieSession from "../../../../functions/cookiesController/outDateCookieSession";
+import { AuthContext } from "../../../../context/AuthContext";
+import { logout } from "../../../../apiCalls";
+import { useFetch } from "../../../../hooks/useFetch";
 export default function Post({
-  mobileView,
   setMobileView,
-  session,
   lang,
   setHomeContent,
-  setIsValidToken,
   allBrands,
 }) {
+  const { user, dispatch } = useContext(AuthContext);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [postMessage, setPostMessage] = useState("");
   const [idToDelete, setIdToDelete] = useState(null);
@@ -23,27 +24,20 @@ export default function Post({
   const [openConfirm, setOpenConfirm] = useState(false);
   const [rerenderPostsList, setRerenderPostsList] = useState(true);
   const [newPost, setNewPost] = useState({});
+  const fetch = useFetch();
   //delete post
   const deletePost = async (id) => {
     try {
-      // console.log("in try", "id", id, "session", session[0]);
-
       const response = await fetch(
-        PF + "/api/posts/" + id + "?token=" + session[0],
+        PF + "/api/posts/" + id + "?token=" + user.session,
         { method: "DELETE" }
       );
-
       const data = await response.json();
-
       if (data.success) {
-        // console.log(data);
         setPostMessage(data.message);
-        // await getAllPosts();
       } else {
         if (data.message === "This session token is not valid") {
-          outDateCookieSession(session[0], session[1]);
-          setIsValidToken(false);
-          setHomeContent("0");
+          logout(dispatch);
         }
       }
     } catch (e) {
@@ -64,15 +58,12 @@ export default function Post({
       const response = await fetch(PF + "/api/tags?lang=" + lang).then((r) =>
         r.json()
       );
-
       allBrands.get().map((brand) => {
         response.data.push({
           name: brand.name.toLowerCase().replace(/\s/g, ""),
         });
       });
-
       setAllTags(response.data);
-      // console.log(response.data);
     } catch (e) {
       if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
         console.error(e);
@@ -140,11 +131,9 @@ export default function Post({
       )}
       <div id="account-content__top">
         <CreatePost
-          session={session}
           allTags={allTags}
           setAllTags={setAllTags}
           setPostMessage={setPostMessage}
-          setIsValidToken={setIsValidToken}
           newPost={newPost}
           setNewPost={setNewPost}
         />
@@ -156,11 +145,9 @@ export default function Post({
         setPostMessage={setPostMessage}
         allTags={allTags}
         setAllTags={setAllTags}
-        session={session}
         reRenderPostsList={rerenderPostsList}
         setRerenderPostsList={setRerenderPostsList}
         setHomeContent={setHomeContent}
-        setIsValidToken={setIsValidToken}
         newPost={newPost}
         setNewPost={setNewPost}
       />

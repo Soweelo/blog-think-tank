@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import styled from "styled-components";
 import { Mail, Close } from "@material-ui/icons";
 import outDateCookieSession from "../../../../functions/cookiesController/outDateCookieSession";
+import { AuthContext } from "../../../../context/AuthContext";
+import { logout } from "../../../../apiCalls";
 // Styling a regular HTML input
 const StyledInput = styled.input`
   display: block;
@@ -18,15 +20,12 @@ const StyledInput = styled.input`
 `;
 export default function AccountBrandForm({
   formContent,
-  token,
   setBackMessage,
   setAccountContent,
   brandContent,
-  session,
   setHomeContent,
-  setIsValidToken,
 }) {
-  console.log(formContent);
+  const { user, dispatch } = useContext(AuthContext);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [message, setMessage] = useState("");
   const [brandId, setBrandId] = useState(
@@ -63,7 +62,7 @@ export default function AccountBrandForm({
         body: JSON.stringify({
           name: brandName,
           link: brandLink,
-          token: token,
+          token: user.session,
         }),
       };
       const url = PF + "/api/brands";
@@ -81,16 +80,9 @@ export default function AccountBrandForm({
         console.log(response);
         setMessage(data.message);
         if (data.message === "This session token is not valid") {
-          outDateCookieSession(session[0], session[1]);
-          setIsValidToken(false);
-          setHomeContent("0");
+          logout(dispatch);
         }
       }
-
-      // }catch(e) {
-      //   if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
-      //     console.error(e);
-      //   }
     } else {
       setMessage("Your brand name or link length is not valid");
     }
@@ -113,7 +105,7 @@ export default function AccountBrandForm({
         body: JSON.stringify({
           link: brandLink,
           name: brandName,
-          token: token,
+          token: user.session,
         }),
       };
       const url = PF + "/api/brands/" + brandId;
@@ -131,16 +123,9 @@ export default function AccountBrandForm({
         // console.log(response);
         setMessage(data.message);
         if (data.message === "This session token is not valid") {
-          outDateCookieSession(session[0], session[1]);
-          setIsValidToken(false);
-          setHomeContent("0");
+          logout(dispatch);
         }
       }
-
-      // }catch(e) {
-      //   if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
-      //     console.error(e);
-      //   }
     } else {
       setMessage("Your brand name or link length is not valid");
     }
@@ -174,28 +159,6 @@ export default function AccountBrandForm({
           Save
         </button>
       </form>
-
-      {/*{(() => {*/}
-      {/*  switch (formContent) {*/}
-      {/*    case 1:*/}
-      {/*      return (*/}
-      {/*        <>*/}
-      {/*          <h2>Edit your Brand</h2>*/}
-      {/*          <div>Form here</div>*/}
-      {/*        </>*/}
-      {/*      );*/}
-
-      {/*    default:*/}
-      {/*      return (*/}
-      {/*        <>*/}
-      {/*          <h2>Add a Brand</h2>*/}
-      {/*          <form onSubmit={submitAddBrand}>*/}
-      {/*            */}
-      {/*          </form>*/}
-      {/*        </>*/}
-      {/*      );*/}
-      {/*  }*/}
-      {/*})()}*/}
     </>
   );
 }

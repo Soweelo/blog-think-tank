@@ -1,6 +1,6 @@
 import "./topbar.scss";
 import { Person, Favorite, Search, GTranslate } from "@material-ui/icons";
-import { useEffect, useState, memo } from "react";
+import { useEffect, useState, memo, useContext } from "react";
 import axios from "axios";
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
@@ -11,21 +11,19 @@ import getOptionByKey from "../../functions/getOptionByKey/GetOptionByKey";
 // import checkValidToken from "../../functions/sessionController/checkValidToken";
 import outDateCookieSession from "../../functions/cookiesController/outDateCookieSession";
 import getCookie from "../../functions/cookiesController/getCookie";
+import { AuthContext } from "../../context/AuthContext";
 // const queryClient = new QueryClient();
 export default memo(function Topbar({
   setHomeContent,
   lang,
   setLang,
-  setShowLogin,
-  showLogin,
+  setShowAuth,
   allOptions,
-  session,
-  setSession,
-  isValidToken,
 }) {
   // const [isOpenedGT, setIsOpenedGT] = useState(false);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [allLang, setAllLang] = useState([]);
+  const { user } = useContext(AuthContext);
   // console.log(topBarContent)
   const fetch = useFetch();
   const [option_header, setOption_header] = useState("");
@@ -90,26 +88,11 @@ export default memo(function Topbar({
   const options = dataLangToArray(allLang);
 
   function openLoginInterface() {
-    // console.log("session", session, "isValidToken", isValidToken);
-    if (session.length !== 0) {
-      // console.log(isValidToken);
-      // console.log("1");
-      if (isValidToken) {
-        setHomeContent("5");
-        // console.log("2");
-      } else {
-        outDateCookieSession(session[0], session[1]);
-        setShowLogin(true);
-        // console.log("3");
-      }
+    console.log("user", user);
+    if (user) {
+      setHomeContent("5");
     } else {
-      setShowLogin(true);
-      const token = getCookie("YW-session-token");
-      const pseudo = getCookie("YW-session-pseudo");
-      // console.log("4");
-      if (token.length !== 0 && isValidToken) {
-        setSession([token, pseudo]);
-      }
+      setShowAuth(true);
     }
   }
 

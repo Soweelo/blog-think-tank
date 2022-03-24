@@ -6,18 +6,16 @@ import {
   StarOutline,
 } from "@material-ui/icons";
 import { useFetch } from "../../../../hooks/useFetch";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import outDateCookieSession from "../../../../functions/cookiesController/outDateCookieSession";
 import useTrait from "../../../../hooks/useTrait";
+import { AuthContext } from "../../../../context/AuthContext";
+import { logout } from "../../../../apiCalls";
 
-export default function AccountParams({
-  session,
-  setMobileView,
-  setHomeContent,
-  setIsValidToken,
-}) {
+export default function AccountParams({ setMobileView, setHomeContent }) {
   // console.log("rerender account params");
   const fetch = useFetch();
+  const { user, dispatch } = useContext(AuthContext);
   const [isFetching, setIsFetching] = useState(false);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [userId, setUserId] = useState("");
@@ -30,11 +28,10 @@ export default function AccountParams({
     try {
       setIsFetching(true);
       const response = await fetch(
-        PF + "/api/members/session?token=" + session[0]
+        PF + "/api/members/session?token=" + user.session
       ).then((r) => r.json());
 
       if (response.success == true) {
-        // console.log(response);
         setEmail(response.data.email);
         setPassword("*********");
         setUserId(response.data.id);
@@ -42,10 +39,7 @@ export default function AccountParams({
         setPseudo(response.data.pseudo);
       } else {
         if (response.message === "This session token is not valid") {
-          outDateCookieSession(session[0], session[1]);
-          console.log("outdatecookies");
-          setIsValidToken(false);
-          setHomeContent("0");
+          logout(dispatch);
         }
       }
 
@@ -73,13 +67,7 @@ export default function AccountParams({
         }}
       />
       <h2>My Account</h2>
-      {/*<button*/}
-      {/*  onClick={() => {*/}
-      {/*    setChangeUserInfo(true);*/}
-      {/*  }}*/}
-      {/*>*/}
-      {/*  RENDER ME*/}
-      {/*</button>*/}
+
       <div className="account-content__info-container">
         <div className="account-content__info-line">
           <div className="account-content__label">

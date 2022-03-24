@@ -11,13 +11,10 @@ import { useState, useEffect, useContext } from "react";
 import MainMenu from "./components/mainMenu/MainMenu";
 import PopupMessage from "./components/popup/PopupMessage";
 import styled from "styled-components";
-import outDateCookieSession from "./functions/cookiesController/outDateCookieSession";
-import MemberLoginandRegister from "./components/login/MemberLoginandRegister";
-// import checkValidToken from "./functions/sessionController/checkValidToken";
+import Auth from "./components/auth/Auth";
 import { useFetch } from "./hooks/useFetch";
 import { AuthContext } from "./context/AuthContext";
 import getCookie from "./functions/cookiesController/getCookie";
-// import { useCheckValidToken } from "./functions/sessionController/useCheckValidToken";
 
 function App() {
   const { user } = useContext(AuthContext);
@@ -25,71 +22,17 @@ function App() {
   const [homeContent, setHomeContent] = useState("0");
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [lang, setLang] = useState("");
-  const [showLogin, setShowLogin] = useState(false);
+  const [showAuth, setShowAuth] = useState(false);
   const [allOptions, setAllOptions] = useState([]);
   const [popupContent, setPopupContent] = useState("");
   const [isOpenedPopup, setIsOpenedPopup] = useState(false);
-  const [isValidToken, setIsValidToken] = useState(false);
-  const [loading, setLoading] = useState(false);
+
   const SectionMain = styled.div`
     background-image: url("${PF}/storage/app/public/4.jpg");
   `;
   const fetch = useFetch();
-  const [session, setSession] = useState([]);
+  // const [session, setSession] = useState([]);
   getCookie("YW-session-token");
-  function endSession() {
-    if (session.length !== 0) {
-      outDateCookieSession(session[0], session[1]);
-      // alert("disconnected", session[0], session[1]);
-      setSession([]);
-
-      setHomeContent("0");
-      setPopupContent("Disconnected");
-      // callBackPopUp();
-    } else {
-      // alert("your Session expired!");
-      setHomeContent("0");
-      setSession([]);
-    }
-  }
-  useEffect(() => {
-    const token = getCookie("YW-session-token");
-    const pseudo = getCookie("YW-session-pseudo");
-    // console.log(getCookie("YW-session-token"));
-    if (token.length !== 0) {
-      const checkToken = async () => {
-        // console.log(token);
-        try {
-          setLoading(true);
-
-          const response = await fetch(
-            PF + "/api/members/session?token=" + token
-          );
-          const data = await response.json();
-          // console.log(data);
-          if (data.success) {
-            setSession([token, pseudo]);
-            setIsValidToken(true);
-          } else {
-            setSession([]);
-            if (token && pseudo) {
-              outDateCookieSession(token, pseudo);
-              setHomeContent("0");
-            }
-          }
-          setLoading(false);
-          // return isValidToken;
-        } catch (e) {
-          console.log(e);
-        }
-        // console.log(session);
-        // console.log("isValid", isValidToken);
-      };
-      if (!loading) {
-        checkToken();
-      }
-    }
-  }, [isValidToken, session]);
 
   useEffect(() => {
     if (getCookie("YW-lang").length === 0) {
@@ -118,11 +61,12 @@ function App() {
     if (lang) {
       fetchAllOptions();
     }
-
-    // console.log(allOptions);
   }, [lang]);
-  // console.log(isOpenedPopup);
-
+  useEffect(() => {
+    if (homeContent === "5") {
+      setHomeContent("0");
+    }
+  }, [user]);
   return (
     <>
       <div className="app">
@@ -131,15 +75,12 @@ function App() {
           setHomeContent={setHomeContent}
           setLang={setLang}
           lang={lang}
-          showLogin={showLogin}
-          setShowLogin={setShowLogin}
+          showAuth={showAuth}
+          setShowAuth={setShowAuth}
           allOptions={allOptions}
-          session={session}
-          isValidToken={isValidToken}
-          setSession={setSession}
         />
 
-        <SectionMain className={`sections${showLogin ? " filter" : ""}`}>
+        <SectionMain className={`sections${showAuth ? " filter" : ""}`}>
           {/*<OnePageContent omeContent={homeContent} setHomeContent={setHomeContent}/>*/}
           {(() => {
             switch (homeContent) {
@@ -181,13 +122,7 @@ function App() {
                   <>
                     <Account
                       allOptions={allOptions}
-                      session={session}
-                      setSession={setSession}
                       setHomeContent={setHomeContent}
-                      // isValidToken={isValidToken}
-                      // setIsValidToken={setIsValidToken}
-                      // setPopupContent={setPopupContent}
-                      // setIsOpenPopup={setIsOpenedPopup}
                       lang={lang}
                     />
                   </>
@@ -204,12 +139,9 @@ function App() {
           homeContent={homeContent}
           setHomeContent={setHomeContent}
           lang={lang}
-          showLogin={showLogin}
-          setShowLogin={setShowLogin}
+          showAuth={showAuth}
+          setShowAuth={setShowAuth}
           allOptions={allOptions}
-          isValidToken={isValidToken}
-          setSession={setSession}
-          session={session}
         />
         <Bottombar
           mainMenuOpen={mainMenuOpen}
@@ -220,14 +152,10 @@ function App() {
           allOptions={allOptions}
         />
 
-        <MemberLoginandRegister
-          showLogin={showLogin}
-          setShowLogin={setShowLogin}
-          session={session}
-          setSession={setSession}
+        <Auth
+          showAuth={showAuth}
+          setShowAuth={setShowAuth}
           setHomeContent={setHomeContent}
-          setIsValidToken={setIsValidToken}
-          isValidToken={isValidToken}
         />
 
         <PopupMessage

@@ -13,10 +13,13 @@ export const loginCall = async (userCredential, dispatch) => {
         "&password=" +
         userCredential.password
     );
-    dispatch({ type: "LOGIN_SUCCESS", payload: res.data });
-  } catch (e) {
-    dispatch({ type: "LOGIN_FAILURE", payload: e });
+    dispatch({ type: "LOGIN_SUCCESS", payload: res.data.data });
+  } catch (err) {
+    dispatch({ type: "LOGIN_FAILURE", payload: err });
   }
+};
+export const loginRegister = (userInfo, dispatch) => {
+  dispatch({ type: "LOGIN_SUCCESS", payload: userInfo });
 };
 export const logout = (dispatch) => {
   dispatch({ type: "LOGOUT_SUCCESS" });

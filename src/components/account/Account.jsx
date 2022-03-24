@@ -1,21 +1,14 @@
 import "./account.scss";
 import BackHomeButton from "../backHomeButton/BackHomeButton";
 import AccountContent from "./accountContent/AccountContent";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Person, Create, LocalOffer, Home } from "@material-ui/icons";
 import outDateCookieSession from "../../functions/cookiesController/outDateCookieSession";
+import { AuthContext } from "../../context/AuthContext";
+import { logout } from "../../apiCalls";
 // import getOptionByKey from "../../functions/getOptionByKey/GetOptionByKey";
-export default function Account({
-  allOptions,
-  setHomeContent,
-  session,
-  setSession,
-  setPopupContent,
-  setIsOpenPopup,
-  isValidToken,
-  setIsValidToken,
-  lang,
-}) {
+export default function Account({ setHomeContent, setIsOpenPopup, lang }) {
+  const { user, isFetching, error, dispatch } = useContext(AuthContext);
   const [accountContent, setAccountContent] = useState(0);
 
   const [mobileView, setMobileView] = useState("menu");
@@ -26,29 +19,12 @@ export default function Account({
     }, 7000);
   };
   function endSession() {
-    // logoutCall;
-    if (session.length !== 0) {
-      outDateCookieSession(session[0], session[1]);
-      // alert("disconnected", session[0], session[1]);
-      setSession([]);
-      // setIsValidToken(false);
-
-      setHomeContent("0");
-      // setPopupContent("Disconnected");
-      // callBackPopUp();
-    } else {
-      // alert("your Session expired!");
-      setHomeContent("0");
-      setSession([]);
-
-      setIsValidToken(false);
-    }
+    logout(dispatch);
   }
   const changeContent = (e) => {
     setHomeContent(e.target.id);
-    // console.log("click" + e.target.id);
   };
-  // console.log(accountContent);
+
   return (
     <div id="account">
       <BackHomeButton setHomeContent={setHomeContent} />
@@ -59,18 +35,16 @@ export default function Account({
             "account__menu-bar" + (mobileView === "menu" ? " mobileView" : "")
           }
         >
-          {/*<BackHomeButton className="account__menu-bar-home" />*/}
           <div
             className="account__menu-bar-home"
             onClick={(e) => changeContent(e)}
           >
-            {" "}
             <Home />
           </div>
           <div className="account__menubar-avatar-wrapper">
             <Person />
             <div className="account__pseudo">
-              Welcome <span>{session[1]}</span>!
+              Welcome <span>{user.pseudo}</span>!
             </div>
           </div>{" "}
           <button className="btn" onClick={endSession}>
@@ -113,14 +87,11 @@ export default function Account({
         >
           <AccountContent
             accountContent={accountContent}
-            session={session}
             setAccountContent={setAccountContent}
             mobileView={mobileView}
             setMobileView={setMobileView}
             lang={lang}
             setHomeContent={setHomeContent}
-            isValidToken={isValidToken}
-            setIsValidToken={setIsValidToken}
           />
         </div>
       </div>

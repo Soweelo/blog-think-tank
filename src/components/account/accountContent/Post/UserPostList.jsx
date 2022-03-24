@@ -1,6 +1,5 @@
 import "./post.scss";
-import parse from "html-react-parser";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import useTrait from "../../../../hooks/useTrait";
 import { format } from "timeago.js";
 import EditAutoCSearchbar from "../../../autoCSearchBar/EditAutoSearchBar";
@@ -9,11 +8,11 @@ import { Cancel, PermMedia } from "@material-ui/icons";
 import { useFetch } from "../../../../hooks/useFetch";
 import { CircularProgress } from "@material-ui/core";
 import outDateCookieSession from "../../../../functions/cookiesController/outDateCookieSession";
-// import { Editor } from "@tinymce/tinymce-react";
+import { AuthContext } from "../../../../context/AuthContext";
+import { logout } from "../../../../apiCalls";
 
 export default function UserPostList({
   setIdToDelete,
-  session,
   setOpenConfirm,
   setPostMessage,
   allTags,
@@ -21,11 +20,10 @@ export default function UserPostList({
   reRenderPostsList,
   setRerenderPostsList,
   setHomeContent,
-  setIsValidToken,
   newPost,
-  setNewPost,
 }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+  const { user, dispatch } = useContext(AuthContext);
   const [postContentButton, setPostContentButton] = useState([-1, false]);
   const [postContent, setPostContent] = useState([-1, ""]);
   const postTagsToChange = useTrait(-1);
@@ -37,7 +35,7 @@ export default function UserPostList({
   let formDataUpdate = new FormData();
   const changedImgPostId = useTrait(-1);
   const [isFetching, setIsFetching] = useState(false);
-  const desc = useRef();
+
   const fetch = useFetch();
   // const editorRef = useRef(null);
   const [addATag, setAddATag] = useState([false, "", -1]);
@@ -65,7 +63,7 @@ export default function UserPostList({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           value: postContent[1],
-          token: session[0],
+          token: user.session,
         }),
       };
       const url = PF + "/api/posts/" + id;
@@ -79,14 +77,11 @@ export default function UserPostList({
         setPostMessage(data.message);
       } else {
         if (data.message === "This session token is not valid") {
-          outDateCookieSession(session[0], session[1]);
-          setHomeContent("0");
-          setIsValidToken(false);
+          logout(dispatch);
         }
       }
     } else {
       setPostMessage("Your post content length is not valid");
-      // console.log(postContent[1].length);
     }
   };
   //*** end edit Content
@@ -100,7 +95,7 @@ export default function UserPostList({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           tag: addATag[1],
-          token: session[0],
+          token: user.session,
         }),
       };
       const url = PF + "/api/posts/" + addATag[2] + "/addTag";
@@ -109,14 +104,10 @@ export default function UserPostList({
       );
       let data = await response;
       if (data.success == true) {
-        // console.log(response);
         setPostMessage(data.message);
-        // setAccountContent(2);
       } else {
         if (data.message === "This session token is not valid") {
-          outDateCookieSession(session[0], session[1]);
-          setHomeContent("0");
-          setIsValidToken(false);
+          logout(dispatch);
         }
       }
     } catch (e) {
@@ -141,7 +132,7 @@ export default function UserPostList({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           tag: deleteATag[1],
-          token: session[0],
+          token: user.session,
         }),
       };
       const url = PF + "/api/posts/" + deleteATag[2] + "/removeTag";
@@ -150,12 +141,11 @@ export default function UserPostList({
       );
       let data = await response;
       if (data.success == true) {
-        // console.log(response);
         setPostMessage(data.message);
-        // setAccountContent(2);
       } else {
-        // console.log(response);
-        setHomeContent("0");
+        if (data.message === "This session token is not valid") {
+          logout(dispatch);
+        }
       }
     } catch (e) {
       if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
@@ -181,13 +171,15 @@ export default function UserPostList({
     // setNewPost({})
     try {
       const response = await fetch(
-        PF + "/api/posts/postsList?token=" + session[0]
+        PF + "/api/posts/postsList?token=" + user.session
       );
       const data = await response.json();
       if (data.success) {
         allPosts.set(data.data);
       } else {
-        setHomeContent("0");
+        if (data.message === "This session token is not valid") {
+          logout(dispatch);
+        }
       }
 
       setRerenderPostsList(false);
@@ -207,12 +199,12 @@ export default function UserPostList({
   };
 
   useEffect(() => {
-    if (reRenderPostsList && session[0]) {
-      // console.log(reRenderPostsList);
-      getAllPosts();
-    }
-    if (!session[0]) {
-      setHomeContent("0");
+    if (user) {
+      if (reRenderPostsList) {
+        getAllPosts();
+      }
+    } else {
+      logout(dispatch);
     }
   }, [reRenderPostsList]);
 
@@ -229,7 +221,7 @@ export default function UserPostList({
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          token: session[0],
+          token: user.session,
         }),
       };
       const url = PF + "/api/posts/" + id + "/deleteDefaultImage";
@@ -244,9 +236,7 @@ export default function UserPostList({
         // setAccountContent(2);
       } else {
         if (data.message === "This session token is not valid") {
-          outDateCookieSession(session[0], session[1]);
-          setIsValidToken(false);
-          setHomeContent("0");
+          logout(dispatch);
         }
       }
     } catch (e) {
@@ -289,7 +279,7 @@ export default function UserPostList({
         "/api/posts/" +
         changedImgPostId.get() +
         "/updateImage?token=" +
-        session[0];
+        user.session;
       const response = await fetch(url, requestOptions).then((res) =>
         res.json()
       );
@@ -301,9 +291,7 @@ export default function UserPostList({
         // setAccountContent(2);
       } else {
         if (data.message === "This session token is not valid") {
-          outDateCookieSession(session[0], session[1]);
-          setIsValidToken(false);
-          setHomeContent("0");
+          logout(dispatch);
         }
       }
       setIsFetching(false);
@@ -705,14 +693,12 @@ export default function UserPostList({
                 id={5}
                 setAllItems={setAllTags}
                 max={3}
-                editing={true}
                 setEMessage={setEMessage}
                 setAddTag={setAddATag}
                 setDeleteATag={setDeleteATag}
                 deleteATag={deleteATag}
                 postId={post.id}
               />
-              {/*{console.log(post.tags)}*/}
             </div>
           </div>
         );

@@ -1,28 +1,25 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import "./accountcontent.scss";
-import AutoCSearchbar from "../../autoCSearchBar/AutoCSearchbar";
-// import { useFetch } from "../../../hooks/useFetch";
+import { ArrowBack } from "@material-ui/icons";
 import AccountBrandForm from "./Brand/AccountBrandForm";
 import useTrait from "../../../hooks/useTrait";
 import Post from "./Post/Post";
-import Brand from "./Brand/Brand";
 import AccountParams from "./AccountParams/AccountParams";
-import { ArrowBack } from "@material-ui/icons";
-import outDateCookieSession from "../../../functions/cookiesController/outDateCookieSession";
+import { logout } from "../../../apiCalls";
 import { useFetch } from "../../../hooks/useFetch";
+import { AuthContext } from "../../../context/AuthContext";
+import Brand from "./Brand/Brand";
 export default function AccountContent({
   accountContent,
-  session,
+
   setAccountContent,
   mobileView,
   setMobileView,
   lang,
   setHomeContent,
-  isValidToken,
-  setIsValidToken,
 }) {
   const [brandMessage, setBrandMessage] = useState("");
-
+  const { user, dispatch } = useContext(AuthContext);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const fetch = useFetch();
   const [accountBrandForm, setAccountBrandForm] = useState(1);
@@ -33,15 +30,16 @@ export default function AccountContent({
     // console.log("in getallbrands");
 
     try {
-      const response = await fetch(PF + "/api/brands/list?token=" + session[0]);
+      const response = await fetch(
+        PF + "/api/brands/list?token=" + user.session
+      );
       const data = await response.json();
       // console.log(data.data);
       if (data.success) {
         allBrands.set(data.data);
       } else {
         if (data.message === "This session token is not valid") {
-          outDateCookieSession(session[0], session[1]);
-          setIsValidToken(false);
+          logout(dispatch);
           setHomeContent("0");
         }
       }
@@ -61,16 +59,11 @@ export default function AccountContent({
           case 1:
             return (
               <Post
-                // allPosts={allPosts}
-                mobileView={mobileView}
                 setMobileView={setMobileView}
-                session={session}
                 setAccountContent={setAccountContent}
                 accountContent={accountContent}
                 lang={lang}
                 setHomeContent={setHomeContent}
-                isValidToken={isValidToken}
-                setIsValidToken={setIsValidToken}
                 allBrands={allBrands}
               />
             );
@@ -78,7 +71,6 @@ export default function AccountContent({
           case 2:
             return (
               <Brand
-                session={session}
                 setMobileView={setMobileView}
                 mobileView={mobileView}
                 setAccountContent={setAccountContent}
@@ -87,8 +79,6 @@ export default function AccountContent({
                 setAccountBrandForm={setAccountBrandForm}
                 brandContent={brandContent}
                 setBrandContent={setBrandContent}
-                isValidToken={isValidToken}
-                setIsValidToken={setIsValidToken}
                 setHomeContent={setHomeContent}
                 getAllBrands={getAllBrands}
                 allBrands={allBrands}
@@ -104,13 +94,9 @@ export default function AccountContent({
                 />
                 <AccountBrandForm
                   formContent={accountBrandForm}
-                  token={session[0]}
                   setBackMessage={setBrandMessage}
                   setAccountContent={setAccountContent}
                   brandContent={brandContent}
-                  isValidToken={isValidToken}
-                  setIsValidToken={setIsValidToken}
-                  session={session}
                   setHomeContent={setHomeContent}
                 />
               </div>
@@ -118,10 +104,7 @@ export default function AccountContent({
           default:
             return (
               <AccountParams
-                session={session}
                 setMobileView={setMobileView}
-                isValidToken={isValidToken}
-                setIsValidToken={setIsValidToken}
                 setHomeContent={setHomeContent}
               />
             );

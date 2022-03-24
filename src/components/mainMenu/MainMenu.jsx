@@ -12,8 +12,8 @@ export default function MainMenu({
   homeContent,
   setHomeContent,
 
-  showLogin,
-  setShowLogin,
+  showAuth,
+  setShowAuth,
   allOptions,
   isValidToken,
   setSession,
@@ -33,11 +33,11 @@ export default function MainMenu({
         // console.log("2");
       } else {
         outDateCookieSession(session[0], session[1]);
-        setShowLogin(true);
+        setShowAuth(true);
         // console.log("3");
       }
     } else {
-      setShowLogin(true);
+      setShowAuth(true);
       const token = getCookie("YW-session-token");
       const pseudo = getCookie("YW-session-pseudo");
       // console.log("4");

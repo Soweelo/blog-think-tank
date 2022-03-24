@@ -1,26 +1,23 @@
 import { Cancel, Label, PermMedia } from "@material-ui/icons";
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import useTrait from "../../../../hooks/useTrait";
 import "autoheight-textarea";
 import EditAutoCSearchbar from "../../../autoCSearchBar/EditAutoSearchBar";
 import { useFetch } from "../../../../hooks/useFetch";
-import outDateCookieSession from "../../../../functions/cookiesController/outDateCookieSession";
 import { CircularProgress } from "@material-ui/core";
-import { green } from "@material-ui/core/colors";
+import { AuthContext } from "../../../../context/AuthContext";
+import { logout } from "../../../../apiCalls";
 
 export default function CreatePost({
-  session,
   allTags,
   setAllTags,
   setHomeContent,
   setPostMessage,
-  setIsValidToken,
-  newPost,
   setNewPost,
 }) {
+  const { user, dispatch } = useContext(AuthContext);
   const [eMessage, setEMessage] = useState("");
   const [isFetching, setIsFetching] = useState(false);
-  const desc = useRef();
   let formData = new FormData();
   const [file, setFile] = useState();
   const postTags = useTrait([]);
@@ -51,7 +48,7 @@ export default function CreatePost({
         body: formData,
       };
 
-      let url = PF + "/api/posts?token=" + session[0];
+      let url = PF + "/api/posts?token=" + user.session;
       let res = await fetch(url, requestOptions).then((res) => res.json());
       // console.log(res);
       if (res.success) {
@@ -74,9 +71,7 @@ export default function CreatePost({
         });
       } else {
         if (res.message === "This session token is not valid") {
-          outDateCookieSession(session[0], session[1]);
-          setHomeContent("0");
-          setIsValidToken(false);
+          logout(dispatch);
         }
       }
       setIsFetching(false);
@@ -90,7 +85,7 @@ export default function CreatePost({
         <div className="account-content__postTop">
           <autoheight-textarea>
             <textarea
-              placeholder={"What's in your mind " + session[1] + "?"}
+              placeholder={"What's in your mind " + user.pseudo + "?"}
               className="account-content__postInput"
               ref={postContent}
             />
