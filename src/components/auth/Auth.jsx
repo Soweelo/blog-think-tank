@@ -1,7 +1,7 @@
 import "./auth.scss";
 import { useRef, useEffect, useCallback, useState, useContext } from "react";
 import { useSpring, animated } from "react-spring";
-import { AuthContext } from "../../context/AuthContext";
+import { AuthContext } from "../../context/Auth/AuthContext";
 import Login from "./Login";
 import Register from "./Register";
 import styled from "styled-components";

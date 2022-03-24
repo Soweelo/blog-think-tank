@@ -19,12 +19,7 @@ const AuthReducer = (state, action) => {
         isFetching: false,
         error: true,
       };
-    // case "LOGOUT_START":
-    //   return {
-    //     user: action.payload,
-    //     isFetching: true,
-    //     error: false,
-    //   };
+
     case "LOGOUT_SUCCESS":
       return {
         user: null,
@@ -32,12 +27,6 @@ const AuthReducer = (state, action) => {
         error: false,
       };
 
-    // case "LOGOUT_FAIL":
-    //   return {
-    //     user: action.payload,
-    //     isFetching: false,
-    //     error: true,
-    //   };
     default:
       return state;
   }

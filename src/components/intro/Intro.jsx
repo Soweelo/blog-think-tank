@@ -2,16 +2,18 @@ import "./intro.scss";
 import Menu from "../menu/Menu";
 import ThinkTankList from "../thinktankList/ThinkTankList";
 import { init } from "ityped";
-import React, { useRef, useEffect, useState, memo } from "react";
+import React, { useRef, useEffect, useState, memo, useContext } from "react";
 
 import { userFav } from "../../dummy";
 
 import Scroll from "../scroll/scroll";
 import getOptionByKey from "../../functions/getOptionByKey/GetOptionByKey";
 import { useFetch } from "../../hooks/useFetch";
+import { LangContext } from "../../context/Lang/LangContext";
 
-export default memo(function Intro({ lang, allOptions }) {
+export default memo(function Intro({ allOptions }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+  const { lang } = useContext(LangContext);
   const fetch = useFetch();
   const [selectedTags, setSelectedTags] = useState([]);
   const textRef = useRef();
@@ -31,24 +33,19 @@ export default memo(function Intro({ lang, allOptions }) {
   }, []);
 
   useEffect(() => {
-    // console.log("INTRO"," début chargementtags chargés dans l intro")
     const getTags = async () => {
       try {
-        const response = await fetch(PF + "/api/tags?lang=" + lang, {
-          enabled: !!lang,
-        }).then((r) => r.json());
-        // console.log(response.data);
+        const response = await fetch(PF + "/api/tags?lang=" + lang).then((r) =>
+          r.json()
+        );
         setAllTags(response.data);
-        // console.log("INTRO","tags chargés dans l intro",answ.data.data)
       } catch (e) {
         if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
           console.error(e);
         }
       }
     };
-    if (lang) {
-      getTags();
-    }
+    getTags();
   }, [lang]);
 
   useEffect(() => {
@@ -56,8 +53,6 @@ export default memo(function Intro({ lang, allOptions }) {
   }, [allOptions]);
   return (
     <div ref={scrollRef} className="intro" id="intro">
-      {/*<Scroll showBelow="250"/>*/}
-
       <div className="intro__welcome" id="topIntro">
         <div className="intro__welcome-h2-wrapper">
           <h2 dangerouslySetInnerHTML={{ __html: option_welcome }}></h2>
@@ -79,7 +74,6 @@ export default memo(function Intro({ lang, allOptions }) {
         favorites={favorites}
         selectedTags={selectedTags}
         allTags={allTags}
-        lang={lang}
       />
       <Scroll showBelow={400} />
     </div>

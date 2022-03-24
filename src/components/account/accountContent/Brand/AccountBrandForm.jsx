@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import styled from "styled-components";
 import { Mail, Close } from "@material-ui/icons";
 import outDateCookieSession from "../../../../functions/cookiesController/outDateCookieSession";
-import { AuthContext } from "../../../../context/AuthContext";
+import { AuthContext } from "../../../../context/Auth/AuthContext";
 import { logout } from "../../../../apiCalls";
 // Styling a regular HTML input
 const StyledInput = styled.input`

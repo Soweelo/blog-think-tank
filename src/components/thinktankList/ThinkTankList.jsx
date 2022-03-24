@@ -2,19 +2,20 @@ import "./thinktanklist.scss";
 // import {thinkTanks} from "../../dummy"
 // import axios from "axios";
 import ThinkTankItem from "../thinkTankItem/ThinkTankItem";
-import { useEffect, useState, memo, useMemo, useRef } from "react";
+import { useEffect, useState, memo, useMemo, useRef, useContext } from "react";
 import Modal from "../modal/Modal";
 import { useFetch } from "../../hooks/useFetch";
 import Loader from "../loader/Loader";
 import useTrait from "../../hooks/useTrait";
 import { format } from "timeago.js";
+import { LangContext } from "../../context/Lang/LangContext";
 export default memo(function ThinkTankList({
   favorites,
   selectedTags,
   allTags,
-  lang,
 }) {
   const fetch = useFetch();
+  const { lang } = useContext(LangContext);
   const [loading, setLoading] = useState(false);
   const [loadingModal, setLoadingModal] = useState(false);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
@@ -47,7 +48,7 @@ export default memo(function ThinkTankList({
         const response = await fetch(
           PF + "/api/posts/" + modalVar[7] + "/getById?lang=" + lang,
           {
-            enabled: !!modalVar[7] && !!lang,
+            enabled: !!modalVar[7],
           }
         );
         const data = await response.json(); // console.log(data.data.content);
@@ -88,10 +89,6 @@ export default memo(function ThinkTankList({
 
   const callThinktank = async () => {
     setLoading(true);
-    // console.log("in request. selected tags", selectedTags);
-    // console.log("in request. tagsToDisplay", tagsToDisplay.get());
-    // console.log("in request. offset", offset);
-    // console.log("bigarray au debut de la requete", bigArray.get());
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -109,19 +106,17 @@ export default memo(function ThinkTankList({
       );
       let data = await response.json();
       let all = new Set([...allThinkTanks, ...data.data]);
-
       let newPack = {
         firstProperty: containerCount,
         secondProperty: shuffleArray(data.data),
       };
       let newarray = [...bigArray.get()];
-      // console.log("newpack", newPack);
+
       newarray.push(newPack);
       bigArray.set(newarray);
       if (data.data.length === 0 || data.data.length < groupLimit) {
         setStopRequest(true);
       }
-
       setLoading(false);
     } catch (e) {
       if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
@@ -135,18 +130,16 @@ export default memo(function ThinkTankList({
       ? tagsToDisplay.set(selectedTags)
       : tagsToDisplay.set([]);
     bigArray.set([]);
-    // console.log(bigArray);
+
     offset.set(0);
-    // console.log(offset.get());
+
     setContainerCount(0);
     setStopRequest(false);
-    // console.log("ok set");
+
     callThinktank();
   }, [selectedTags, allTags]);
-  // console.log("selected Tags", selectedTags, "tags to display", tagsToDisplay);
 
   useEffect(() => {
-    // console.log(stopRequest);
     if (!stopRequest && !loading) {
       callThinktank();
       setContainerCount(containerCount + 1);
@@ -156,11 +149,9 @@ export default memo(function ThinkTankList({
     const currentElement = lastElement;
     // console.log(lastElement);
     const currentObserver = observer.current;
-
     if (currentElement) {
       currentObserver.observe(currentElement);
     }
-
     return () => {
       if (currentElement) {
         currentObserver.unobserve(currentElement);
@@ -171,15 +162,7 @@ export default memo(function ThinkTankList({
   const [containerCount, setContainerCount] = useState(0);
   return (
     <div className="big_container">
-      {/*{<Loader loading={loading} />}*/}
-      {/*{console.log("***********")}*/}
-      {/*{console.log("allthinktanks", allThinkTanks)}*/}
-      {/*{console.log("bigarrayget", bigArray.get().length)}*/}
       {bigArray.get().map((packOfTwelve, counter) => {
-        // console.log("packOfTwelve", packOfTwelve.secondProperty.length);
-        // }
-        // console.log(lang);
-
         return (
           packOfTwelve.secondProperty.length !== 0 && (
             <div

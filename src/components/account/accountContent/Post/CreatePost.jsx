@@ -5,7 +5,7 @@ import "autoheight-textarea";
 import EditAutoCSearchbar from "../../../autoCSearchBar/EditAutoSearchBar";
 import { useFetch } from "../../../../hooks/useFetch";
 import { CircularProgress } from "@material-ui/core";
-import { AuthContext } from "../../../../context/AuthContext";
+import { AuthContext } from "../../../../context/Auth/AuthContext";
 import { logout } from "../../../../apiCalls";
 
 export default function CreatePost({

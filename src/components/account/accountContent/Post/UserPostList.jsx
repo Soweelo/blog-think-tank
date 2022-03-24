@@ -8,7 +8,7 @@ import { Cancel, PermMedia } from "@material-ui/icons";
 import { useFetch } from "../../../../hooks/useFetch";
 import { CircularProgress } from "@material-ui/core";
 import outDateCookieSession from "../../../../functions/cookiesController/outDateCookieSession";
-import { AuthContext } from "../../../../context/AuthContext";
+import { AuthContext } from "../../../../context/Auth/AuthContext";
 import { logout } from "../../../../apiCalls";
 
 export default function UserPostList({

@@ -7,7 +7,7 @@ import UserPostList from "./UserPostList";
 import CreatePost from "./CreatePost";
 import Scroll from "../../../scroll/scroll";
 import outDateCookieSession from "../../../../functions/cookiesController/outDateCookieSession";
-import { AuthContext } from "../../../../context/AuthContext";
+import { AuthContext } from "../../../../context/Auth/AuthContext";
 import { logout } from "../../../../apiCalls";
 import { useFetch } from "../../../../hooks/useFetch";
 export default function Post({

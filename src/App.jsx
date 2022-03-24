@@ -13,15 +13,17 @@ import PopupMessage from "./components/popup/PopupMessage";
 import styled from "styled-components";
 import Auth from "./components/auth/Auth";
 import { useFetch } from "./hooks/useFetch";
-import { AuthContext } from "./context/AuthContext";
+import { AuthContext } from "./context/Auth/AuthContext";
 import getCookie from "./functions/cookiesController/getCookie";
+import { LangContext } from "./context/Lang/LangContext";
 
 function App() {
   const { user } = useContext(AuthContext);
+  const { lang } = useContext(LangContext);
   const [mainMenuOpen, setMainMenuOpen] = useState(false);
   const [homeContent, setHomeContent] = useState("0");
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-  const [lang, setLang] = useState("");
+  // const [lang, setLang] = useState(navigator.language.substr(0, 2));
   const [showAuth, setShowAuth] = useState(false);
   const [allOptions, setAllOptions] = useState([]);
   const [popupContent, setPopupContent] = useState("");
@@ -31,23 +33,11 @@ function App() {
     background-image: url("${PF}/storage/app/public/4.jpg");
   `;
   const fetch = useFetch();
-  // const [session, setSession] = useState([]);
-  getCookie("YW-session-token");
-
-  useEffect(() => {
-    if (getCookie("YW-lang").length === 0) {
-      setLang(navigator.language.substr(0, 2));
-    } else {
-      setLang(getCookie("YW-lang"));
-    }
-  }, []);
 
   useEffect(() => {
     const fetchAllOptions = async () => {
       try {
-        const response = await fetch(PF + "/api/options?lang=" + lang, {
-          enabled: !!lang,
-        });
+        const response = await fetch(PF + "/api/options?lang=" + lang);
         const data = await response.json();
         // console.log(data.data);
         setAllOptions(data.data);
@@ -57,11 +47,11 @@ function App() {
         }
       }
     };
-    // console.log(allOptions);
-    if (lang) {
-      fetchAllOptions();
-    }
+
+    console.log("in useeffect lang dependent");
+    fetchAllOptions();
   }, [lang]);
+  console.log(lang);
   useEffect(() => {
     if (homeContent === "5") {
       setHomeContent("0");
@@ -73,8 +63,6 @@ function App() {
         <Topbar
           homeContent={homeContent}
           setHomeContent={setHomeContent}
-          setLang={setLang}
-          lang={lang}
           showAuth={showAuth}
           setShowAuth={setShowAuth}
           allOptions={allOptions}
@@ -87,7 +75,6 @@ function App() {
               case "1":
                 return (
                   <MoreAbout
-                    lang={lang}
                     setHomeContent={setHomeContent}
                     allOptions={allOptions}
                   />
@@ -95,7 +82,6 @@ function App() {
               case "2":
                 return (
                   <Privacy
-                    lang={lang}
                     setHomeContent={setHomeContent}
                     allOptions={allOptions}
                   />
@@ -104,7 +90,6 @@ function App() {
               case "3":
                 return (
                   <Faq
-                    lang={lang}
                     setHomeContent={setHomeContent}
                     allOptions={allOptions}
                   />
@@ -112,7 +97,6 @@ function App() {
               case "4":
                 return (
                   <BePart
-                    lang={lang}
                     setHomeContent={setHomeContent}
                     allOptions={allOptions}
                   />
@@ -123,12 +107,11 @@ function App() {
                     <Account
                       allOptions={allOptions}
                       setHomeContent={setHomeContent}
-                      lang={lang}
                     />
                   </>
                 );
               default:
-                return <Intro lang={lang} allOptions={allOptions} />;
+                return <Intro allOptions={allOptions} />;
             }
           })()}
         </SectionMain>
@@ -138,7 +121,6 @@ function App() {
           setMainMenuOpen={setMainMenuOpen}
           homeContent={homeContent}
           setHomeContent={setHomeContent}
-          lang={lang}
           showAuth={showAuth}
           setShowAuth={setShowAuth}
           allOptions={allOptions}
@@ -148,7 +130,6 @@ function App() {
           setMainMenuOpen={setMainMenuOpen}
           homeContent={homeContent}
           setHomeContent={setHomeContent}
-          lang={lang}
           allOptions={allOptions}
         />
 

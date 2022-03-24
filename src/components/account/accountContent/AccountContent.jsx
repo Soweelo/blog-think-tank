@@ -7,7 +7,7 @@ import Post from "./Post/Post";
 import AccountParams from "./AccountParams/AccountParams";
 import { logout } from "../../../apiCalls";
 import { useFetch } from "../../../hooks/useFetch";
-import { AuthContext } from "../../../context/AuthContext";
+import { AuthContext } from "../../../context/Auth/AuthContext";
 import Brand from "./Brand/Brand";
 export default function AccountContent({
   accountContent,

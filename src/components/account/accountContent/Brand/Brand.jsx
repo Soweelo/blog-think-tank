@@ -12,7 +12,7 @@ import { useContext, useEffect, useState } from "react";
 import useTrait from "../../../../hooks/useTrait";
 import outDateCookieSession from "../../../../functions/cookiesController/outDateCookieSession";
 import { useFetch } from "../../../../hooks/useFetch";
-import { AuthContext } from "../../../../context/AuthContext";
+import { AuthContext } from "../../../../context/Auth/AuthContext";
 import { logout } from "../../../../apiCalls";
 
 export default function Brand({

@@ -6,7 +6,7 @@ import { useRef, useEffect, useCallback, useState, useContext } from "react";
 import { Person, Mail, Lock } from "@material-ui/icons";
 import { useFetch } from "../../hooks/useFetch";
 import { loginCall, loginRegister } from "../../apiCalls";
-import { AuthContext } from "../../context/AuthContext";
+import { AuthContext } from "../../context/Auth/AuthContext";
 import { CircularProgress } from "@material-ui/core";
 
 const CloseAuthButton = styled(MdClose)`

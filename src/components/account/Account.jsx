@@ -4,7 +4,7 @@ import AccountContent from "./accountContent/AccountContent";
 import { useState, useEffect, useContext } from "react";
 import { Person, Create, LocalOffer, Home } from "@material-ui/icons";
 import outDateCookieSession from "../../functions/cookiesController/outDateCookieSession";
-import { AuthContext } from "../../context/AuthContext";
+import { AuthContext } from "../../context/Auth/AuthContext";
 import { logout } from "../../apiCalls";
 // import getOptionByKey from "../../functions/getOptionByKey/GetOptionByKey";
 export default function Account({ setHomeContent, setIsOpenPopup, lang }) {

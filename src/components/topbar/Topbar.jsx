@@ -1,33 +1,24 @@
 import "./topbar.scss";
 import { Person, Favorite, Search, GTranslate } from "@material-ui/icons";
 import { useEffect, useState, memo, useContext } from "react";
-import axios from "axios";
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
 import { useFetch } from "../../hooks/useFetch";
-// import { QueryClient, QueryClientProvider } from "react-query";
-import GetOption from "../getoption/GetOption";
 import getOptionByKey from "../../functions/getOptionByKey/GetOptionByKey";
-// import checkValidToken from "../../functions/sessionController/checkValidToken";
-import outDateCookieSession from "../../functions/cookiesController/outDateCookieSession";
-import getCookie from "../../functions/cookiesController/getCookie";
-import { AuthContext } from "../../context/AuthContext";
-// const queryClient = new QueryClient();
+import { AuthContext } from "../../context/Auth/AuthContext";
+import { LangContext } from "../../context/Lang/LangContext";
+import { langSetter } from "../../langCall";
 export default memo(function Topbar({
   setHomeContent,
-  lang,
-  setLang,
   setShowAuth,
   allOptions,
 }) {
-  // const [isOpenedGT, setIsOpenedGT] = useState(false);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [allLang, setAllLang] = useState([]);
   const { user } = useContext(AuthContext);
-  // console.log(topBarContent)
+  const { lang, dispatch } = useContext(LangContext);
   const fetch = useFetch();
   const [option_header, setOption_header] = useState("");
-  // console.log(allOptions);
   function dataLangToArray(data) {
     const result = [];
 
@@ -39,9 +30,9 @@ export default memo(function Topbar({
   }
 
   function setLangAndCookieLang(option) {
-    setLang(option);
-    document.cookie =
-      "YW-lang=" + option + "; SameSite=Lax; Secure;;max-age=31536000";
+    console.log(option);
+    langSetter(option, dispatch);
+    //  cookies setting
   }
 
   function getFullname(all, code) {
