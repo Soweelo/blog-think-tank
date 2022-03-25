@@ -16,6 +16,7 @@ import { useFetch } from "./hooks/useFetch";
 import { AuthContext } from "./context/Auth/AuthContext";
 import getCookie from "./functions/cookiesController/getCookie";
 import { LangContext } from "./context/Lang/LangContext";
+import { langSetter } from "./langCall";
 
 function App() {
   const { user } = useContext(AuthContext);
@@ -33,22 +34,19 @@ function App() {
     background-image: url("${PF}/storage/app/public/4.jpg");
   `;
   const fetch = useFetch();
-
-  useEffect(() => {
-    const fetchAllOptions = async () => {
-      try {
-        const response = await fetch(PF + "/api/options?lang=" + lang);
-        const data = await response.json();
-        // console.log(data.data);
-        setAllOptions(data.data);
-      } catch (e) {
-        if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
-          console.error(e);
-        }
+  const fetchAllOptions = async () => {
+    try {
+      const response = await fetch(PF + "/api/options?lang=" + lang);
+      const data = await response.json();
+      // console.log(data.data);
+      setAllOptions(data.data);
+    } catch (e) {
+      if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
+        console.error(e);
       }
-    };
-
-    console.log("in useeffect lang dependent");
+    }
+  };
+  useEffect(() => {
     fetchAllOptions();
   }, [lang]);
   console.log(lang);
@@ -57,6 +55,14 @@ function App() {
       setHomeContent("0");
     }
   }, [user]);
+
+  useEffect(() => {
+    let cookieLang = getCookie("YW-lang");
+    if (cookieLang) {
+      langSetter(cookieLang);
+    }
+  }, []);
+  console.log(lang);
   return (
     <>
       <div className="app">

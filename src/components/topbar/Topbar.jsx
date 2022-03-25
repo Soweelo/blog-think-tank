@@ -8,6 +8,7 @@ import getOptionByKey from "../../functions/getOptionByKey/GetOptionByKey";
 import { AuthContext } from "../../context/Auth/AuthContext";
 import { LangContext } from "../../context/Lang/LangContext";
 import { langSetter } from "../../langCall";
+import setCookieLang from "../../functions/cookiesController/setCookieLang";
 export default memo(function Topbar({
   setHomeContent,
   setShowAuth,
@@ -30,9 +31,8 @@ export default memo(function Topbar({
   }
 
   function setLangAndCookieLang(option) {
-    console.log(option);
     langSetter(option, dispatch);
-    //  cookies setting
+    setCookieLang(option);
   }
 
   function getFullname(all, code) {
