@@ -5,8 +5,8 @@ import { useRef, useEffect, useCallback, useState, useContext } from "react";
 
 import { Person, Mail, Lock } from "@material-ui/icons";
 import { useFetch } from "../../hooks/useFetch";
-import { loginCall, loginRegister } from "../../apiCalls";
-import { AuthContext } from "../../context/Auth/AuthContext";
+import { loginRegister } from "../../context functions/apiCalls";
+import { UserContext } from "../../context/UserContext";
 import { CircularProgress } from "@material-ui/core";
 
 const CloseAuthButton = styled(MdClose)`
@@ -82,7 +82,7 @@ export default function Register({
   const username = useRef();
 
   const [messageRegister, setMessageRegister] = useState("");
-  const { user, isFetching, error, dispatch } = useContext(AuthContext);
+  const { isFetching, dispatch } = useContext(UserContext);
   const handleRegisterSubmit = async (event) => {
     event.preventDefault();
     const requestOptions = {
@@ -153,13 +153,25 @@ export default function Register({
             />
           </div>
 
-          <button className="btn login__btn-submit" type="submit">
-            Register
+          <button
+            className="btn login__btn-submit"
+            type="submit"
+            disabled={isFetching}
+          >
+            {isFetching ? (
+              <CircularProgress color="secondary" size="20px" />
+            ) : (
+              "Register"
+            )}
           </button>
           <div className="login__message--error">{messageRegister}</div>
         </div>
 
-        <div className=" login__btn-switch" onClick={switchContent}>
+        <div
+          className=" login__btn-switch"
+          onClick={switchContent}
+          disabled={isFetching}
+        >
           Already Member? LOGIN HERE !
         </div>
       </form>
@@ -167,6 +179,7 @@ export default function Register({
       <CloseAuthButton
         aria-label="Close Login"
         onClick={() => setShowAuth((prev) => !prev)}
+        disabled={isFetching}
       ></CloseAuthButton>
     </LoginContent>
   );

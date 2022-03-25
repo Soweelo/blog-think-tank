@@ -3,17 +3,16 @@ import Menu from "../menu/Menu";
 import ThinkTankList from "../thinktankList/ThinkTankList";
 import { init } from "ityped";
 import React, { useRef, useEffect, useState, memo, useContext } from "react";
-
 import { userFav } from "../../dummy";
-
 import Scroll from "../scroll/scroll";
 import getOptionByKey from "../../functions/getOptionByKey/GetOptionByKey";
 import { useFetch } from "../../hooks/useFetch";
-import { LangContext } from "../../context/Lang/LangContext";
+
+import { UserContext } from "../../context/UserContext";
 
 export default memo(function Intro({ allOptions }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-  const { lang } = useContext(LangContext);
+  const { lang } = useContext(UserContext);
   const fetch = useFetch();
   const [selectedTags, setSelectedTags] = useState([]);
   const textRef = useRef();

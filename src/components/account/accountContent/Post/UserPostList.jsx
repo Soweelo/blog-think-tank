@@ -8,8 +8,8 @@ import { Cancel, PermMedia } from "@material-ui/icons";
 import { useFetch } from "../../../../hooks/useFetch";
 import { CircularProgress } from "@material-ui/core";
 import outDateCookieSession from "../../../../functions/cookiesController/outDateCookieSession";
-import { AuthContext } from "../../../../context/Auth/AuthContext";
-import { logout } from "../../../../apiCalls";
+import { UserContext } from "../../../../context/UserContext";
+import { logout } from "../../../../context functions/apiCalls";
 
 export default function UserPostList({
   setIdToDelete,
@@ -23,7 +23,7 @@ export default function UserPostList({
   newPost,
 }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-  const { user, dispatch } = useContext(AuthContext);
+  const { user, dispatch } = useContext(UserContext);
   const [postContentButton, setPostContentButton] = useState([-1, false]);
   const [postContent, setPostContent] = useState([-1, ""]);
   const postTagsToChange = useTrait(-1);

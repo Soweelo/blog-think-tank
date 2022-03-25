@@ -2,29 +2,23 @@ import Intro from "./components/intro/Intro";
 import Topbar from "./components/topbar/Topbar";
 import "./app.scss";
 import Bottombar from "./components/bottomBar/Bottombar";
+import MainMenu from "./components/mainMenu/MainMenu";
 import MoreAbout from "./components/moreAbout/MoreAbout";
 import Privacy from "./components/privacy/Privacy";
 import Faq from "./components/faq/Faq";
 import Account from "./components/account/Account";
 import BePart from "./components/bePart/BePart";
 import { useState, useEffect, useContext } from "react";
-import MainMenu from "./components/mainMenu/MainMenu";
 import PopupMessage from "./components/popup/PopupMessage";
 import styled from "styled-components";
 import Auth from "./components/auth/Auth";
 import { useFetch } from "./hooks/useFetch";
-import { AuthContext } from "./context/Auth/AuthContext";
-import getCookie from "./functions/cookiesController/getCookie";
-import { LangContext } from "./context/Lang/LangContext";
-import { langSetter } from "./langCall";
-
+import { UserContext } from "./context/UserContext";
 function App() {
-  const { user } = useContext(AuthContext);
-  const { lang, dispatch } = useContext(LangContext);
+  const { user, lang } = useContext(UserContext);
   const [mainMenuOpen, setMainMenuOpen] = useState(false);
   const [homeContent, setHomeContent] = useState("0");
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-  // const [lang, setLang] = useState(navigator.language.substr(0, 2));
   const [showAuth, setShowAuth] = useState(false);
   const [allOptions, setAllOptions] = useState([]);
   const [popupContent, setPopupContent] = useState("");
@@ -49,20 +43,13 @@ function App() {
   useEffect(() => {
     fetchAllOptions();
   }, [lang]);
-  console.log(lang);
+  // console.log(lang);
   useEffect(() => {
     if (homeContent === "5") {
       setHomeContent("0");
     }
   }, [user]);
 
-  useEffect(() => {
-    let cookieLang = getCookie("YW-lang");
-    if (cookieLang) {
-      langSetter(cookieLang, dispatch);
-    }
-  }, []);
-  console.log(lang);
   return (
     <>
       <div className="app">
@@ -75,7 +62,6 @@ function App() {
         />
 
         <SectionMain className={`sections${showAuth ? " filter" : ""}`}>
-          {/*<OnePageContent omeContent={homeContent} setHomeContent={setHomeContent}/>*/}
           {(() => {
             switch (homeContent) {
               case "1":
@@ -110,10 +96,12 @@ function App() {
               case "5":
                 return (
                   <>
-                    <Account
-                      allOptions={allOptions}
-                      setHomeContent={setHomeContent}
-                    />
+                    {user && (
+                      <Account
+                        allOptions={allOptions}
+                        setHomeContent={setHomeContent}
+                      />
+                    )}
                   </>
                 );
               default:

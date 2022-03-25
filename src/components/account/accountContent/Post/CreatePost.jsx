@@ -5,8 +5,8 @@ import "autoheight-textarea";
 import EditAutoCSearchbar from "../../../autoCSearchBar/EditAutoSearchBar";
 import { useFetch } from "../../../../hooks/useFetch";
 import { CircularProgress } from "@material-ui/core";
-import { AuthContext } from "../../../../context/Auth/AuthContext";
-import { logout } from "../../../../apiCalls";
+import { UserContext } from "../../../../context/UserContext";
+import { logout } from "../../../../context functions/apiCalls";
 
 export default function CreatePost({
   allTags,
@@ -15,7 +15,7 @@ export default function CreatePost({
   setPostMessage,
   setNewPost,
 }) {
-  const { user, dispatch } = useContext(AuthContext);
+  const { user, dispatch } = useContext(UserContext);
   const [eMessage, setEMessage] = useState("");
   const [isFetching, setIsFetching] = useState(false);
   let formData = new FormData();

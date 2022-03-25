@@ -1,14 +1,16 @@
-const AuthReducer = (state, action) => {
+const UserReducer = (state, action) => {
   switch (action.type) {
     case "LOGIN_START":
       return {
         user: null,
+        lang: state.lang,
         isFetching: true,
         error: false,
       };
     case "LOGIN_SUCCESS":
       return {
         user: action.payload,
+        lang: state.lang,
         isFetching: false,
         error: false,
       };
@@ -16,6 +18,7 @@ const AuthReducer = (state, action) => {
     case "LOGIN_FAIL":
       return {
         user: null,
+        lang: state.lang,
         isFetching: false,
         error: true,
       };
@@ -23,6 +26,14 @@ const AuthReducer = (state, action) => {
     case "LOGOUT_SUCCESS":
       return {
         user: null,
+        lang: state.lang,
+        isFetching: false,
+        error: false,
+      };
+    case "LANG_SUCCESS":
+      return {
+        user: state.user,
+        lang: action.payload,
         isFetching: false,
         error: false,
       };
@@ -31,4 +42,4 @@ const AuthReducer = (state, action) => {
       return state;
   }
 };
-export default AuthReducer;
+export default UserReducer;

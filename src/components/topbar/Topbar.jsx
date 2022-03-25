@@ -5,10 +5,8 @@ import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
 import { useFetch } from "../../hooks/useFetch";
 import getOptionByKey from "../../functions/getOptionByKey/GetOptionByKey";
-import { AuthContext } from "../../context/Auth/AuthContext";
-import { LangContext } from "../../context/Lang/LangContext";
-import { langSetter } from "../../langCall";
-import setCookieLang from "../../functions/cookiesController/setCookieLang";
+import { UserContext } from "../../context/UserContext";
+import { langSetter } from "../../context functions/langCall";
 export default memo(function Topbar({
   setHomeContent,
   setShowAuth,
@@ -16,10 +14,11 @@ export default memo(function Topbar({
 }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [allLang, setAllLang] = useState([]);
-  const { user } = useContext(AuthContext);
-  const { lang, dispatch } = useContext(LangContext);
+  const { user, lang, dispatch } = useContext(UserContext);
+  // const { lang, dispatch } = useContext(LangContext);
   const fetch = useFetch();
   const [option_header, setOption_header] = useState("");
+  const options = dataLangToArray(allLang);
   function dataLangToArray(data) {
     const result = [];
 
@@ -30,9 +29,8 @@ export default memo(function Topbar({
     return result;
   }
 
-  function setLangAndCookieLang(option) {
+  function setLang(option) {
     langSetter(option, dispatch);
-    setCookieLang(option);
   }
 
   function getFullname(all, code) {
@@ -46,26 +44,22 @@ export default memo(function Topbar({
     });
     return result;
   }
-
-  useEffect(() => {
-    const getLangs = async () => {
-      try {
-        const response = await fetch(PF + "/api/langs").then((r) => r.json());
-
-        setAllLang(response.data);
-      } catch (e) {
-        if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
-          console.error(e);
-        }
+  const getLangs = async () => {
+    try {
+      const response = await fetch(PF + "/api/langs").then((r) => r.json());
+      setAllLang(response.data);
+    } catch (e) {
+      if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
+        console.error(e);
       }
-    };
-
+    }
+  };
+  useEffect(() => {
     getLangs();
   }, [PF]);
 
   useEffect(() => {
     let result = getOptionByKey("01_header", allOptions);
-    // console.log(result);
     setOption_header(result);
   }, [allOptions]);
   function setName() {
@@ -76,7 +70,6 @@ export default memo(function Topbar({
     }
   }
   setName();
-  const options = dataLangToArray(allLang);
 
   function openLoginInterface() {
     console.log("user", user);
@@ -86,7 +79,6 @@ export default memo(function Topbar({
       setShowAuth(true);
     }
   }
-
   return (
     <div className="topbar">
       <div className="wrapper">
@@ -120,7 +112,7 @@ export default memo(function Topbar({
           <Dropdown
             options={options}
             value={lang}
-            onChange={(e) => setLangAndCookieLang(e.value)}
+            onChange={(e) => setLang(e.value)}
             className="nav__link-GT-input"
           />
         </div>

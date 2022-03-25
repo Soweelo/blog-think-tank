@@ -5,9 +5,9 @@ import AccountBrandForm from "./Brand/AccountBrandForm";
 import useTrait from "../../../hooks/useTrait";
 import Post from "./Post/Post";
 import AccountParams from "./AccountParams/AccountParams";
-import { logout } from "../../../apiCalls";
+import { logout } from "../../../context functions/apiCalls";
 import { useFetch } from "../../../hooks/useFetch";
-import { AuthContext } from "../../../context/Auth/AuthContext";
+import { UserContext } from "../../../context/UserContext";
 import Brand from "./Brand/Brand";
 export default function AccountContent({
   accountContent,
@@ -19,7 +19,7 @@ export default function AccountContent({
   setHomeContent,
 }) {
   const [brandMessage, setBrandMessage] = useState("");
-  const { user, dispatch } = useContext(AuthContext);
+  const { user, dispatch } = useContext(UserContext);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const fetch = useFetch();
   const [accountBrandForm, setAccountBrandForm] = useState(1);

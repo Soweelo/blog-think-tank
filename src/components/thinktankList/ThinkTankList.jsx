@@ -1,21 +1,18 @@
 import "./thinktanklist.scss";
-// import {thinkTanks} from "../../dummy"
-// import axios from "axios";
 import ThinkTankItem from "../thinkTankItem/ThinkTankItem";
 import { useEffect, useState, memo, useMemo, useRef, useContext } from "react";
 import Modal from "../modal/Modal";
 import { useFetch } from "../../hooks/useFetch";
-import Loader from "../loader/Loader";
 import useTrait from "../../hooks/useTrait";
 import { format } from "timeago.js";
-import { LangContext } from "../../context/Lang/LangContext";
+import { UserContext } from "../../context/UserContext";
 export default memo(function ThinkTankList({
   favorites,
   selectedTags,
   allTags,
 }) {
   const fetch = useFetch();
-  const { lang } = useContext(LangContext);
+  const { lang } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
   const [loadingModal, setLoadingModal] = useState(false);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;

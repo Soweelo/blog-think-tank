@@ -1,7 +1,7 @@
 import "./auth.scss";
 import { useRef, useEffect, useCallback, useState, useContext } from "react";
 import { useSpring, animated } from "react-spring";
-import { AuthContext } from "../../context/Auth/AuthContext";
+import { UserContext } from "../../context/UserContext";
 import Login from "./Login";
 import Register from "./Register";
 import styled from "styled-components";
@@ -30,7 +30,7 @@ const LoginWrapper = styled.div`
 export default function Auth({ showAuth, setShowAuth, setHomeContent }) {
   const [registerContent, setRegisterContent] = useState(false);
   const LoginRef = useRef();
-  const { user } = useContext(AuthContext);
+  const { user } = useContext(UserContext);
   const animation = useSpring({
     config: {
       duration: 150,

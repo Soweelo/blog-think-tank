@@ -12,8 +12,8 @@ import { useContext, useEffect, useState } from "react";
 import useTrait from "../../../../hooks/useTrait";
 import outDateCookieSession from "../../../../functions/cookiesController/outDateCookieSession";
 import { useFetch } from "../../../../hooks/useFetch";
-import { AuthContext } from "../../../../context/Auth/AuthContext";
-import { logout } from "../../../../apiCalls";
+import { UserContext } from "../../../../context/UserContext";
+import { logout } from "../../../../context functions/apiCalls";
 
 export default function Brand({
   setMobileView,
@@ -26,7 +26,7 @@ export default function Brand({
   allBrands,
 }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-  const { user, dispatch } = useContext(AuthContext);
+  const { user, dispatch } = useContext(UserContext);
   const [brandMessage, setBrandMessage] = useState("");
   const [openConfirm, setOpenConfirm] = useState(false);
   const [idToDelete, setIdToDelete] = useState(null);

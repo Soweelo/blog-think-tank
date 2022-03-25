@@ -9,13 +9,13 @@ import { useFetch } from "../../../../hooks/useFetch";
 import { useContext, useEffect, useState } from "react";
 import outDateCookieSession from "../../../../functions/cookiesController/outDateCookieSession";
 import useTrait from "../../../../hooks/useTrait";
-import { AuthContext } from "../../../../context/Auth/AuthContext";
-import { logout } from "../../../../apiCalls";
+import { UserContext } from "../../../../context/UserContext";
+import { logout } from "../../../../context functions/apiCalls";
 
 export default function AccountParams({ setMobileView, setHomeContent }) {
   // console.log("rerender account params");
   const fetch = useFetch();
-  const { user, dispatch } = useContext(AuthContext);
+  const { user, dispatch } = useContext(UserContext);
   const [isFetching, setIsFetching] = useState(false);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [userId, setUserId] = useState("");

@@ -1,15 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
-import { AuthContextProvider } from "./context/Auth/AuthContext";
-import { LangContextProvider } from "./context/Lang/LangContext";
+import { UserContextProvider } from "./context/UserContext";
+
 ReactDOM.render(
   <React.StrictMode>
-    <AuthContextProvider>
-      <LangContextProvider>
-        <App />
-      </LangContextProvider>
-    </AuthContextProvider>
+    <UserContextProvider>
+      <App />
+    </UserContextProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

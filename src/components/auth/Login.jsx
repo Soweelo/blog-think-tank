@@ -1,12 +1,10 @@
 import "./auth.scss";
 import styled from "styled-components";
 import { MdClose } from "react-icons/md";
-import { useRef, useEffect, useCallback, useState, useContext } from "react";
-
-import { Person, Mail, Lock } from "@material-ui/icons";
-import { useFetch } from "../../hooks/useFetch";
-import { loginCall } from "../../apiCalls";
-import { AuthContext } from "../../context/Auth/AuthContext";
+import { useRef, useState, useContext } from "react";
+import { Mail, Lock } from "@material-ui/icons";
+import { loginCall } from "../../context functions/apiCalls";
+import { UserContext } from "../../context/UserContext";
 import { CircularProgress } from "@material-ui/core";
 import sha512 from "../../functions/sha512";
 
@@ -71,11 +69,11 @@ export default function Login({ switchContent, setShowAuth }) {
   const email = useRef();
   const password = useRef();
   const [message, setMessage] = useState("");
-  const { user, isFetching, error, dispatch } = useContext(AuthContext);
+  const { isFetching, dispatch } = useContext(UserContext);
   const handleLoginSubmit = async (event) => {
     event.preventDefault();
     let hashedPsw = await sha512(password.current.value);
-    console.log(email.current.value, hashedPsw);
+    // console.log(email.current.value, hashedPsw);
     await loginCall(
       { email: email.current.value, password: hashedPsw },
       dispatch
@@ -122,9 +120,7 @@ export default function Login({ switchContent, setShowAuth }) {
               "Log In"
             )}
           </button>
-          <div className="login__message--error" disabled={isFetching}>
-            {message}
-          </div>
+          <div className="login__message--error">{message}</div>
           <div className="login__forgoten-psw" disabled={isFetching}>
             Forgotten password? <span>Click-here</span>!
           </div>

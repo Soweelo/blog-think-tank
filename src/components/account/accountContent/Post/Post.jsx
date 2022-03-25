@@ -7,8 +7,8 @@ import UserPostList from "./UserPostList";
 import CreatePost from "./CreatePost";
 import Scroll from "../../../scroll/scroll";
 import outDateCookieSession from "../../../../functions/cookiesController/outDateCookieSession";
-import { AuthContext } from "../../../../context/Auth/AuthContext";
-import { logout } from "../../../../apiCalls";
+import { UserContext } from "../../../../context/UserContext";
+import { logout } from "../../../../context functions/apiCalls";
 import { useFetch } from "../../../../hooks/useFetch";
 export default function Post({
   setMobileView,
@@ -16,7 +16,7 @@ export default function Post({
   setHomeContent,
   allBrands,
 }) {
-  const { user, dispatch } = useContext(AuthContext);
+  const { user, dispatch } = useContext(UserContext);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [postMessage, setPostMessage] = useState("");
   const [idToDelete, setIdToDelete] = useState(null);

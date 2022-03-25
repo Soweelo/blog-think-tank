@@ -1,10 +1,8 @@
 import { useContext, useState } from "react";
 import styled from "styled-components";
-import { Mail, Close } from "@material-ui/icons";
-import outDateCookieSession from "../../../../functions/cookiesController/outDateCookieSession";
-import { AuthContext } from "../../../../context/Auth/AuthContext";
-import { logout } from "../../../../apiCalls";
-// Styling a regular HTML input
+import { UserContext } from "../../../../context/UserContext";
+import { logout } from "../../../../context functions/apiCalls";
+
 const StyledInput = styled.input`
   display: block;
   margin: 0.3rem 0 0 0;
@@ -23,9 +21,9 @@ export default function AccountBrandForm({
   setBackMessage,
   setAccountContent,
   brandContent,
-  setHomeContent,
+  F,
 }) {
-  const { user, dispatch } = useContext(AuthContext);
+  const { user, dispatch } = useContext(UserContext);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [message, setMessage] = useState("");
   const [brandId, setBrandId] = useState(
@@ -54,8 +52,6 @@ export default function AccountBrandForm({
       brandName.length > 0 &&
       brandName.length > 3
     ) {
-      // alert("fine length")
-
       const requestOptions = {
         method: "POST",
         headers: { "Content-Type": "application/json" },

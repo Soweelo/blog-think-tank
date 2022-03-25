@@ -1,5 +1,5 @@
 import axios from "axios";
-import getCookie from "./functions/cookiesController/getCookie";
+import getCookie from "../functions/cookiesController/getCookie";
 
 export const loginCall = async (userCredential, dispatch) => {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;

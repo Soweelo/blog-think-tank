@@ -3,12 +3,10 @@ import BackHomeButton from "../backHomeButton/BackHomeButton";
 import AccountContent from "./accountContent/AccountContent";
 import { useState, useEffect, useContext } from "react";
 import { Person, Create, LocalOffer, Home } from "@material-ui/icons";
-import outDateCookieSession from "../../functions/cookiesController/outDateCookieSession";
-import { AuthContext } from "../../context/Auth/AuthContext";
-import { logout } from "../../apiCalls";
-// import getOptionByKey from "../../functions/getOptionByKey/GetOptionByKey";
+import { UserContext } from "../../context/UserContext";
+import { logout } from "../../context functions/apiCalls";
 export default function Account({ setHomeContent, setIsOpenPopup, lang }) {
-  const { user, isFetching, error, dispatch } = useContext(AuthContext);
+  const { user, dispatch } = useContext(UserContext);
   const [accountContent, setAccountContent] = useState(0);
 
   const [mobileView, setMobileView] = useState("menu");

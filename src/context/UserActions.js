@@ -15,3 +15,7 @@ export const LogoutSuccess = () => ({
   type: "LOGOUT_SUCCESS",
   payload: null,
 });
+export const LangSuccess = (lang) => ({
+  type: "LANG_SUCCESS",
+  payload: lang,
+});
