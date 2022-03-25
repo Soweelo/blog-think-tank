@@ -20,7 +20,7 @@ import { langSetter } from "./langCall";
 
 function App() {
   const { user } = useContext(AuthContext);
-  const { lang } = useContext(LangContext);
+  const { lang, dispatch } = useContext(LangContext);
   const [mainMenuOpen, setMainMenuOpen] = useState(false);
   const [homeContent, setHomeContent] = useState("0");
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
@@ -59,7 +59,7 @@ function App() {
   useEffect(() => {
     let cookieLang = getCookie("YW-lang");
     if (cookieLang) {
-      langSetter(cookieLang);
+      langSetter(cookieLang, dispatch);
     }
   }, []);
   console.log(lang);
