@@ -4,7 +4,7 @@ import useTrait from "../../../../hooks/useTrait";
 import { format } from "timeago.js";
 import EditAutoCSearchbar from "../../../autoCSearchBar/EditAutoSearchBar";
 import "autoheight-textarea";
-import { Cancel, PermMedia } from "@material-ui/icons";
+import { Cancel, Label, LocalActivity, PermMedia } from "@material-ui/icons";
 import { useFetch } from "../../../../hooks/useFetch";
 import { CircularProgress } from "@material-ui/core";
 import outDateCookieSession from "../../../../functions/cookiesController/outDateCookieSession";
@@ -19,7 +19,6 @@ export default function UserPostList({
   setAllTags,
   reRenderPostsList,
   setRerenderPostsList,
-  setHomeContent,
   newPost,
 }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
@@ -38,8 +37,8 @@ export default function UserPostList({
 
   const fetch = useFetch();
   // const editorRef = useRef(null);
-  const [addATag, setAddATag] = useState([false, "", -1]);
-  const [deleteATag, setDeleteATag] = useState([false, "", -1]);
+  const [addTag, setAddTag] = useState([false, "", -1]);
+  const [deleteTag, setDeleteTag] = useState([false, "", -1]);
   // DELETE POST
   const askConfirm = (e) => {
     e.preventDefault();
@@ -48,7 +47,7 @@ export default function UserPostList({
     setIdToDelete(id);
     setOpenConfirm(true);
   };
-  const parse = require("html-react-parser");
+  // const parse = require("html-react-parser");
   // end DELETE POST
   const submitEditContent = async (event) => {
     const id = event.target.attributes["data-value"].value;
@@ -85,20 +84,19 @@ export default function UserPostList({
     }
   };
   //*** end edit Content
-
+  // console.log("newPost", newPost);
   //* ADD TAG
   const addATagToPost = async () => {
-    // console.log("Ill add");
     try {
       const requestOptions = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          tag: addATag[1],
+          tag: addTag[1],
           token: user.session,
         }),
       };
-      const url = PF + "/api/posts/" + addATag[2] + "/addTag";
+      const url = PF + "/api/posts/" + addTag[2] + "/addTag";
       const response = await fetch(url, requestOptions).then((response) =>
         response.json()
       );
@@ -117,11 +115,11 @@ export default function UserPostList({
     }
   };
   useEffect(() => {
-    if (addATag[0]) {
+    if (addTag[0]) {
       addATagToPost();
-      setAddATag([false, "", -1]);
+      setAddTag([false, "", -1]);
     }
-  }, [addATag[0]]);
+  }, [addTag[0]]);
   //* end ADD TAG
 
   //* DELETE TAG
@@ -131,11 +129,11 @@ export default function UserPostList({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          tag: deleteATag[1],
+          tag: deleteTag[1],
           token: user.session,
         }),
       };
-      const url = PF + "/api/posts/" + deleteATag[2] + "/removeTag";
+      const url = PF + "/api/posts/" + deleteTag[2] + "/removeTag";
       const response = await fetch(url, requestOptions).then((response) =>
         response.json()
       );
@@ -154,12 +152,12 @@ export default function UserPostList({
     }
   };
   useEffect(() => {
-    // console.log("deleteATag", deleteATag);
-    if (deleteATag[0]) {
+    // console.log("deleteTag", deleteATag);
+    if (deleteTag[0]) {
       deleteATagToPost();
-      setDeleteATag([false, "", -1]);
+      setDeleteTag([false, "", -1]);
     }
-  }, [deleteATag[0]]);
+  }, [deleteTag[0]]);
 
   //* end DELETE TAG
 
@@ -305,7 +303,7 @@ export default function UserPostList({
     }
   };
   //*** end update img
-  // console.log(newPost, newPost.id);
+  // console.log("newpost", newPost);
   return (
     <div className="account-content__post-wrapper">
       {newPost.id && (
@@ -466,42 +464,55 @@ export default function UserPostList({
               {isFetching ? <CircularProgress size="20px" /> : "SAVE"}
             </button>
           </form>
-
-          <div
-            className="account-content__postTagContainer"
-            onClick={() => {
-              // e.preventDefault();
-              if (postTagsToChange.get() !== newPost.id) {
-                postTags.set(newPost.tags);
-                setEMessage(["", "blue"]);
-              }
-              postTagsToChange.set(newPost.id);
-              // postTags.set(post.tags);
-            }}
-          >
-            <div className="message" style={{ color: eMessage[1] }}>
-              {postTagsToChange.get() == newPost.id && eMessage[0]}
+          {newPost.brand.length > 0 && (
+            <div className="account-content__postBrand">
+              <div className="account-content__postOption-label-wrapper">
+                <LocalActivity className="account-content__postIcon green" />
+                <span className="account-content__postOptionText">Brand</span>
+              </div>
+              <div className="tag">{newPost.brand}</div>
             </div>
-            <EditAutoCSearchbar
-              selectedItems={
-                postTagsToChange.get() == newPost.id
-                  ? postTags.get()
-                  : newPost.tags
-                // newPost.tags
-              }
-              postTags={postTags}
-              allItems={allTags}
-              id={5}
-              setAllItems={setAllTags}
-              max={3}
-              editing={true}
-              setEMessage={setEMessage}
-              setAddTag={setAddATag}
-              setDeleteATag={setDeleteATag}
-              deleteATag={deleteATag}
-              postId={newPost.id}
-            />
-            {/*{console.log(newPost.tags)}*/}
+          )}
+          <div className="account-content__postTags">
+            <div className="account-content__postOption-label-wrapper">
+              <Label className="account-content__postIcon blue" />
+              <span className="account-content__postOptionText">Tag</span>
+            </div>{" "}
+            <div
+              className="account-content__postTagContainer"
+              onClick={() => {
+                // e.preventDefault();
+                if (postTagsToChange.get() !== newPost.id) {
+                  postTags.set(newPost.tags);
+                  setEMessage(["", "blue"]);
+                }
+                postTagsToChange.set(newPost.id);
+                // postTags.set(post.tags);
+              }}
+            >
+              <div className="message" style={{ color: eMessage[1] }}>
+                {postTagsToChange.get() == newPost.id && eMessage[0]}
+              </div>
+              <EditAutoCSearchbar
+                selectedItems={
+                  postTagsToChange.get() == newPost.id
+                    ? postTags.get()
+                    : newPost.tags
+                  // newPost.tags
+                }
+                postSelectedItems={postTags}
+                allItems={allTags}
+                id={5}
+                max={3}
+                edit={true}
+                setEMessage={setEMessage}
+                setAddItem={setAddTag}
+                setDeleteItem={setDeleteTag}
+                postId={newPost.id}
+                // firstIsBrand={false}
+              />
+              {/*{console.log(newPost.tags)}*/}
+            </div>
           </div>
         </div>
       )}
@@ -668,37 +679,54 @@ export default function UserPostList({
                 {isFetching ? <CircularProgress size="20px" /> : "SAVE"}
               </button>
             </form>
-
-            <div
-              className="account-content__postTagContainer"
-              onClick={() => {
-                // e.preventDefault();
-                if (postTagsToChange.get() !== post.id) {
-                  postTags.set(post.tags);
-                  setEMessage(["", "blue"]);
-                }
-                postTagsToChange.set(post.id);
-                // postTags.set(post.tags);
-              }}
-            >
-              <div className="message" style={{ color: eMessage[1] }}>
-                {postTagsToChange.get() == post.id && eMessage[0]}
+            {post.brand && (
+              <div className="account-content__postBrand">
+                <div className="account-content__postOption-label-wrapper">
+                  <LocalActivity className="account-content__postIcon green" />
+                  <span className="account-content__postOptionText">Brand</span>
+                </div>
+                <div className="tag">{post.brand.name}</div>
               </div>
-              <EditAutoCSearchbar
-                selectedItems={
-                  postTagsToChange.get() == post.id ? postTags.get() : post.tags
-                }
-                postTags={postTags}
-                allItems={allTags}
-                id={5}
-                setAllItems={setAllTags}
-                max={3}
-                setEMessage={setEMessage}
-                setAddTag={setAddATag}
-                setDeleteATag={setDeleteATag}
-                deleteATag={deleteATag}
-                postId={post.id}
-              />
+            )}
+            <div className="account-content__postTags">
+              <div className="account-content__postOption-label-wrapper">
+                <Label className="account-content__postIcon blue" />
+                <span className="account-content__postOptionText">Tag</span>
+              </div>
+              <div
+                className="account-content__postTagContainer"
+                onClick={() => {
+                  // e.preventDefault();
+                  if (postTagsToChange.get() !== post.id) {
+                    postTags.set(post.tags);
+                    setEMessage(["", "blue"]);
+                  }
+                  postTagsToChange.set(post.id);
+                  // postTags.set(post.tags);
+                }}
+              >
+                <div className="message" style={{ color: eMessage[1] }}>
+                  {postTagsToChange.get() == post.id && eMessage[0]}
+                </div>
+                <EditAutoCSearchbar
+                  selectedItems={
+                    postTagsToChange.get() == post.id
+                      ? postTags.get()
+                      : post.tags
+                  }
+                  postSelectedItems={postTags}
+                  allItems={allTags}
+                  id={5}
+                  setAllItems={setAllTags}
+                  max={3}
+                  setEMessage={setEMessage}
+                  setAddItem={setAddTag}
+                  setDeleteItem={setDeleteTag}
+                  deleteTag={deleteTag}
+                  postId={post.id}
+                  firstIsBrand={post.brand ? true : false}
+                />
+              </div>
             </div>
           </div>
         );

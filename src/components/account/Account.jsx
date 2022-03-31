@@ -10,12 +10,7 @@ export default function Account({ setHomeContent, setIsOpenPopup, lang }) {
   const [accountContent, setAccountContent] = useState(0);
 
   const [mobileView, setMobileView] = useState("menu");
-  const callBackPopUp = () => {
-    setIsOpenPopup(true);
-    setTimeout(function () {
-      setIsOpenPopup(false);
-    }, 7000);
-  };
+
   function endSession() {
     logout(dispatch);
   }

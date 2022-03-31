@@ -98,6 +98,9 @@
     align-items: center;
     margin-top:10px
     ;max-height: 45px;
+    svg.green{
+      color: $validate;
+    }
   }
 }
 
@@ -116,6 +119,7 @@
   font-size: 14px;
   font-weight: 500;
   margin: auto 5px auto;
+  min-width: 50px;
 }
 .account-content__postEditAutoSearch-Wrapper{
   width: min(100%,580px);
@@ -268,12 +272,47 @@ width: 100%;
         }
       }
     }
+    .account-content__postBrand{
+      display: flex;
+      .account-content__postOption-label-wrapper{
+        display: flex;
+        align-items: center;
+        margin-right: 0.7rem;
+        svg.green{
+          color: $validate;
+        }
 
-    .account-content__postTagContainer{
-    //display: flex;
-    justify-content: center;
-    align-content: center;
-    margin: 1rem;
-  }
+      }
+      .tag{
+          display: flex;
+          align-items: center;
+          padding: 5px;
+          border: 1px solid gray;
+          border-radius: 5px;
+          height: 25px;
+          margin: 2px 5px;
+        }
+    }
+    .account-content__postTags {
+      display: flex;
+      align-content: baseline;
+      margin-right: 0;
+      cursor: pointer;
+      margin-top: 0.4rem;
+      flex-wrap: wrap;
+      .account-content__postOption-label-wrapper {
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+        max-height: 45px;;
+      }
+      .account-content__postTagContainer {
+        //display: flex;
+        //justify-content: center;
+        //align-content: center;
+        margin: 0 1rem 0;
+        width: auto;
+      }
+    }
   }
 }

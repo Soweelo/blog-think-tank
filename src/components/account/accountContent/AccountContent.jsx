@@ -52,6 +52,7 @@ export default function AccountContent({
   useEffect(() => {
     getAllBrands();
   }, []);
+
   return (
     <div className="account-content__wrapper">
       {(() => {

@@ -1,4 +1,10 @@
-import { Cancel, Label, PermMedia } from "@material-ui/icons";
+import {
+  Cancel,
+  Label,
+  PermMedia,
+  Flag,
+  LocalActivity,
+} from "@material-ui/icons";
 import { useContext, useRef, useState } from "react";
 import useTrait from "../../../../hooks/useTrait";
 import "autoheight-textarea";
@@ -7,20 +13,32 @@ import { useFetch } from "../../../../hooks/useFetch";
 import { CircularProgress } from "@material-ui/core";
 import { UserContext } from "../../../../context/UserContext";
 import { logout } from "../../../../context functions/apiCalls";
+import AutoCSearchbar from "../../../autoCSearchBar/AutoCSearchbar";
 
 export default function CreatePost({
   allTags,
   setAllTags,
-  setHomeContent,
   setPostMessage,
   setNewPost,
+  allBrands,
 }) {
   const { user, dispatch } = useContext(UserContext);
   const [eMessage, setEMessage] = useState("");
+  const [eBrandMessage, setEBrandMessage] = useState(["", "black"]);
   const [isFetching, setIsFetching] = useState(false);
+  //formatting allBarnds for editAutoCSearchBar
+  let adaptedBrands = [];
+  allBrands.get().map((brand) => {
+    adaptedBrands.push({
+      name: brand.name.toLowerCase().replace(/\s/g, ""),
+      id: brand.id,
+    });
+  });
   let formData = new FormData();
   const [file, setFile] = useState();
   const postTags = useTrait([]);
+  const postBrand = useTrait([]);
+  const postBrandId = useTrait(null);
   let postContent = useRef();
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const fetch = useFetch();
@@ -29,10 +47,10 @@ export default function CreatePost({
     e.preventDefault();
     formData.append("text", postContent.current.value);
     formData.append("image", file);
+    formData.append("brand", postBrandId.get());
     postTags.get().map((tag) => {
       formData.append("tags[]", tag);
     });
-
     submitPost();
   };
   //end submit new post
@@ -42,7 +60,9 @@ export default function CreatePost({
   const submitPost = async () => {
     try {
       setIsFetching(true);
-      // console.log(formData.values());
+      // for (const [key, value] of formData.entries()) {
+      //   console.log(key, value);
+      // }
       const requestOptions = {
         method: "POST",
         body: formData,
@@ -50,13 +70,8 @@ export default function CreatePost({
 
       let url = PF + "/api/posts?token=" + user.session;
       let res = await fetch(url, requestOptions).then((res) => res.json());
-      // console.log(res);
+
       if (res.success) {
-        setPostMessage(res.message);
-        setEMessage(["", "red"]);
-        setFile(null);
-        postTags.set([]);
-        postContent.current.value = "";
         let tagsArray = [];
         res.data.tags.map((item) => {
           tagsArray.push(item.name);
@@ -64,11 +79,18 @@ export default function CreatePost({
         setNewPost({
           updated_at: res.data.updated_at,
           content: res.data.content,
-          brand: res.data.brand,
+          brand: postBrand.get(),
           id: res.data.id,
           images: file,
           tags: tagsArray,
         });
+        setPostMessage(res.message);
+        setEMessage(["", "red"]);
+        setFile(null);
+        postBrand.set([]);
+        postBrandId.set(null);
+        postTags.set([]);
+        postContent.current.value = "";
       } else {
         if (res.message === "This session token is not valid") {
           logout(dispatch);
@@ -79,6 +101,7 @@ export default function CreatePost({
       console.log(e);
     }
   };
+  // console.log("postBrand", postBrand.get());
   return (
     <div className="account-content__post">
       <div className="account-content__postWrapper">
@@ -97,7 +120,7 @@ export default function CreatePost({
             <img
               className="account-content__postImg"
               src={URL.createObjectURL(file)}
-              alt=""
+              alt={""}
             />
           </div>
         )}
@@ -117,6 +140,40 @@ export default function CreatePost({
                 onChange={(e) => setFile(e.target.files[0])}
               />
             </label>
+            {allBrands.get().length > 0 && (
+              <>
+                <hr className="account-content__postHr" />
+                <div className="account-content__postOption">
+                  <div className="account-content__postOption-label-wrapper">
+                    <LocalActivity className="account-content__postIcon green" />
+                    <span className="account-content__postOptionText">
+                      Brand
+                    </span>
+                  </div>
+
+                  <div className="account-content__postEditAutoSearch-Wrapper">
+                    <EditAutoCSearchbar
+                      selectedItems={postBrand.get()}
+                      postSelectedItems={postBrand}
+                      postSelectedItemId={postBrandId}
+                      allItems={adaptedBrands}
+                      id={8}
+                      max={1}
+                      postId={null}
+                      setEMessage={setEBrandMessage}
+                      edit={false}
+                      firstIsBrand={false}
+                    />
+                    <div
+                      className="message"
+                      style={{ color: eBrandMessage[1] }}
+                    >
+                      {eBrandMessage[0]}
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
             <hr className="account-content__postHr" />
             <div className="account-content__postOption">
               <div className="account-content__postOption-label-wrapper">
@@ -127,13 +184,14 @@ export default function CreatePost({
               <div className="account-content__postEditAutoSearch-Wrapper">
                 <EditAutoCSearchbar
                   selectedItems={postTags.get()}
-                  postTags={postTags}
+                  postSelectedItems={postTags}
                   allItems={allTags}
-                  setAllItems={setAllTags}
                   id={7}
                   max={3}
                   postId={null}
                   setEMessage={setEMessage}
+                  edit={true}
+                  firstIsBrand={false}
                 />
                 <div className="message" style={{ color: eMessage[1] }}>
                   {eMessage[0]}
@@ -143,11 +201,7 @@ export default function CreatePost({
           </div>
 
           <button className="btn account-content__postButton" type="submit">
-            {isFetching ? (
-              <CircularProgress color={"green"} size="20px" />
-            ) : (
-              "POST"
-            )}
+            {isFetching ? <CircularProgress size="20px" /> : "POST"}
           </button>
         </form>
       </div>

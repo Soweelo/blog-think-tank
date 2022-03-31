@@ -58,11 +58,11 @@ export default function Post({
       const response = await fetch(PF + "/api/tags?lang=" + lang).then((r) =>
         r.json()
       );
-      allBrands.get().map((brand) => {
-        response.data.push({
-          name: brand.name.toLowerCase().replace(/\s/g, ""),
-        });
-      });
+      // allBrands.get().map((brand) => {
+      //   response.data.push({
+      //     name: brand.name.toLowerCase().replace(/\s/g, ""),
+      //   });
+      // });
       setAllTags(response.data);
     } catch (e) {
       if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
@@ -136,6 +136,7 @@ export default function Post({
           setPostMessage={setPostMessage}
           newPost={newPost}
           setNewPost={setNewPost}
+          allBrands={allBrands}
         />
       </div>
 
@@ -150,6 +151,7 @@ export default function Post({
         setHomeContent={setHomeContent}
         newPost={newPost}
         setNewPost={setNewPost}
+        allBrands={allBrands}
       />
     </div>
   );

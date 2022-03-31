@@ -6,22 +6,24 @@ import getUnique from "../../functions/getUnique";
 import toObjectArray from "../../functions/toObjectArray";
 export default function EditAutoCSearchbar({
   selectedItems,
-  postTags,
+  postSelectedItems,
   allItems,
-  setAllItems,
   id,
   max,
   postId,
   setEMessage,
-  setAddTag,
-  setDeleteATag,
+  setAddItem,
+  setDeleteItem,
+  edit,
+  postSelectedItemId,
+  firstIsBrand,
 }) {
   const [isSuggestion, setIsSuggestion] = useState(false);
   const searchText = useTrait("");
   const isNewTag = useTrait(false);
   const equalValues = useTrait(0);
   const updateSuggestion = (e) => {
-    // console.log("in update sugg", "e.key", e.target.value);
+    // console.log("allitems", allItems);
     setIsSuggestion(false);
     if (e.target.value.length > 1) {
       searchText.set(e.target.value);
@@ -44,41 +46,55 @@ export default function EditAutoCSearchbar({
   };
 
   const addItem = (e) => {
-    if (selectedItems.length < max) {
-      console.log(e.target.className.includes("suggestion-select-item"));
+    if (selectedItems.length < (firstIsBrand ? max + 1 : max)) {
+      // console.log(e.target.className.includes("suggestion-select-item"));
       let newTagName = e.target.className.includes("suggestion-select-item")
         ? e.target.attributes["tagsuggest"].value
         : e.target.value;
-      //**add tag to container
-      postTags.set([...postTags.get(), newTagName]);
-      //**send signal to parent for updating the post
-      if (postId) {
-        setAddTag([true, e.target.attributes["tagsuggest"].value, postId]);
+
+      // check if searched item exists in allItems
+      let existsSuchItem = allItems.filter(
+        (allItems) => allItems.name === newTagName
+      );
+
+      if (edit || existsSuchItem.length > 0) {
+        //**add tag to container
+        postSelectedItems.set([...postSelectedItems.get(), newTagName]);
+
+        //** send  item id to parent
+        if (e.target.attributes["tagsuggest-id"].value != 0) {
+          let newTagId = e.target.attributes["tagsuggest-id"].value;
+          postSelectedItemId.set(newTagId);
+        }
+        // console.log("in here");
+        //**send signal to parent for updating the post
+        if (postId) {
+          setAddItem([true, e.target.attributes["tagsuggest"].value, postId]);
+        }
+        //**cancel current input value
+        document.getElementsByClassName(
+          "tagcontainer--input" + id + e.target.getAttribute("data-postid")
+        )[0].value = "";
+        searchText.set("");
+        // **close suggestions
+        setIsSuggestion(false);
+      } else {
+        setEMessage(["Sorry this item doesnt exist.", "red"]);
       }
-      //**cancel current input value
-      document.getElementsByClassName(
-        "tagcontainer--input" + id + e.target.getAttribute("data-postid")
-      )[0].value = "";
-      searchText.set("");
-      // **close suggestions
-      setIsSuggestion(false);
     } else {
-      setEMessage(["You can select a maximum of " + max + " tags ", "red"]);
+      setEMessage(["You can select a maximum of " + max + " items ", "red"]);
       setIsSuggestion(false);
       searchText.set("");
     }
   };
 
   const removeItem = (item) => {
-    // console.log(id, item, postId);
     const newSelectedItems = selectedItems.filter(
       (selectedItems) => selectedItems !== item
     );
-    postTags.set(newSelectedItems);
-    // selectedItems = postTags.get();
-    // console.log(postTags.get(), id);
+    postSelectedItems.set(newSelectedItems);
     if (postId) {
-      setDeleteATag([true, item, postId]);
+      setDeleteItem([true, item, postId]);
     }
   };
 
@@ -104,7 +120,7 @@ export default function EditAutoCSearchbar({
     <>
       <div className="tag-container">
         {selectedItems.map((item, index) => {
-          return (
+          return firstIsBrand && index == 0 ? null : (
             <div key={index} className="tag">
               {item}
               <span onClick={() => removeItem(item)}>
@@ -136,7 +152,7 @@ export default function EditAutoCSearchbar({
         className={"suggestion " + (isSuggestion && "active")}
         style={{ position: "relative" }}
       >
-        {isNewTag.get() && (
+        {isNewTag.get() && edit && (
           <div
             className="suggestion-select-item new-item-wrapper"
             onClick={addItem}
@@ -158,6 +174,7 @@ export default function EditAutoCSearchbar({
               key={i}
               className="suggestion-select-item"
               tagsuggest={option.name}
+              tagsuggest-id={option.id ? option.id : 0}
               data-postid={postId}
               onClick={addItem}
             >

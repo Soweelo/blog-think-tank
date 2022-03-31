@@ -14,16 +14,16 @@ export const UserContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(UserReducer, INITIAL_STATE);
   useEffect(() => {
     localStorage.setItem("user", JSON.stringify(state.user));
-    console.log(
-      "state user",
-      state.user,
-      "localStorage.getItem(user)",
-      localStorage.getItem("user")
-    );
+    // console.log(
+    //   "state user",
+    //   state.user,
+    //   "localStorage.getItem(user)",
+    //   localStorage.getItem("user")
+    // );
   }, [state.user]);
   useEffect(() => {
     localStorage.setItem("lang", JSON.stringify(state.lang));
-    console.log("lang", state.lang);
+    // console.log("lang", state.lang);
   }, [state.lang]);
   return (
     <UserContext.Provider

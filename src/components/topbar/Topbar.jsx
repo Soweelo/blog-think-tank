@@ -72,7 +72,7 @@ export default memo(function Topbar({
   setName();
 
   function openLoginInterface() {
-    console.log("user", user);
+    // console.log("user", user);
     if (user) {
       setHomeContent("5");
     } else {
