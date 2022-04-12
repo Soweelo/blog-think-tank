@@ -8,8 +8,10 @@ export default function Menu({
   allTags,
   selectedTags,
   setSelectedTags,
-
+  setHomeContent,
   allOptions,
+  setShowAuth,
+  setRegisterContent,
 }) {
   const [menuOpen, setMenuOpen] = useState(0);
 
@@ -42,6 +44,9 @@ export default function Menu({
           selectedTags={selectedTags}
           setSelectedTags={setSelectedTags}
           allOptions={allOptions}
+          setHomeContent={setHomeContent}
+          setShowAuth={setShowAuth}
+          setRegisterContent={setRegisterContent}
         />
       ))}
     </ul>

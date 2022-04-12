@@ -3,21 +3,26 @@ import Menu from "../menu/Menu";
 import ThinkTankList from "../thinktankList/ThinkTankList";
 import { init } from "ityped";
 import React, { useRef, useEffect, useState, memo, useContext } from "react";
-import { userFav } from "../../dummy";
+// import { userFav } from "../../dummy";
 import Scroll from "../scroll/scroll";
 import getOptionByKey from "../../functions/getOptionByKey/GetOptionByKey";
 import { useFetch } from "../../hooks/useFetch";
 
 import { UserContext } from "../../context/UserContext";
 
-export default memo(function Intro({ allOptions }) {
+export default memo(function Intro({
+  allOptions,
+  setHomeContent,
+  setShowAuth,
+  setRegisterContent,
+}) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const { lang } = useContext(UserContext);
   const fetch = useFetch();
   const [selectedTags, setSelectedTags] = useState([]);
   const textRef = useRef();
   const scrollRef = useRef();
-  const [favorites, setFavorites] = useState(userFav);
+  const [favorites, setFavorites] = useState([]);
   const [option_welcome, setOption_welcome] = useState("");
   const [allTags, setAllTags] = useState([]);
 
@@ -66,6 +71,9 @@ export default memo(function Intro({ allOptions }) {
           selectedTags={selectedTags}
           setSelectedTags={setSelectedTags}
           allOptions={allOptions}
+          setHomeContent={setHomeContent}
+          setShowAuth={setShowAuth}
+          setRegisterContent={setRegisterContent}
         />
       </div>
 

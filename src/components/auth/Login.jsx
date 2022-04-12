@@ -65,7 +65,7 @@ const StyledInput = styled.input`
   color: white;
   height: 40px;
 `;
-export default function Login({ switchContent, setShowAuth }) {
+export default function Login({ switchContent, setShowAuth, isDisplayed }) {
   const email = useRef();
   const password = useRef();
   const [message, setMessage] = useState("");
@@ -131,7 +131,7 @@ export default function Login({ switchContent, setShowAuth }) {
           onClick={switchContent}
           disabled={isFetching}
         >
-          Still not a Member? REGISTER HERE !
+          Still not a Member? <span>REGISTER HERE </span>!
         </div>
       </form>
       <CloseAuthButton

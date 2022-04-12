@@ -1,8 +1,7 @@
 import "./auth.scss";
 import styled from "styled-components";
 import { MdClose } from "react-icons/md";
-import { useRef, useEffect, useCallback, useState, useContext } from "react";
-
+import { useRef, useState, useContext } from "react";
 import { Person, Mail, Lock } from "@material-ui/icons";
 import { useFetch } from "../../hooks/useFetch";
 import { loginRegister } from "../../context functions/apiCalls";
@@ -70,11 +69,7 @@ const StyledInput = styled.input`
   color: white;
   height: 40px;
 `;
-export default function Register({
-  setShowAuth,
-  switchContent,
-  setHomeContent,
-}) {
+export default function Register({ setShowAuth, switchContent, isDisplayed }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const fetch = useFetch();
   const email = useRef();
@@ -172,7 +167,7 @@ export default function Register({
           onClick={switchContent}
           disabled={isFetching}
         >
-          Already Member? LOGIN HERE !
+          Already Member?<span> LOGIN HERE </span>!
         </div>
       </form>
 

@@ -1,49 +1,28 @@
 import "./mainmenu.scss";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useContext, useEffect, useState } from "react";
 import { Favorite, Person, Search, Home } from "@material-ui/icons";
 import getOptionByKey from "../../functions/getOptionByKey/GetOptionByKey";
-import outDateCookieSession from "../../functions/cookiesController/outDateCookieSession";
-import getCookie from "../../functions/cookiesController/getCookie";
+import { UserContext } from "../../context/UserContext";
 
 export default function MainMenu({
   mainMenuOpen,
   setMainMenuOpen,
-  homeContent,
   setHomeContent,
-
-  showAuth,
   setShowAuth,
   allOptions,
-  isValidToken,
-  setSession,
-  session,
+  setRegisterContent,
 }) {
+  const { user } = useContext(UserContext);
   const changeContent = (e) => {
     setHomeContent(e.target.id);
-    // console.log(e.target.parentNode.id);
     setMainMenuOpen(false);
   };
   function openLoginInterface() {
-    // console.log("session", session, "isValidToken", isValidToken);
-    if (session.length !== 0) {
-      // console.log("1");
-      if (isValidToken) {
-        setHomeContent("5");
-        // console.log("2");
-      } else {
-        outDateCookieSession(session[0], session[1]);
-        setShowAuth(true);
-        // console.log("3");
-      }
+    if (user) {
+      setHomeContent("5");
     } else {
+      setRegisterContent(false);
       setShowAuth(true);
-      const token = getCookie("YW-session-token");
-      const pseudo = getCookie("YW-session-pseudo");
-      // console.log("4");
-      if (token.length !== 0 && isValidToken) {
-        setSession([token, pseudo]);
-      }
     }
     setMainMenuOpen(false);
   }

@@ -13,7 +13,24 @@
   height: 45px;
   transition: 1s ease;
   z-index: 14;
-
+  .home{
+    display: none;
+    width:32px;
+    height: 25px;
+    cursor:pointer;
+    @include mobile{
+      display: flex;
+    }
+  }
+  .account{
+    display: none;
+    width:32px;
+    height: 25px;
+    cursor:pointer;
+    @include mobile{
+      display: flex;
+    }
+  }
   .hamburger{
     display: none;
     width:32px;

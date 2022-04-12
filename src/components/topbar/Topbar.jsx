@@ -11,6 +11,7 @@ export default memo(function Topbar({
   setHomeContent,
   setShowAuth,
   allOptions,
+  setRegisterContent,
 }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [allLang, setAllLang] = useState([]);
@@ -76,6 +77,7 @@ export default memo(function Topbar({
     if (user) {
       setHomeContent("5");
     } else {
+      setRegisterContent(false);
       setShowAuth(true);
     }
   }

@@ -20,6 +20,7 @@ function App() {
   const [homeContent, setHomeContent] = useState("0");
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [showAuth, setShowAuth] = useState(false);
+  const [registerContent, setRegisterContent] = useState(false);
   const [allOptions, setAllOptions] = useState([]);
   const [popupContent, setPopupContent] = useState("");
   const [isOpenedPopup, setIsOpenedPopup] = useState(false);
@@ -49,6 +50,16 @@ function App() {
       setHomeContent("0");
     }
   }, [user]);
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker
+      .register("/sw.js")
+      .then(function (reg) {
+        console.log("Successfully registered service worker", reg);
+      })
+      .catch(function (err) {
+        console.warn("Error whilst registering service worker", err);
+      });
+  }
 
   return (
     <>
@@ -58,6 +69,7 @@ function App() {
           setHomeContent={setHomeContent}
           showAuth={showAuth}
           setShowAuth={setShowAuth}
+          setRegisterContent={setRegisterContent}
           allOptions={allOptions}
         />
 
@@ -105,7 +117,14 @@ function App() {
                   </>
                 );
               default:
-                return <Intro allOptions={allOptions} />;
+                return (
+                  <Intro
+                    allOptions={allOptions}
+                    setHomeContent={setHomeContent}
+                    setShowAuth={setShowAuth}
+                    setRegisterContent={setRegisterContent}
+                  />
+                );
             }
           })()}
         </SectionMain>
@@ -117,6 +136,7 @@ function App() {
           setHomeContent={setHomeContent}
           showAuth={showAuth}
           setShowAuth={setShowAuth}
+          setRegisterContent={setRegisterContent}
           allOptions={allOptions}
         />
         <Bottombar
@@ -125,12 +145,16 @@ function App() {
           homeContent={homeContent}
           setHomeContent={setHomeContent}
           allOptions={allOptions}
+          setShowAuth={setShowAuth}
+          setRegisterContent={setRegisterContent}
         />
 
         <Auth
           showAuth={showAuth}
           setShowAuth={setShowAuth}
           setHomeContent={setHomeContent}
+          registerContent={registerContent}
+          setRegisterContent={setRegisterContent}
         />
 
         <PopupMessage

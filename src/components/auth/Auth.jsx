@@ -27,8 +27,13 @@ const LoginWrapper = styled.div`
   z-index: 21;
 `;
 
-export default function Auth({ showAuth, setShowAuth, setHomeContent }) {
-  const [registerContent, setRegisterContent] = useState(false);
+export default function Auth({
+  showAuth,
+  setShowAuth,
+  setHomeContent,
+  registerContent,
+  setRegisterContent,
+}) {
   const LoginRef = useRef();
   const { user } = useContext(UserContext);
   const animation = useSpring({
@@ -84,12 +89,14 @@ export default function Auth({ showAuth, setShowAuth, setHomeContent }) {
                 <Login
                   switchContent={switchContent}
                   setShowAuth={setShowAuth}
+                  isDisplayed={!registerContent}
                 />
               )}
               {registerContent && (
                 <Register
                   switchContent={switchContent}
                   setShowAuth={setShowAuth}
+                  isDisplayed={registerContent}
                 />
               )}
             </LoginWrapper>

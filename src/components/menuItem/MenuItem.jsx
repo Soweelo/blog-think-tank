@@ -1,8 +1,9 @@
 import "./menuitem.scss";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 // import { MdClose } from 'react-icons/md';
 import AutoCSearchbar from "../autoCSearchBar/AutoCSearchbar";
 import getOptionByKey from "../../functions/getOptionByKey/GetOptionByKey";
+import { UserContext } from "../../context/UserContext";
 export default function MenuItem({
   id,
   menuOpen,
@@ -13,7 +14,11 @@ export default function MenuItem({
   selectedTags,
   setSelectedTags,
   allOptions,
+  setHomeContent,
+  setShowAuth,
+  setRegisterContent,
 }) {
+  const { user } = useContext(UserContext);
   const isCurrent = id === menuOpen ? true : false;
   function getTitle(id) {
     switch (id) {
@@ -60,7 +65,15 @@ export default function MenuItem({
     setOption_create_text_1(getOptionByKey("02_create_account", allOptions));
     setOption_create_text_2(getOptionByKey("02_subscribe", allOptions));
   }, [allOptions]);
-
+  function openLoginInterface() {
+    // console.log("user", user);
+    if (user) {
+      setHomeContent("5");
+    } else {
+      setRegisterContent(true);
+      setShowAuth(true);
+    }
+  }
   return (
     <li className={"menu__item btn btn--dropdown " + (isCurrent && "active")}>
       <div
@@ -136,10 +149,12 @@ export default function MenuItem({
                 <li
                   className="hoverable"
                   dangerouslySetInnerHTML={{ __html: option_create_text_1 }}
+                  onClick={() => openLoginInterface()}
                 ></li>
                 <li
                   className="hoverable"
                   dangerouslySetInnerHTML={{ __html: option_create_text_2 }}
+                  onClick={() => openLoginInterface()}
                 ></li>
               </ul>
             );

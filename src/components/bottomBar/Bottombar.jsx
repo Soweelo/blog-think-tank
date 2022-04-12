@@ -1,15 +1,19 @@
 import "./bottombar.scss";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import getOptionByKey from "../../functions/getOptionByKey/GetOptionByKey";
+import { Home, Person } from "@material-ui/icons";
+import { UserContext } from "../../context/UserContext";
 
 export default function Bottombar({
   mainMenuOpen,
   setMainMenuOpen,
-  homeContent,
   setHomeContent,
   allOptions,
+  setShowAuth,
+  setRegisterContent,
 }) {
+  const { user } = useContext(UserContext);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [option_moreabout, setOption_moreabout] = useState("");
   const [option_privacy, setOption_privacy] = useState("");
@@ -26,6 +30,16 @@ export default function Bottombar({
   const changeContent = (e) => {
     setHomeContent(e.target.id);
   };
+
+  function openLoginInterface() {
+    // console.log("user", user);
+    if (user) {
+      setHomeContent("5");
+    } else {
+      setRegisterContent(false);
+      setShowAuth(true);
+    }
+  }
   return (
     <div className={"bottombar " + (mainMenuOpen && " active")}>
       <div
@@ -52,11 +66,16 @@ export default function Bottombar({
         id="4"
         dangerouslySetInnerHTML={{ __html: option_join }}
       ></div>
-
+      <div className="home" onClick={(e) => changeContent(e)} id="0">
+        <Home />
+      </div>
       <div className="hamburger" onClick={() => setMainMenuOpen(!mainMenuOpen)}>
         <span className="line1"></span>
         <span className="line2"></span>
         <span className="line3"></span>
+      </div>
+      <div className="account" onClick={() => openLoginInterface()}>
+        <Person />
       </div>
     </div>
   );

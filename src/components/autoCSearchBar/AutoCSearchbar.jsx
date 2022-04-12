@@ -1,5 +1,5 @@
 import "./autocsearchbar.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MdClose } from "react-icons/md";
 
 export default function AutoCSearchbar({
@@ -10,13 +10,7 @@ export default function AutoCSearchbar({
 }) {
   const [isSuggestion, setIsSuggestion] = useState(false);
   const [eMessage, setEMessage] = useState("");
-  // const [selectedOption,setSelectedOption] = useState(null)
   const [searchText, setSearchText] = useState("");
-
-  // const options = [];
-  // for (let i = 0;i <allItems.length; i++){
-  //     options[i]={name:allItems[i].toLowerCase()};
-  // }
 
   const updateSuggestion = (e) => {
     setIsSuggestion(false);
@@ -60,8 +54,6 @@ export default function AutoCSearchbar({
         } else {
           setEMessage("You already selected this tag");
         }
-      } else {
-        setEMessage("This tag still does not exist");
       }
     }
   };
@@ -92,7 +84,15 @@ export default function AutoCSearchbar({
       }
     });
   }
-
+  useEffect(() => {
+    if (
+      searchText.length > 2 &&
+      allItems.filter(({ name }) => name.indexOf(searchText.toLowerCase()) > -1)
+        .length == 0
+    ) {
+      setEMessage("This tag still does not exist");
+    }
+  }, [searchText]);
   return (
     <>
       <div className="message">{eMessage}</div>
