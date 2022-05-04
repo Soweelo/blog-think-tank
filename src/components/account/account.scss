@@ -1,16 +1,24 @@
 @import "../../global.scss";
 
-#account{
+#account {
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow:hidden;
+  overflow: hidden;
   justify-content: center;
-  h1{
+  @include pad {
+    .bckHome {
+      right: 5vh;
+      top: 12vh;
+      left: unset;
+    }
+  }
+
+  h1 {
     padding-top: calc(45px + 0.1rem);
     text-align: center;
   }
-  .account__para-container{
+  .account__para-container {
     width: min(1200px, 95%);
     background-color: $primary;
     color: $secondary;
@@ -20,17 +28,17 @@
     margin-top: 1.5rem;
     margin-bottom: 0.3rem;
     max-height: 95vh;
-    //overflow-y: scroll;
-    scrollbar-width:none;
+    position: relative;
+    scrollbar-width: none;
     display: flex;
     min-height: 80vh;
-    p{
+    p {
       //margin-bottom: 3rem;
-      br{
+      br {
         margin-bottom: 10px;
       }
     }
-    .account__menu-bar{
+    .account__menu-bar {
       width: 30%;
       //background-color: grey;
       display: flex;
@@ -41,141 +49,142 @@
       background-color: $complementary;
       color: $primary;
       border-radius: 20px 0 0 20px;
-      .account__menu-bar-home{display: none;}
-      @include mobile{
+      .account__menu-bar-home {
+        display: none;
+      }
+      @include mobile {
         width: 0;
         transition: all 50ms ease-in-out;
         //transition: opacity 1ms ease-in-out;
         border-radius: 20px;
-        padding:0;
+        padding: 0;
         overflow: hidden;
         opacity: 0;
-        .account__menu-bar-home{
+        .account__menu-bar-home {
           display: flex;
-          position:absolute;
-background-color: $tertiary;
-          top: 25px;
-          height: 1.9rem;
-          width: 1.9rem;
+          position: absolute;
+          background-color: $tertiary;
+          top: 30px;
+          height: 2.5rem;
+          width: 2.5rem;
           right: 25px;
-          border-radius:50%;
+          border-radius: 50%;
           padding: 0.2rem;
-          justify-content: center;align-items: center;
-cursor: pointer;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
         }
-        &.mobileView{
+        &.mobileView {
           width: 100%;
           opacity: 1;
-
-
         }
       }
 
-      .account__menubar-avatar-wrapper{
-
+      .account__menubar-avatar-wrapper {
         display: flex;
 
         justify-content: flex-start;
         align-items: flex-start;
-        padding:1rem;
+        padding: 1rem;
         border-radius: 20px;
         width: 80%;
-        margin-top:1rem;
+        margin-top: 1rem;
 
-        svg{
+        svg {
           color: $complementary;
           //border:1px solid $tertiary;
           background-color: $primary;
           border-radius: 50%;
-          padding:1rem;
-          margin-top:0.7rem;
+          padding: 1rem;
+          margin-top: 0.7rem;
         }
-        .account__pseudo{
-         letter-spacing: 1px; padding:0.7rem;
-font-weight: 300;
+        .account__pseudo {
+          letter-spacing: 1px;
+          padding: 0.7rem;
+          font-weight: 300;
           margin: auto 0.1rem;
-          span{
+          span {
             font-weight: bolder;
           }
         }
-
       }
-      button{
-          width: 110px;
-          color: $primary;
-          margin:0.1rem 0 1rem;
-          border:1px solid $primary;
-          cursor:pointer;
-          opacity: 0.7;
-      padding-left: 1rem;
-      margin-left:1rem;
-        transition:font-weight 50ms ease-in-out;
-        &:hover{
+      button {
+        width: 110px;
+        color: $primary;
+        margin: 0.1rem 0 1rem;
+        border: 1px solid $primary;
+        cursor: pointer;
+        opacity: 0.7;
+        padding-left: 1rem;
+        margin-left: 1rem;
+        transition: font-weight 50ms ease-in-out;
+        &:hover {
           font-weight: bolder;
-        background-color: rgba(211, 211, 211, 0.05);
+          background-color: rgba(211, 211, 211, 0.05);
         }
       }
-      .account__menubar-menulist{
+      .account__menubar-menulist {
         margin-top: 1rem;
         width: 90%;
         padding-left: 1rem;
-        opacity:90%;
-        ul{
+        opacity: 90%;
+        ul {
           list-style: none;
           padding: 0;
-          border-top:1px solid $primary;
-          li{
+          border-top: 1px solid $primary;
+          li {
             display: flex;
             align-items: center;
-            height:3rem;
+            height: 3rem;
             padding-left: 0.5rem;
-            transition:font-weight 50ms ease-in-out;
-            border-bottom:1px solid $primary;
-            svg{margin-right: 0.5rem}
-            &:hover{
+            transition: font-weight 50ms ease-in-out;
+            border-bottom: 1px solid $primary;
+            svg {
+              margin-right: 0.5rem;
+            }
+            &:hover {
               font-weight: bold;
               background-color: rgba(211, 211, 211, 0.05);
-              cursor:pointer
+              cursor: pointer;
             }
           }
         }
       }
     }
   }
-  .account__content-display{width: 66%;box-sizing: border-box; overflow-y: scroll;
+  .account__content-display {
+    width: 66%;
+    box-sizing: border-box;
+    overflow-y: scroll;
 
     scrollbar-width: inherit;
-@include mobile{
-  width: 0;
-opacity :0;
-  border-radius: 20px;
-  padding:0;
-  transition: all 50ms ease-in-out;
-  &.mobileView{
-    width: 100%;
-    opacity:1;
+    @include mobile {
+      width: 0;
+      opacity: 0;
+      border-radius: 20px;
+      padding: 0;
+      transition: all 50ms ease-in-out;
+      &.mobileView {
+        width: 100%;
+        opacity: 1;
+      }
+    }
   }
-}
-
+  .account__content-display::-webkit-scrollbar {
+    display: none;
   }
-  .account__content-display::-webkit-scrollbar{
-
-display: none;
-
-
-  }
-  @include mobile{
-    h1{
+  @include mobile {
+    h1 {
       padding: 0.2rem 0.5rem 0 0.5rem;
       font-size: 1.7rem;
     }
-    .account__para-container{
+    .account__para-container {
       margin-top: 0;
       //padding: 1rem ;
-      @include mobile{
+      @include mobile {
         margin-top: 0.3rem;
       }
-      h2{
+      h2 {
         font-size: 1.3rem;
       }
     }

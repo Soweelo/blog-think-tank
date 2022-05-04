@@ -41,16 +41,16 @@ ex: variable  langue, session (token valide),  etc.
         };
     Malheureusement j'ai pu constater que cela envoi des champs nuls pour les données ainsi envoyées.
     SUPPRIMER LE HEADER permet de régler le problème!
-    Attention aussi à la fonction d'où part le fetch. Dans un submit directement cela semble poser problème pour la transmission du data ...
+    Attention aussi à la fonction d'où part le fetch. Dans un submit directement cela semble poser problème pour la transmission des datas ...
 
 ***affichage du post nouvellement créé directement dans la post list.
     Avec stéphane nous avons vu de sorte à ce que cela se fasse sans re-render de tous les posts.
     Deux solutions:
         ** afficher juste les infos postés: dans ce cas c'est rapide, on met à jour une variable nouveau post, mais on n'a pas encore sont                    id, son updated_at etc... donc le post affiché tel quel n'a pas les éléments pour être mis à jour
-        ** afficher les infos récupérées dans la réponse positive du serveur. dans ce cas c'est un peu plus long(le temps d'enregistrement du post),
+        ** afficher les infos récupérées dans la réponse positive du serveur. Dans ce cas c'est un peu plus long(le temps d'enregistrement du post),
         mais il y a toutes les données nécéssaires à sa modification sans re-render. Je privilégie cette piste.
 
-*** dans un formulaire sur un input, le detecteur onKeypress permet de saisir les  valeurs  des lettres saisies au clavier mais:
+*** dans un formulaire sur un input, le detecteur onKeypress permet de saisir les valeurs des lettres saisies au clavier mais:
     - saisit "Enter"
     - il y a un retard d'un caractère.
     - il ne saisit pas le changemnt si on tape la touche delete
@@ -58,3 +58,24 @@ ex: variable  langue, session (token valide),  etc.
        Onchange permet de saisir le juste nombre de caractère:
        - la value saisie est à jour, même après un delete
        - ne saisit pas "Enter"
+
+
+*** Problème pour la syntaxe tinyMCE dans un textarea:
+
+       Even if using next function is more elegant than creating a div with dangerouslySetInnerHtml
+      and get its content which is the current method I had to adopt in my USERPOSTLIST.jsx file )
+      IT does not converts ALL characters:
+
+      For instance " ' " keeps being expressed as l&#39
+        -   function createMarkup(content) {
+                return { __html: content };
+            }
+
+*** Expiration de la session dans le local storage:
+        * dans la fonction login du fichier  apiCalls.js , je rajoute une date d'expiration en seconde à l'objet user stocké dans le local Storage.
+             const now = new Date();
+             const expiryDate = now.getTime() + 31536000; (la date actuelle +12 mois en secondes)
+             res.data.data["expiry"] = expiryDate;
+             cette version de user augmentée de expiry est dispatchée normalement et stockée dans le local Storage
+
+        * maintenant dans Usercontext, lorsque crée l'état initial de mon user globale, je ne récupère user que si la date d'expiration n'est pas dépassée.

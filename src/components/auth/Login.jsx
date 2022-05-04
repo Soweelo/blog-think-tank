@@ -74,8 +74,12 @@ export default function Login({ switchContent, setShowAuth, isDisplayed }) {
     event.preventDefault();
     let hashedPsw = await sha512(password.current.value);
     // console.log(email.current.value, hashedPsw);
+
     await loginCall(
-      { email: email.current.value, password: hashedPsw },
+      {
+        email: email.current.value,
+        password: hashedPsw,
+      },
       dispatch
     );
   };

@@ -23,9 +23,9 @@ export default function MenuItem({
   function getTitle(id) {
     switch (id) {
       case 1:
-        return option_how_it_works_title;
-      case 2:
         return option_read_by_tag_title;
+      case 2:
+        return option_how_it_works_title;
       case 3:
         return option_my_favorite_tags_title;
       default:
@@ -92,16 +92,6 @@ export default function MenuItem({
         switch (id) {
           case 1:
             return (
-              <ul className="menu-how">
-                <li
-                  dangerouslySetInnerHTML={{ __html: option_how_it_works_text }}
-                ></li>
-
-                <li className="hoverable"> </li>
-              </ul>
-            );
-          case 2:
-            return (
               <ul className="menu-read" id="menu-read">
                 <li
                   dangerouslySetInnerHTML={{ __html: option_read_by_tag_text }}
@@ -115,6 +105,16 @@ export default function MenuItem({
                     id={1}
                   />
                 </li>
+              </ul>
+            );
+          case 2:
+            return (
+              <ul className="menu-how">
+                <li
+                  dangerouslySetInnerHTML={{ __html: option_how_it_works_text }}
+                ></li>
+
+                <li className="hoverable"> </li>
               </ul>
             );
 

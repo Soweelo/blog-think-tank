@@ -10,6 +10,8 @@ import { CircularProgress } from "@material-ui/core";
 import outDateCookieSession from "../../../../functions/cookiesController/outDateCookieSession";
 import { UserContext } from "../../../../context/UserContext";
 import { logout } from "../../../../context functions/apiCalls";
+import { htmlToDOM } from "html-react-parser";
+import { checkHtmlElement } from "@testing-library/jest-dom/dist/utils";
 
 export default function UserPostList({
   setIdToDelete,
@@ -303,7 +305,12 @@ export default function UserPostList({
     }
   };
   //*** end update img
-  // console.log("newpost", newPost);
+  // Fix the html tinyMce syntax issue:
+  // More beautiful than creating a div with dangerouslySetInnerHtml and get its content BUT does not converts ALL chararcters:*
+  // For instance " ' " keeps being expressed as l&#39
+  function createMarkup(content) {
+    return { __html: content };
+  }
   return (
     <div className="account-content__post-wrapper">
       {newPost.id && (
@@ -518,9 +525,6 @@ export default function UserPostList({
       )}
 
       {allPosts.get().map((post, i) => {
-        {
-          // console.log(post);
-        }
         return (
           <div className="account-content__post-container" key={i}>
             <div className="account-content__top">
@@ -537,13 +541,22 @@ export default function UserPostList({
             </div>
 
             <div className="account-content__content-input">
+              <div
+                id="html-textarea"
+                style={{ display: "none" }}
+                dangerouslySetInnerHTML={{ __html: post.content }}
+              ></div>
               <autoheight-textarea>
                 <textarea
                   // oninput="auto_grow(this)"
                   data-postid={post.id}
                   className="account-content__text"
                   value={
-                    postContent[0] == post.id ? postContent[1] : post.content
+                    postContent[0] == post.id
+                      ? postContent[1]
+                      : document.getElementById("html-textarea")
+                      ? document.getElementById("html-textarea").innerText
+                      : ""
                   }
                   // placeholder={post.content.substr(1, 30) + "..."}
                   onClick={(e) => {

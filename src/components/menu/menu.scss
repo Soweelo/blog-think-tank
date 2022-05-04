@@ -1,21 +1,23 @@
 @import "../../global.scss";
-.menu-1{
+.menu-1 {
   width: 100%;
   display: flex;
   justify-content: space-between;
   padding: 0;
   margin-bottom: 5rem;
-  color:$complementary;
+  color: $complementary;
   opacity: 0;
   transition: opacity 0.5s ease;
-  &.not-transparent{
-  opacity: 1;
-  //background-color: red;
-}
+  &.not-transparent {
+    opacity: 1;
+    //background-color: red;
+  }
+  @include pad {
+    width: 97%;
+  }
 
-
-  @include mobile{
+  @include mobile {
     flex-direction: column;
     margin-bottom: 0;
-    }
+  }
 }

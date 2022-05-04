@@ -1,54 +1,57 @@
 @import "../../global.scss";
-.intro{
-  height: unset!important;
+.intro {
+  height: unset !important;
   min-height: calc(100vh - 90px);
   display: flex;
   flex-direction: column;
   justify-content: start;
   align-items: center;
 
-
-  .intro__welcome{
-    margin-top:9rem;
+  .intro__welcome {
+    margin-top: 9rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
     min-width: 45%;
 
-    @include mobile{
+    @include mobile {
       //min-width: 300px;
-      width: max(300px,90%)
+      width: max(300px, 90%);
     }
-    h2{
-      letter-spacing: 2px;
-      word-spacing: 0.5rem;
-      margin-bottom:5px;
-      font-family: 'Inconsolata', monospace;
-      text-shadow: -2px -2px white;
-      @include mobile{
-        max-width: 200px;
+    .intro__welcome-h2-wrapper {
+      max-width: min(98%, 700px);
+      margin-bottom: 5px;
+      display: flex;
+      justify-content: center;
+      h2 {
+        letter-spacing: 2px;
+        word-spacing: 0.5rem;
+
+        font-family: "Inconsolata", monospace;
+        text-shadow: -2px -2px white;
       }
     }
-    h1{
+
+    h1 {
       letter-spacing: 2px;
       word-spacing: 0.5rem;
       font-weight: 800;
       font-size: 2.7rem;
-      font-family: 'Inconsolata', monospace;
+      font-family: "Inconsolata", monospace;
       margin-bottom: 6rem;
-      .ityped-cursor{
-        animation:blink 1s infinite;
+      .ityped-cursor {
+        animation: blink 1s infinite;
       }
       @keyframes blink {
-        50%{
-          opacity:1;
+        50% {
+          opacity: 1;
         }
-        100%{
-          opacity:0;
+        100% {
+          opacity: 0;
         }
       }
-      @include mobile{
+      @include mobile {
         font-size: 1.7rem;
       }
     }

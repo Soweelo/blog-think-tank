@@ -128,7 +128,7 @@ export default function AccountBrandForm({
   };
   return (
     <>
-      <h2>{formContent === 1 ? "Edit your Brand" : "Add a new Brand"}</h2>
+      <h2>{formContent === 1 ? "Edit your Link" : "Add a new Link"}</h2>
       <div className="account__form-message">{message}</div>
       <form onSubmit={formContent === 1 ? submitEditBrand : submitAddBrand}>
         <div className="account__input-container">
@@ -136,17 +136,17 @@ export default function AccountBrandForm({
           <StyledInput
             className="input-field"
             type="text"
-            placeholder={formContent === 1 ? brandName : "Type Your Brand name"}
+            placeholder={formContent === 1 ? brandName : "Type Your Link name"}
             onChange={handleBrandNameChange}
             value={brandName}
           />
         </div>
         <div className="account__input-container">
-          <div className="account-label">Link</div>
+          <div className="account-label">URL</div>
           <StyledInput
             className="input-field"
             type="text"
-            placeholder={formContent === 1 ? brandLink : "Type Your Brand link"}
+            placeholder={formContent === 1 ? brandLink : "Type Your Link URL"}
             onChange={handleBrandLinkChange}
             value={brandLink}
           />

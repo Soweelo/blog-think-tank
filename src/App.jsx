@@ -14,6 +14,8 @@ import styled from "styled-components";
 import Auth from "./components/auth/Auth";
 import { useFetch } from "./hooks/useFetch";
 import { UserContext } from "./context/UserContext";
+import getCookie from "./functions/cookiesController/getCookie";
+import CookieBanner from "./components/cookieBanner/CookieBanner";
 function App() {
   const { user, lang } = useContext(UserContext);
   const [mainMenuOpen, setMainMenuOpen] = useState(false);
@@ -24,11 +26,19 @@ function App() {
   const [allOptions, setAllOptions] = useState([]);
   const [popupContent, setPopupContent] = useState("");
   const [isOpenedPopup, setIsOpenedPopup] = useState(false);
-
+  const [cookiesBanner, setCookiesBanner] = useState(true);
   const SectionMain = styled.div`
     background-image: url("${PF}/storage/app/public/4.jpg");
   `;
   const fetch = useFetch();
+  useEffect(() => {
+    const consentCookie = getCookie("YWORLD3-cookies-consent");
+    // console.log(consentCookie);
+    if (consentCookie) {
+      setCookiesBanner(false);
+    }
+  }, []);
+
   const fetchAllOptions = async () => {
     try {
       const response = await fetch(PF + "/api/options?lang=" + lang);
@@ -162,6 +172,12 @@ function App() {
           isOpen={isOpenedPopup}
           setIsOpen={setIsOpenedPopup}
         />
+        {cookiesBanner && (
+          <CookieBanner
+            setCookieBanner={setCookiesBanner}
+            allOptions={allOptions}
+          />
+        )}
       </div>
     </>
   );

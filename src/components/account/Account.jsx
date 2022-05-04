@@ -67,7 +67,7 @@ export default function Account({ setHomeContent, setIsOpenPopup, lang }) {
                   setMobileView("content");
                 }}
               >
-                <LocalOffer /> My Brands
+                <LocalOffer /> My Links
               </li>
             </ul>
           </div>

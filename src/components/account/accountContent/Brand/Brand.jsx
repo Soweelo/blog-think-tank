@@ -94,13 +94,13 @@ export default function Brand({
         <div className="account__message--delete">
           {nb_postsToDelete !== "0" ? (
             <div className="account__message-delete-text">
-              You have {nb_postsToDelete} posts tagged with this brand.
+              You have {nb_postsToDelete} posts tagged with this link.
               <br /> Still want to delete?
             </div>
           ) : (
             <div className="account__message-delete-text">
               Delete this brand?
-              <br /> None of your posts is tagged with this brand.
+              <br /> None of your posts is tagged with this link.
             </div>
           )}
 
@@ -136,7 +136,7 @@ export default function Brand({
         </div>
       )}
       <div className="account-content__info-line">
-        <h2>My Brands</h2>
+        <h2>My Links</h2>
 
         <div className="account-content__buttons">
           <div
@@ -146,7 +146,7 @@ export default function Brand({
               setAccountBrandForm(0);
             }}
           >
-            ADD NEW BRAND
+            ADD NEW LINK
           </div>
         </div>
       </div>

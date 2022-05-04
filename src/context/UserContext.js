@@ -1,7 +1,11 @@
 import { createContext, useEffect, useReducer } from "react";
 import UserReducer from "./UserReducer";
 const INITIAL_STATE = {
-  user: JSON.parse(localStorage.getItem("user")) || null,
+  user:
+    JSON.parse(localStorage.getItem("user")) &&
+    JSON.parse(localStorage.getItem("user")).expiry < new Date().getTime()
+      ? JSON.parse(localStorage.getItem("user"))
+      : null,
   lang:
     JSON.parse(localStorage.getItem("lang")) || navigator.language.substr(0, 2),
   isFetching: false,
@@ -18,7 +22,9 @@ export const UserContextProvider = ({ children }) => {
     //   "state user",
     //   state.user,
     //   "localStorage.getItem(user)",
-    //   localStorage.getItem("user")
+    //   localStorage.getItem("user"),
+    //   " expiry date > date now",
+    //   localStorage.getItem("user").expiry > new Date().getTime()
     // );
   }, [state.user]);
   useEffect(() => {
