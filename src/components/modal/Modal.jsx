@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { MdClose } from "react-icons/md";
 import { useRef, useEffect, useCallback, useState } from "react";
 import { useSpring, animated } from "react-spring";
-import { Favorite, Share, Comment } from "@material-ui/icons";
+import { Favorite, Share, Comment, Report } from "@material-ui/icons";
 import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
 
 const Background = styled.div`
@@ -99,7 +99,7 @@ const ModalContent = styled.div`
   padding:1rem;
     scrollbar-width: thin;
   scrollbar-color: #fff0 #fff0;
-  
+ 
   h1{
   line-height: 2rem;
   }
@@ -153,10 +153,14 @@ export default function Modal({
   text,
   date,
   loadingModal,
+  reported = false,
 }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-
+  const [reportedPost, setReportedPost] = useState(reported);
+  //lorsque la donnée de signalement d'un post sera délivrée par l'api, la récupérer dans le parent de ce composant et la faire passer dans cette prop "reported" (bool)
   const modalRef = useRef();
+  const reportRef = useRef();
+  console.log(reportRef);
   const animation = useSpring({
     config: {
       duration: 450,
@@ -190,7 +194,13 @@ export default function Modal({
     document.addEventListener("keydown", keyPress);
     return () => document.removeEventListener("keydown", keyPress);
   }, [keyPress]);
+  //reporting a post
 
+  const reportPost = (e) => {
+    e.preventDefault();
+    //call api and send it the new value of report (if it was true, send false, i it was false send true)
+    setReportedPost(!reportedPost);
+  };
   return (
     <>
       {showModal ? (
@@ -249,6 +259,24 @@ export default function Modal({
                     {date}
                   </p>
                   <p dangerouslySetInnerHTML={{ __html: text }}></p>
+                  <div
+                    className="modal__report visible"
+                    title={
+                      reportedPost
+                        ? "You reported this Post"
+                        : "Report this Post"
+                    }
+                    onClick={(e) => reportPost(e)}
+                  >
+                    <div
+                      className={
+                        "modal__report-wrapper " + (reportedPost && " active")
+                      }
+                    >
+                      <div className="active-fill"></div>
+                      <Report className={reportedPost && "report"} />
+                    </div>
+                  </div>
                   {url !== 0 && (
                     <div className="modal__button-wrapper">
                       <a href={url} target="blank">
@@ -256,12 +284,13 @@ export default function Modal({
                       </a>
                     </div>
                   )}
+                  <div className="modal__bottom-ref" ref={reportRef}></div>
                   <CloseModalButton
                     aria-label="Close modal"
                     onClick={() => setShowModal((prev) => !prev)}
                   ></CloseModalButton>
                 </ModalContent>
-              </ModalWrapper>{" "}
+              </ModalWrapper>
             </animated.div>
           ) : (
             <div className="lds-ring">

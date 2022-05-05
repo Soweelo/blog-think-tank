@@ -1,11 +1,12 @@
-@import "../../global";.lds-ring {
+@import "../../global";
+.lds-ring {
   display: inline-block;
   position: relative;
   width: 80px;
   height: 80px;
   position: absolute;
-  top:50vh;
-  transform: translate(60%,-50%);
+  top: 50vh;
+  transform: translate(60%, -50%);
   right: 50vw;
 }
 .lds-ring div {
@@ -37,20 +38,20 @@
     transform: rotate(360deg);
   }
 }
-.animated-div{
+.animated-div {
   display: grid;
   align-items: center;
   justify-items: center;
 
-  .modal-wrapper{
-    .icon3{
+  .modal-wrapper {
+    .icon3 {
       transition: all 0.3s ease;
-      &.false{
-        .icon--tocome{
+      &.false {
+        .icon--tocome {
           display: none;
         }
       }
-      &.expand{
+      &.expand {
         width: 7rem;
         //height: 3rem;
         background-color: white;
@@ -62,50 +63,117 @@
         justify-content: center;
 
         padding: 1rem;
-        svg{
+        svg {
           display: none;
         }
       }
-        .icon--tocome{
-          display: flex;
-          color: $complementary;
-
-        }
+      .icon--tocome {
+        display: flex;
+        color: $complementary;
+      }
     }
 
-    .modal-content{
+    .modal-content {
       //scrollbar-width: none;
       //scrollbar-color: #fff0 #fff0;
-      .modal__date{
+      .modal__date {
         display: flex;
         align-items: center;
         color: $secondary;
-        background-color: rgba(0,0,0,0.1);
+        background-color: rgba(0, 0, 0, 0.1);
         width: max-content;
         padding: 0.2rem 0.5rem;
-        svg{
+        svg {
           margin-right: 0.5rem;
           margin-top: 0;
         }
       }
-      .modal__button-wrapper{
+      .modal__report {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        //background-color: lightgrey;
+        height: 1000px;
+        width: 100px;
+        display: flex;
+        justify-content: end;
+        align-items: end;
+        overflow: hidden;
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+        &.visible {
+          opacity: 1;
+        }
+        .modal__report-wrapper {
+          position: absolute;
+          background-color: $shadow;
+          border: 1px solid $tertiary;
+          box-shadow: $box-shadow;
+          height: 150px;
+          width: 150px;
+          transform: translate(75px, 75px);
+
+          border-radius: 50%;
+          z-index: 2;
+          transition: border 1.1s 0.7s ease-in;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          animation: move 1s cubic-bezier(.1,.08,.61,1.3);
+          @keyframes move {
+          from{ transform: translate(150px, 150px);}
+          to{transform: translate(75px, 75px);}
+          }
+          .active-fill {
+            width: 0;
+            height: 0;
+            border-radius: 10%;
+            background-color: $primary;
+            z-index: 4;
+            position: absolute;
+            transition: all 0.6s ease-in;
+
+          }
+          svg {
+            fill: $secondary;
+            z-index: 5;
+            transform: translate(-30px, -30px);
+            transition: fill 0.5s 0.1s ease-in;
+          }
+
+          &.active {
+            border: 1px solid $delete;
+            .active-fill {
+              transform: rotate(360deg);
+              width: 100%;
+              height: 100%;
+              border-radius: 50%;
+
+            }
+            svg {
+              fill: $delete;
+            }
+          }
+        }
+      }
+      .modal__button-wrapper {
         padding-bottom: 1rem;
         height: 50px;
         display: flex;
         flex-direction: column;
-        justify-content: flex-end;      }
+        justify-content: flex-end;
+      }
 
-      @include mobile{
+      @include mobile {
         margin-top: 0;
-        h1{
+        h1 {
           margin: 0;
           color: $complementary;
         }
       }
     }
-    .modal-content::-webkit-scrollbar{
+    .modal-content::-webkit-scrollbar {
       width: 10px;
-
     }
     .modal-content::-webkit-scrollbar-thumb {
       background-color: rgba(255, 255, 255, 0);
@@ -114,19 +182,16 @@
       background: rgba(255, 255, 255, 0);
     }
 
-    @include mobile{
+    @include mobile {
       height: 80vh;
       grid-template-columns: 1fr;
       grid-template-rows: 0.5fr 1fr;
-      .modal-img-wrapper{
-        border-radius: 10px 10px 0 0 ;
-        img{
-          border-radius: 10px 10px 0 0 ;
+      .modal-img-wrapper {
+        border-radius: 10px 10px 0 0;
+        img {
+          border-radius: 10px 10px 0 0;
         }
       }
-
     }
   }
-
 }
-
