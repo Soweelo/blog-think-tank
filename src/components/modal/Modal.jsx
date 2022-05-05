@@ -160,7 +160,7 @@ export default function Modal({
   //lorsque la donnée de signalement d'un post sera délivrée par l'api, la récupérer dans le parent de ce composant et la faire passer dans cette prop "reported" (bool)
   const modalRef = useRef();
   const reportRef = useRef();
-  console.log(reportRef);
+  // console.log(reportRef);
   const animation = useSpring({
     config: {
       duration: 450,

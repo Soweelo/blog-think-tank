@@ -20,6 +20,7 @@ export default function MenuItem({
 }) {
   const { user } = useContext(UserContext);
   const isCurrent = id === menuOpen ? true : false;
+  const readByTag = useRef();
   function getTitle(id) {
     switch (id) {
       case 1:
@@ -74,89 +75,149 @@ export default function MenuItem({
       setShowAuth(true);
     }
   }
+  //read by tag modification
+  // custom suggestion list margin to make it appear correct bottom
+  const customMargin = readByTag.current
+    ? readByTag.current.getBoundingClientRect().height
+    : null;
+  useEffect(() => {
+    if (document.querySelector(".suggestion") && customMargin) {
+      document.querySelector(".suggestion").style.cssText +=
+        "margin-top:" + customMargin + "px";
+    }
+  }, [customMargin]);
+
   return (
     <li className={"menu__item btn btn--dropdown " + (isCurrent && "active")}>
-      <div
-        className="menu__item-wrapper"
-        onClick={(e) => (isCurrent ? setMenuOpen(0) : setMenuOpen(id))}
-      >
-        <div className="menu__item--title">{getTitle(id)}</div>
-        <div
-          className="menu__item--seeMore"
-          onClick={(e) => (isCurrent ? setMenuOpen(0) : setMenuOpen(id))}
-        >
-          {isCurrent ? "-" : "+"}
-        </div>
-      </div>
       {(() => {
         switch (id) {
           case 1:
             return (
-              <ul className="menu-read" id="menu-read">
-                <li
-                  dangerouslySetInnerHTML={{ __html: option_read_by_tag_text }}
-                ></li>
-
-                <li>
+              <>
+                <div
+                  className="menu__item-wrapper menu-read"
+                  ref={readByTag}
+                  id="menu-read"
+                  onClick={(e) =>
+                    isCurrent ? setMenuOpen(0) : setMenuOpen(id)
+                  }
+                >
                   <AutoCSearchbar
                     selectedItems={selectedTags}
                     setSelectedItems={setSelectedTags}
                     allItems={allTags}
                     id={1}
+                    placeholder={getTitle(id)}
                   />
-                </li>
-              </ul>
+                </div>
+              </>
             );
           case 2:
             return (
-              <ul className="menu-how">
-                <li
-                  dangerouslySetInnerHTML={{ __html: option_how_it_works_text }}
-                ></li>
+              <>
+                <div
+                  className="menu__item-wrapper"
+                  onClick={(e) =>
+                    isCurrent ? setMenuOpen(0) : setMenuOpen(id)
+                  }
+                >
+                  <div className="menu__item--title">{getTitle(id)}</div>
+                  <div
+                    className="menu__item--seeMore"
+                    onClick={(e) =>
+                      isCurrent ? setMenuOpen(0) : setMenuOpen(id)
+                    }
+                  >
+                    {isCurrent ? "-" : "+"}
+                  </div>
+                </div>
+                <ul className="menu-how">
+                  <li
+                    dangerouslySetInnerHTML={{
+                      __html: option_how_it_works_text,
+                    }}
+                  ></li>
 
-                <li className="hoverable"> </li>
-              </ul>
+                  <li className="hoverable"> </li>
+                </ul>
+              </>
             );
 
           case 3:
             return (
-              <ul className="menu-fav">
-                <li
-                  className="hoverable"
-                  dangerouslySetInnerHTML={{
-                    __html: option_my_favorite_tags_text_1,
-                  }}
-                ></li>
-                <li
-                  dangerouslySetInnerHTML={{
-                    __html: option_my_favorite_tags_text_2,
-                  }}
-                ></li>
-                <li>
-                  <AutoCSearchbar
-                    selectedItems={favorites}
-                    setSelectedItems={setFavorites}
-                    allItems={allTags}
-                    id={2}
-                  />
-                </li>
-              </ul>
+              <>
+                <div
+                  className="menu__item-wrapper"
+                  onClick={(e) =>
+                    isCurrent ? setMenuOpen(0) : setMenuOpen(id)
+                  }
+                >
+                  <div className="menu__item--title">{getTitle(id)}</div>
+                  <div
+                    className="menu__item--seeMore"
+                    onClick={(e) =>
+                      isCurrent ? setMenuOpen(0) : setMenuOpen(id)
+                    }
+                  >
+                    {isCurrent ? "-" : "+"}
+                  </div>
+                </div>
+                <ul className="menu-fav">
+                  <li
+                    className="hoverable"
+                    dangerouslySetInnerHTML={{
+                      __html: option_my_favorite_tags_text_1,
+                    }}
+                  ></li>
+                  <li
+                    dangerouslySetInnerHTML={{
+                      __html: option_my_favorite_tags_text_2,
+                    }}
+                  ></li>
+                  <li>
+                    <AutoCSearchbar
+                      selectedItems={favorites}
+                      setSelectedItems={setFavorites}
+                      allItems={allTags}
+                      id={2}
+                    />
+                  </li>
+                </ul>
+              </>
             );
 
           default:
             return (
-              <ul className="menu-addYours">
-                <li
-                  className="hoverable"
-                  dangerouslySetInnerHTML={{ __html: option_create_text_1 }}
-                  onClick={() => openLoginInterface()}
-                ></li>
-                <li
-                  className="hoverable"
-                  dangerouslySetInnerHTML={{ __html: option_create_text_2 }}
-                  onClick={() => openLoginInterface()}
-                ></li>
-              </ul>
+              <>
+                <div
+                  className="menu__item-wrapper"
+                  onClick={(e) =>
+                    isCurrent ? setMenuOpen(0) : setMenuOpen(id)
+                  }
+                >
+                  <div className="menu__item--title">{getTitle(id)}</div>
+                  <div
+                    className="menu__item--seeMore"
+                    onClick={(e) =>
+                      isCurrent ? setMenuOpen(0) : setMenuOpen(id)
+                    }
+                  >
+                    {isCurrent ? "-" : "+"}
+                  </div>
+                </div>
+                <ul className="menu-addYours">
+                  <li
+                    className="hoverable"
+                    dangerouslySetInnerHTML={{ __html: option_create_text_1 }}
+                    onClick={() => openLoginInterface()}
+                  ></li>
+                  <li
+                    className="hoverable"
+                    dangerouslySetInnerHTML={{ __html: option_create_text_2 }}
+                    onClick={() => openLoginInterface()}
+                  ></li>
+                </ul>
+              </>
             );
         }
       })()}

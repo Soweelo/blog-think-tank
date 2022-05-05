@@ -7,6 +7,7 @@ export default function AutoCSearchbar({
   setSelectedItems,
   allItems,
   id,
+  placeholder,
 }) {
   const [isSuggestion, setIsSuggestion] = useState(false);
   const [eMessage, setEMessage] = useState("");
@@ -93,9 +94,12 @@ export default function AutoCSearchbar({
       setEMessage("This tag still does not exist");
     }
   }, [searchText]);
+
   return (
     <>
-      <div className="message">{eMessage}</div>
+      <div className={"message " + (eMessage && " display-message")}>
+        {eMessage}
+      </div>
       <div className="tag-container">
         {selectedItems.map((item, index) => {
           return (
@@ -114,6 +118,7 @@ export default function AutoCSearchbar({
           type="text"
           onChange={(e) => updateSuggestion(e)}
           onFocus={(e) => setOpenToCenter(e)}
+          placeholder={placeholder ? placeholder : null}
         />
       </div>
 
@@ -129,8 +134,7 @@ export default function AutoCSearchbar({
                 tagsuggest={option.name}
                 onClick={addItem}
               >
-                {" "}
-                #{option.name}{" "}
+                #{option.name}
               </div>
             );
           })}
