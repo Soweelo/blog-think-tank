@@ -79,7 +79,7 @@ export default function Post({
     element.style.height = "5px";
     element.style.height = element.scrollHeight + "px";
   }
-  // console.log(allTags);
+
   return (
     <div id={"account-content__scrolling-wrapper"}>
       <Scroll

@@ -25,9 +25,14 @@ export default function UserPostList({
 }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const { user, dispatch } = useContext(UserContext);
+
+  //** Prevent rendering a newly modified post by defining  those variables. First expression of array is the id of the newly modified post  or -1 if none has been modified.
+  // second expression of array is the content to be changed, without refreshing the postList.
   const [postContentButton, setPostContentButton] = useState([-1, false]);
   const [postContent, setPostContent] = useState([-1, ""]);
   const postTagsToChange = useTrait(-1);
+  //**
+
   const postTags = useTrait([]);
   const [eMessage, setEMessage] = useState(["", "blue"]);
   const [postContentMemo, setPostContentMemo] = useState("");
@@ -308,9 +313,11 @@ export default function UserPostList({
   // Fix the html tinyMce syntax issue:
   // More beautiful than creating a div with dangerouslySetInnerHtml and get its content BUT does not converts ALL chararcters:*
   // For instance " ' " keeps being expressed as l&#39
-  function createMarkup(content) {
-    return { __html: content };
-  }
+
+  // function createMarkup(content) {
+  //   return { __html: content };
+  // }
+
   return (
     <div className="account-content__post-wrapper">
       {newPost.id && (
@@ -542,7 +549,7 @@ export default function UserPostList({
 
             <div className="account-content__content-input">
               <div
-                id="html-textarea"
+                id={"html-textarea-" + post.id}
                 style={{ display: "none" }}
                 dangerouslySetInnerHTML={{ __html: post.content }}
               ></div>
@@ -554,8 +561,9 @@ export default function UserPostList({
                   value={
                     postContent[0] == post.id
                       ? postContent[1]
-                      : document.getElementById("html-textarea")
-                      ? document.getElementById("html-textarea").innerText
+                      : document.getElementById("html-textarea-" + post.id)
+                      ? document.getElementById("html-textarea-" + post.id)
+                          .innerText
                       : ""
                   }
                   // placeholder={post.content.substr(1, 30) + "..."}

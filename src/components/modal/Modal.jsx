@@ -21,7 +21,7 @@ const Background = styled.div`
 
 const ModalWrapper = styled.div`
   width: min(800px, 90%);
-  height: min(400px, 90%);
+  height: min(400px, 90vh);
   box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
   background: #fff;
   color: #000;
@@ -99,12 +99,14 @@ const ModalContent = styled.div`
   padding:1rem;
     scrollbar-width: thin;
   scrollbar-color: #fff0 #fff0;
+
  
   h1{
   line-height: 2rem;
   }
   p {
     margin-bottom: 1rem;
+    max-height:100%;
     
   }
   a {
@@ -201,6 +203,7 @@ export default function Modal({
     //call api and send it the new value of report (if it was true, send false, i it was false send true)
     setReportedPost(!reportedPost);
   };
+  // console.log(date);
   return (
     <>
       {showModal ? (
@@ -274,7 +277,9 @@ export default function Modal({
                       }
                     >
                       <div className="active-fill"></div>
-                      <Report className={reportedPost && "report"} />
+                      <Report
+                        className={"report-icon " + (reportedPost && " report")}
+                      />
                     </div>
                   </div>
                   {url !== 0 && (

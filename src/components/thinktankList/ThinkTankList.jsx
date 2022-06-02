@@ -183,7 +183,7 @@ export default memo(function ThinkTankList({
                       images={p.images}
                       tags={p.tags}
                       text={p.content}
-                      date={p.updated_at}
+                      date={format(p.updated_at)}
                       showModal={showModal}
                       setShowModal={setShowModal}
                       modalVar={modalVar}

@@ -291,10 +291,12 @@
 .menu__item:nth-child(1) {
   width: 320px;
   max-width: 320px;
-  min-height: 65px;
-  height: auto;
-  border-radius: 15px;
+  border-radius: 20px;
   overflow: inherit;
+  margin-top: 0;
+  padding: 0;
+min-height: 36px;
+  height: unset;
 
   &.active {
     background-color: rgba(255, 255, 255, 0.83);
@@ -302,8 +304,23 @@
       display: none;
     }
   }
-  .tag-container input {
-    background-color: transparent;
+  .tag-container {
+    padding: 0;
+    border: none;
+    input {
+      background-color: transparent;
+      outline: none;
+      padding: 0;
+    }
+    .tag{
+      font-size: 14px;
+      padding: 3px 3px 3px 5px;
+      span .mdClose{
+        height: 13px;
+        right: 4px;
+        width: 13px;
+      }
+    }
   }
   .message {
     color: #cc623a;
@@ -315,24 +332,22 @@
     padding: 0.7rem;
     border-radius: 15px;
     display: none;
-    &.display-message{
+    &.display-message {
       display: block;
     }
-
   }
   .suggestion {
     margin-top: 52px;
-    z-index: 1;
+    //z-index: 1;
+    z-index: 10;
   }
-  @include pad{
-
-
+  @include pad {
     margin-left: 1rem;
     margin-bottom: 1rem;
   }
-  @include mobile{
+  @include mobile {
     max-width: unset;
-    width: 90%;
+    width: 95%;
     margin-left: 1rem;
     margin-bottom: 1rem;
   }

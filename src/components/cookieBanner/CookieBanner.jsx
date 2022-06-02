@@ -11,11 +11,6 @@ export default function CookieBanner({ setCookieBanner, allOptions }) {
 
   useEffect(() => {
     setOption_cookie_text(getOptionByKey("04_cookies", allOptions));
-    if (!getOptionByKey("04_cookies", allOptions)) {
-      setOption_cookie_text(
-        "Consent cookie text to come Consent cookie text to come Consent cookie text to come Consent cookie text to come Consent cookie text to come Consent cookie text to come"
-      );
-    }
   }, [allOptions]);
 
   return (
