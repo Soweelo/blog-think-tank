@@ -49,6 +49,13 @@ export default function Bottombar({
         }
     }
     const handleClickReadByTag = ()=>{
+      if(homeContent !== "0"){
+          let target = document.getElementById("menu-read")
+          setHomeContent("0")
+          if (target){
+              target.scrollIntoView({ behavior: "smooth",block: "center" });
+          }
+      }
       let target = document.getElementById("menu-read")
         if (target){
         target.scrollIntoView({ behavior: "smooth",block: "center" });

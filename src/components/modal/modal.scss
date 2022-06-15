@@ -77,16 +77,19 @@
         align-items: end;
         overflow-x: clip;
         width: 100%;
+        position: absolute;
+        bottom: -154px;
         .iconComm {
           transition: all 0.3s ease;
           z-index: 10;
           &.false {
             .icon--tocome {
               display: none;
+
             }
           }
           &.expand {
-            width: 7rem;
+            min-width: 7rem;
             background-color: white;
             border: 1px solid #2f2f2f;
             text-align: center;
@@ -104,7 +107,18 @@
           .icon--tocome {
             display: flex;
             color: $complementary;
+            font-size: 0.9rem;
+            line-height: 1.2rem;
           }
+        }
+
+
+        @include mobile{
+          bottom: -14px;
+        }
+
+        @media (max-width: 490px) {
+          bottom:-46px;
         }
       }
       .iconsLeft{
@@ -162,6 +176,8 @@
               display: block;
               animation: opacityOn 0.5s 0.2s  forwards;
               margin-left: 1rem;
+             line-height: 1.2rem;
+             font-size: 0.9rem;
               @keyframes opacityOn {
               to{
                 opacity: 1;

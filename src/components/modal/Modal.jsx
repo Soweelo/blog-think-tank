@@ -1,11 +1,12 @@
 import "./modal.scss";
 import styled from "styled-components";
 import {MdClose} from "react-icons/md";
-import {useRef, useEffect, useCallback, useState} from "react";
+import {useRef, useEffect, useCallback, useState, useContext} from "react";
 import {useSpring, animated} from "react-spring";
 import {Favorite, Share, Comment, Report} from "@material-ui/icons";
 import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
 import WritePostBtn from "../writePostBtn/WritePostBtn";
+import {UserContext} from "../../context/UserContext";
 
 
 const Background = styled.div`
@@ -50,7 +51,6 @@ const ModalImgWrapper = styled.div`
 `;
 
 const ModalContent = styled.div`
-  display: grid;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -162,17 +162,19 @@ export default function Modal({
                                   url,
                                   text,
                                   date,
+                                  id,
                                   loadingModal,
-                                  reported = false,
                                   setSelectedTags,
                                   setAccountContent,
                                   setHomeContent,
-    setShowAuth,
-                              }) {
+                                  setShowAuth,
 
+                              }) {
+    const {user} = useContext(UserContext);
     const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-    const [reportedPost, setReportedPost] = useState(reported);
-    //lorsque la donnée de signalement d'un post sera délivrée par l'api, la récupérer dans le parent de ce composant et la faire passer dans cette prop "reported" (bool)
+    const [reportedPost, setReportedPost] = useState(false);
+    const [loadingReport, setLoadingReport] = useState(false)
+    const [reportMessage, setReportMessage] = useState("")
     const modalRef = useRef();
     const reportRef = useRef();
     // console.log(reportRef);
@@ -188,10 +190,6 @@ export default function Modal({
         if (modalRef.current === e.target) {
             setShowModal(false);
         }
-        // console.log("click sur le background. modalRef.urrent vaut  ")
-        // console.log( modalRef.current )
-        // console.log( "et e.target vaut ")
-        // console.log(e.target)
     };
 
     const keyPress = useCallback(
@@ -213,9 +211,64 @@ export default function Modal({
 
     const reportPost = (e) => {
         e.preventDefault();
-        //call api and send it the new value of report (if it was true, send false, i it was false send true)
-        setReportedPost(!reportedPost);
+        console.log("click")
+        if (user) {
+            setLoadingReport(true)
+            console.log("user")
+        } else {
+            console.log("no user")
+            setReportedPost(true)
+           setReportMessage("Please loggin to report")
+        }
+
     };
+    useEffect(() => {
+        if (showModal) {
+            setReportedPost(false);
+            setReportMessage("")
+        }
+    }, [showModal])
+    useEffect(() => {
+        const getModalReport = async () => {
+
+            try {
+                let formData = new FormData();
+                formData.append("token", user.session);
+                formData.append("post_id", id);
+                const requestOptions = {
+                    method: "POST",
+                    body: formData,
+                };
+                let url = PF + "/api/reportings/store"
+                let res = await fetch(url, requestOptions).then((res) => res.json())
+                console.log(res)
+                if (res.success) {
+                    setReportedPost(true)
+                    setReportMessage("reported")
+                } else {
+                    console.log(res.message)
+                    if (res.message == "Member already does reporting for this post") {
+                        setReportedPost(true)
+                        setReportMessage("Already reported!")
+                    }else{
+                        setReportedPost(true)
+                        setReportMessage("This post was deleted")
+                    }
+                }
+                setLoadingReport(false);
+            } catch (e) {
+                if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
+                    console.error(e);
+                }
+            }
+        };
+        if (loadingReport) {
+            //    call url api with session token and id
+            //    --> if success set reported to true
+            //    --> if failure "you already signaled this post
+            getModalReport()
+        }
+    }, [loadingReport])
     // console.log(date);
     const handleClickOnTag = (e) => {
         setSelectedTags([e])
@@ -293,7 +346,7 @@ export default function Modal({
 
 
                                                 <Report className="report-icon"/>
-                                                <div className="modal__reported"><span>reported</span></div>
+                                                <div className="modal__reported"><span>{reportMessage}</span></div>
 
                                             </div>
                                         </div>
@@ -323,7 +376,8 @@ export default function Modal({
                                 ></CloseModalButton>
                             </ModalWrapper>
                             <div className="modal__WritePostBtnContainer">
-                                <WritePostBtn setAccountContent={setAccountContent} setHomeContent={setHomeContent} setShowAuth={setShowAuth} modal={true} setShowModal={setShowModal}/>
+                                <WritePostBtn setAccountContent={setAccountContent} setHomeContent={setHomeContent}
+                                              setShowAuth={setShowAuth} modal={true} setShowModal={setShowModal}/>
                             </div>
                         </animated.div>
                     ) : (

@@ -11,9 +11,7 @@ export default memo(function ThinkTankItem({
   url,
   text,
   date,
-  showModal,
   setShowModal,
-  modalVar,
   setModalVar,
   brand,
 }) {

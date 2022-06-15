@@ -16,6 +16,9 @@ $box-shadow:rgba(0, 0, 0, 0.2) 0px 5px 16px;
   border: 1px solid $primary;
   border-radius: 20px;
 }
+html.unscrollable{
+  overflow-y: hidden;
+}
 .loader{
   position: absolute;
   top: 40%;

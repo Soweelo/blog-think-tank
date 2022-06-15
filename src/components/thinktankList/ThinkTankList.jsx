@@ -29,6 +29,7 @@ export default memo(function ThinkTankList({
   const [lastElement, setLastElement] = useState(null);
   const groupLimit = 12;
   const [stopRequest, setStopRequest] = useState(false);
+
   const observer = useRef(
     new IntersectionObserver((entries) => {
       const first = entries[0];
@@ -130,12 +131,9 @@ export default memo(function ThinkTankList({
       ? tagsToDisplay.set(selectedTags)
       : tagsToDisplay.set([]);
     bigArray.set([]);
-
     offset.set(0);
-
     setContainerCount(0);
     setStopRequest(false);
-
     callThinktank();
   }, [selectedTags, allTags]);
 
@@ -158,7 +156,13 @@ export default memo(function ThinkTankList({
       }
     };
   }, [lastElement]);
-
+ useEffect(()=>{
+   if(showModal){
+     document.querySelector("html").classList.add("unscrollable")
+   }else{
+     document.querySelector("html").classList.remove("unscrollable")
+   }
+ },[showModal])
   const [containerCount, setContainerCount] = useState(0);
   return (
     <div className="big_container">
@@ -233,6 +237,7 @@ export default memo(function ThinkTankList({
       <Modal
         showModal={showModal}
         setShowModal={setShowModal}
+        id={modalVar[7]}
         images={modalVar[0]}
         title={modalVar[1]}
         url={modalVar[3]}
