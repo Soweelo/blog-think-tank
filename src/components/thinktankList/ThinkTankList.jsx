@@ -7,9 +7,12 @@ import useTrait from "../../hooks/useTrait";
 import { format } from "timeago.js";
 import { UserContext } from "../../context/UserContext";
 export default memo(function ThinkTankList({
-  favorites,
+  setAccountContent,
   selectedTags,
   allTags,
+    setSelectedTags,
+    setHomeContent,
+    setShowAuth,
 }) {
   const fetch = useFetch();
   const { lang } = useContext(UserContext);
@@ -237,8 +240,12 @@ export default memo(function ThinkTankList({
         text={text}
         date={modalVar[5]}
         loadingModal={loadingModal}
+        setSelectedTags={setSelectedTags}
+        setAccountContent={setAccountContent}
+        setHomeContent={setHomeContent}
+        setShowAuth={setShowAuth}
       ></Modal>
-      {/*{console.log(modalVar)}*/}
+
     </div>
   );
 });

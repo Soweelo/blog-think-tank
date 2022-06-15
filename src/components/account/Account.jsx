@@ -5,10 +5,8 @@ import { useState, useEffect, useContext } from "react";
 import { Person, Create, LocalOffer, Home } from "@material-ui/icons";
 import { UserContext } from "../../context/UserContext";
 import { logout } from "../../context functions/apiCalls";
-export default function Account({ setHomeContent, setIsOpenPopup, lang }) {
+export default function Account({ setHomeContent, accountContent, setAccountContent, lang }) {
   const { user, dispatch } = useContext(UserContext);
-  const [accountContent, setAccountContent] = useState(0);
-
   const [mobileView, setMobileView] = useState("menu");
 
   function endSession() {

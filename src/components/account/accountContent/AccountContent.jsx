@@ -11,7 +11,6 @@ import { UserContext } from "../../../context/UserContext";
 import Brand from "./Brand/Brand";
 export default function AccountContent({
   accountContent,
-
   setAccountContent,
   mobileView,
   setMobileView,

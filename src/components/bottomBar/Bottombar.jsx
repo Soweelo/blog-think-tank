@@ -2,11 +2,12 @@ import "./bottombar.scss";
 
 import { useContext, useEffect, useState } from "react";
 import getOptionByKey from "../../functions/getOptionByKey/GetOptionByKey";
-import { Home, Person } from "@material-ui/icons";
+import { Home, Person, Search } from "@material-ui/icons";
 import { UserContext } from "../../context/UserContext";
 
 export default function Bottombar({
   mainMenuOpen,
+    homeContent,
   setMainMenuOpen,
   setHomeContent,
   allOptions,
@@ -40,6 +41,19 @@ export default function Bottombar({
       setShowAuth(true);
     }
   }
+    const handleClickHome = (e) => {
+        if(homeContent === "0"){
+            window[`scrollTo`]({ top: 0, behavior: `smooth` });
+        }else{
+            changeContent(e)
+        }
+    }
+    const handleClickReadByTag = ()=>{
+      let target = document.getElementById("menu-read")
+        if (target){
+        target.scrollIntoView({ behavior: "smooth",block: "center" });
+        }
+    }
   return (
     <div className={"bottombar " + (mainMenuOpen && " active")}>
       <div
@@ -66,10 +80,13 @@ export default function Bottombar({
         id="4"
         dangerouslySetInnerHTML={{ __html: option_join }}
       ></div>
-      <div className="home" onClick={(e) => changeContent(e)} id="0">
+      <div className="home" onClick={(e) => handleClickHome(e)} id="0">
         <Home />
       </div>
-      <div className="hamburger" onClick={() => setMainMenuOpen(!mainMenuOpen)}>
+        <div className="search" onClick={handleClickReadByTag}>
+            <Search />
+        </div>
+      <div className="hamburger" onClick={ () =>setMainMenuOpen(!mainMenuOpen)}>
         <span className="line1"></span>
         <span className="line2"></span>
         <span className="line3"></span>

@@ -16,6 +16,7 @@ import { useFetch } from "./hooks/useFetch";
 import { UserContext } from "./context/UserContext";
 import getCookie from "./functions/cookiesController/getCookie";
 import CookieBanner from "./components/cookieBanner/CookieBanner";
+import getOptionByKey from "./functions/getOptionByKey/GetOptionByKey";
 function App() {
   const { user, lang } = useContext(UserContext);
   const [mainMenuOpen, setMainMenuOpen] = useState(false);
@@ -27,8 +28,13 @@ function App() {
   const [popupContent, setPopupContent] = useState("");
   const [isOpenedPopup, setIsOpenedPopup] = useState(false);
   const [cookiesBanner, setCookiesBanner] = useState(true);
+  const [accountContent, setAccountContent] = useState(0);
   const SectionMain = styled.div`
     background-image: url("${PF}/storage/app/public/4.jpg");
+    @media (max-width: 768px) {
+      background-image: none;
+      background-color: ${getOptionByKey("01_bgcolor", allOptions)} !important;
+    }
   `;
   const fetch = useFetch();
   useEffect(() => {
@@ -64,10 +70,10 @@ function App() {
     navigator.serviceWorker
       .register("/sw.js")
       .then(function (reg) {
-        console.log("Successfully registered service worker", reg);
+        // console.log("Successfully registered service worker", reg);
       })
       .catch(function (err) {
-        console.warn("Error whilst registering service worker", err);
+        // console.warn("Error whilst registering service worker", err);
       });
   }
 
@@ -122,6 +128,8 @@ function App() {
                       <Account
                         allOptions={allOptions}
                         setHomeContent={setHomeContent}
+                        accountContent={accountContent}
+                        setAccountContent={setAccountContent}
                       />
                     )}
                   </>
@@ -133,6 +141,7 @@ function App() {
                     setHomeContent={setHomeContent}
                     setShowAuth={setShowAuth}
                     setRegisterContent={setRegisterContent}
+                    setAccountContent={setAccountContent}
                   />
                 );
             }

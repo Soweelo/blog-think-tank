@@ -14,15 +14,29 @@
   transition: 1s ease;
   z-index: 14;
   .home{
+    flex:1;
     display: none;
     width:32px;
     height: 25px;
     cursor:pointer;
     @include mobile{
       display: flex;
+      justify-content: end;
+    }
+  }
+  .search{
+    flex:1;
+    display: none;
+    width:32px;
+    height: 25px;
+    cursor:pointer;
+    @include mobile{
+      display: flex;
+      justify-content: end;
     }
   }
   .account{
+    flex:1.5;
     display: none;
     width:32px;
     height: 25px;
@@ -32,12 +46,14 @@
     }
   }
   .hamburger{
+    flex:2.7;
     display: none;
-    width:32px;
+    justify-content: center;
     height: 25px;
     span{
+      width:32px;
       display: block;
-      width: 100%;
+      //width: 100%;
       height: 3px;
       background-color: $complementary;
       transform-origin: left;
@@ -45,6 +61,7 @@
     }
     @include mobile{
       display: flex;
+      align-items: center;
       flex-direction: column;
       justify-content: space-between;
       cursor:pointer;

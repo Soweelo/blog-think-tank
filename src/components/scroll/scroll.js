@@ -29,7 +29,7 @@ const Scroll = ({ showBelow, scrollAnchor }) => {
 
   const handleClick = () => {
     if (scrollAnchor) {
-      let aim = document.getElementById(scrollAnchor).offsetHeight;
+      // let aim = document.getElementById(scrollAnchor).offsetHeight;
       document
         .getElementById(scrollAnchor)
         .scrollIntoView({ behavior: "smooth" });
@@ -41,7 +41,7 @@ const Scroll = ({ showBelow, scrollAnchor }) => {
   return (
     <div>
       {show && (
-        <IconButton onClick={handleClick} className="toTop">
+        <IconButton onClick={handleClick} className="toTop" title="Scroll to top">
           <ExpandLess />
         </IconButton>
       )}
