@@ -60,7 +60,7 @@
   .intro__writePostBtnWrapper{
     z-index: 10;
     position: fixed !important;
-    bottom: 8vh;
+    bottom: calc(2vh + 45px);
     background-color: white !important;
     border-radius: 17% !important;
     color: black !important;

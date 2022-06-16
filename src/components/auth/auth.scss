@@ -4,6 +4,9 @@
   display: grid;
   align-items: center;
   justify-items: center;
+  max-height: 95vh;
+  overflow-y: scroll;
+  scrollbar-width: none
 
   h1 {
     color: $complementary;

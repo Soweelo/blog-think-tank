@@ -30,10 +30,9 @@ const LoginContent = styled.div`
   color: #141414;
   // overflow-y:scroll;
   padding:1rem;
-
     scrollbar-width: thin;
   scrollbar-color: #fff0 #fff0;
-  
+  max-width: 91vw;
   h1{
   line-height: 2rem;
   }
