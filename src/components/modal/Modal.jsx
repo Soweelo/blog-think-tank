@@ -284,7 +284,7 @@ export default function Modal({
                         <animated.div
                             style={animation}
                             ref={modalRef}
-                            className="animated-div"
+                            className="animated-div modal"
                         >
                             <ModalWrapper showModal={showModal} className="modal-wrapper">
                                 <ModalImgWrapper className="modal-img-wrapper">
@@ -375,11 +375,11 @@ export default function Modal({
                                     aria-label="Close modal"
                                     onClick={() => setShowModal((prev) => !prev)}
                                 ></CloseModalButton>
+                                <div className="modal__WritePostBtnContainer">
+                                    <WritePostBtn setAccountContent={setAccountContent} setHomeContent={setHomeContent}
+                                                  setShowAuth={setShowAuth} modal={true} setShowModal={setShowModal}/>
+                                </div>
                             </ModalWrapper>
-                            <div className="modal__WritePostBtnContainer">
-                                <WritePostBtn setAccountContent={setAccountContent} setHomeContent={setHomeContent}
-                                              setShowAuth={setShowAuth} modal={true} setShowModal={setShowModal}/>
-                            </div>
                         </animated.div>
                     ) : (
                         <div className="lds-ring">
