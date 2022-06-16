@@ -74,6 +74,7 @@ const ModalContent = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: end;
+    z-index: 1500;
 
     .iconFav,
     .iconShare {

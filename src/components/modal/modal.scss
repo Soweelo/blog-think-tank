@@ -77,8 +77,9 @@
         align-items: end;
         overflow-x: clip;
         width: 100%;
-        position: absolute;
-        bottom: -154px;
+        height: 113px;
+        position: relative;
+        z-index: 13;
         .iconComm {
           transition: all 0.3s ease;
           z-index: 10;
@@ -110,15 +111,6 @@
             font-size: 0.9rem;
             line-height: 1.2rem;
           }
-        }
-
-
-        @include mobile{
-          bottom: -14px;
-        }
-
-        @media (max-width: 490px) {
-          bottom:-46px;
         }
       }
       .iconsLeft{
@@ -199,6 +191,12 @@
         height: 50px;
         display: flex;
         flex-direction: column;
+        z-index: 0;
+        position: relative;
+        a{
+          position: relative;
+          z-index: 1500;
+        }
       }
 
       @include mobile {
