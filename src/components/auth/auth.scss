@@ -4,9 +4,13 @@
   display: grid;
   align-items: center;
   justify-items: center;
-  max-height: 95vh;
-  overflow-y: scroll;
-  scrollbar-width: none
+  &.auth{
+    max-height: 95vh;
+    overflow-y: hidden;
+    scrollbar-width: none;
+  }
+
+
 
   h1 {
     color: $complementary;
@@ -151,4 +155,11 @@
     opacity: 1;
 
   }
+}
+@media (max-height:435px) {
+  .animated-div.auth{
+    overflow-y: scroll ;
+    -ms-scrollbar-track-color: transparent;
+  }
+
 }

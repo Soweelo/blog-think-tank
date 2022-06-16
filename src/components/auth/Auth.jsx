@@ -82,7 +82,7 @@ export default function Auth({
           <animated.div
             style={animation}
             ref={LoginRef}
-            className="animated-div"
+            className="animated-div auth"
           >
             <LoginWrapper showAuth={showAuth} className="login-wrapper">
               {!registerContent && (
