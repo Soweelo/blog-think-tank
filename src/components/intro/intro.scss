@@ -79,53 +79,54 @@
       }
     }
   }
-  @include mobile{
-    &::before{
-      content: "";
-      position: absolute;
-      top:30px;
-      left:25px;
-      height: 30px;
-      width: 30px;
-      background-image:url('https://api.yworld3.com/storage/app/public/icon-blue-48.png');
-      background-size:contain;
-      background-repeat: no-repeat;
-      animation: opacity 2s 2.5s linear forwards;
-      opacity: 0;
-      z-index: 10;
-    }
-    &::after{
-      content: "";
-      position: absolute;
-      top:-155px;
-      left:-155px;
-      height: 150px;
-      width: 150px;
-      border-radius: 50%;
-      background-image:url('https://api.yworld3.com/storage/app/public/earthmap.png');
-      background-size:cover;
-      border:1px solid #64c7cb;
-      animation: earthmoves 4s linear 0s infinite ,appears 2s linear forwards;
-      box-shadow:0 0 25px RGBA(255,255,255, 0.10),
-      -8px -8px 15px rgba(100, 199, 203, 0.56) inset,
-      2px 2px 25px rgba(100, 199, 203, 0.18) inset,
-      -45px -45px 25px rgba(100, 199, 203, 0.13) inset,
-      25px 25px 45px rgba(100, 199, 203, 0.6) inset;
 
-    }
-    @keyframes earthmoves {
-      0% { background-position:0 0 }
-      100% { background-position:267px 0 }
-    }
-    @keyframes appears {
-      to{
-        transform: rotate(10deg) translate(110px ,90px);
-      }
-    }
-    @keyframes opacity {
-      to{
-        opacity: 1;
-      }
+
+  &::before{
+    content: "";
+    position: absolute;
+    top:30px;
+    left:25px;
+    height: 30px;
+    width: 30px;
+    background-image:url('https://api.yworld3.com/storage/app/public/icon-blue-48.png');
+    background-size:contain;
+    background-repeat: no-repeat;
+    animation: opacity 2s 2.5s linear forwards;
+    opacity: 0;
+    z-index: 10;
+  }
+  &::after{
+    content: "";
+    position: absolute;
+    top:-155px;
+    left:-155px;
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+    background-image:url('https://api.yworld3.com/storage/app/public/earthmap.png');
+    background-size:cover;
+    border:1px solid #64c7cb;
+    animation: earthmoves 4s linear 0s infinite ,appears 2s linear forwards;
+    box-shadow:0 0 25px RGBA(255,255,255, 0.10),
+    -8px -8px 15px rgba(100, 199, 203, 0.56) inset,
+    2px 2px 25px rgba(100, 199, 203, 0.18) inset,
+    -45px -45px 25px rgba(100, 199, 203, 0.13) inset,
+    25px 25px 45px rgba(100, 199, 203, 0.6) inset;
+
+  }
+  @keyframes earthmoves {
+    0% { background-position:0 0 }
+    100% { background-position:267px 0 }
+  }
+  @keyframes appears {
+    to{
+      transform: rotate(10deg) translate(110px ,90px);
     }
   }
+  @keyframes opacity {
+    to{
+      opacity: 1;
+    }
+  }
+
 }
