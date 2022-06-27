@@ -22,21 +22,21 @@ export default memo(function Intro({
     const {lang} = useContext(UserContext);
     const fetch = useFetch();
     const [selectedTags, setSelectedTags] = useState([]);
-    const textRef = useRef();
+    // const textRef = useRef();
     const scrollRef = useRef();
     const [favorites, setFavorites] = useState([]);
     const [option_welcome, setOption_welcome] = useState("");
     const [allTags, setAllTags] = useState([]);
 
-    useEffect(() => {
-        init(textRef.current, {
-            showCursor: true,
-            loop: false,
-            backDelay: 1500,
-            backSpeed: 60,
-            strings: ["WORLD 1.0", "WORLD 2.0", "WORLD 3.0"],
-        });
-    }, []);
+    // useEffect(() => {
+    //     init(textRef.current, {
+    //         showCursor: true,
+    //         loop: false,
+    //         backDelay: 1500,
+    //         backSpeed: 60,
+    //         strings: ["WORLD 1.0", "WORLD 2.0", "WORLD 3.0"],
+    //     });
+    // }, []);
 
     useEffect(() => {
         const getTags = async () => {
@@ -60,12 +60,12 @@ export default memo(function Intro({
     return (
         <div ref={scrollRef} className="intro" id="intro">
             <div className="intro__welcome" id="topIntro">
-                <div className="intro__welcome-h2-wrapper">
+                {/*<div className="intro__welcome-h2-wrapper">*/}
                     {/*<h2 dangerouslySetInnerHTML={{__html: option_welcome}}></h2>*/}
-                </div>
-                <h1>
-                    YOUR <span ref={textRef}></span>
-                </h1>
+                {/*</div>*/}
+                {/*<h1>*/}
+                {/*    YOUR <span ref={textRef}></span>*/}
+                {/*</h1>*/}
                 <Menu
                     favorites={favorites}
                     setFavorites={setFavorites}
