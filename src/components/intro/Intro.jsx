@@ -61,7 +61,7 @@ export default memo(function Intro({
         <div ref={scrollRef} className="intro" id="intro">
             <div className="intro__welcome" id="topIntro">
                 <div className="intro__welcome-h2-wrapper">
-                    <h2 dangerouslySetInnerHTML={{__html: option_welcome}}></h2>
+                    {/*<h2 dangerouslySetInnerHTML={{__html: option_welcome}}></h2>*/}
                 </div>
                 <h1>
                     YOUR <span ref={textRef}></span>
