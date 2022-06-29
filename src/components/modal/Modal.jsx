@@ -29,6 +29,7 @@ const ModalWrapper = styled.div`
   background: #fff;
   color: #000;
   display: grid;
+
   grid-template-columns: 1fr 1fr;
   position: relative;
   z-index: 21;
@@ -380,15 +381,16 @@ export default function Modal({
                   </div>
 
                   <div className="modal__bottom-ref" ref={reportRef}></div>
+                  <div
+                    className={
+                      "modal-comments " + (openCommentList ? "expand" : null)
+                    }
+                    id="commentsSection"
+                  >
+                    <CommentList />
+                  </div>
                 </ModalContent>
-                <div
-                  className={
-                    "modal-comments " + (openCommentList ? "expand" : null)
-                  }
-                  id="commentsSection"
-                >
-                  <CommentList />
-                </div>
+
                 <CloseModalButton
                   aria-label="Close modal"
                   onClick={() => setShowModal((prev) => !prev)}
