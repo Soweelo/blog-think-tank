@@ -10,9 +10,9 @@ export default memo(function ThinkTankList({
   setAccountContent,
   selectedTags,
   allTags,
-    setSelectedTags,
-    setHomeContent,
-    setShowAuth,
+  setSelectedTags,
+  setHomeContent,
+  setShowAuth,
 }) {
   const fetch = useFetch();
   const { lang } = useContext(UserContext);
@@ -20,6 +20,7 @@ export default memo(function ThinkTankList({
   const [loadingModal, setLoadingModal] = useState(false);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [text, setText] = useState("");
+  const [nbComments, setNbComments] = useState(0);
   const [modalVar, setModalVar] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const tagsToDisplay = useTrait([]);
@@ -29,7 +30,7 @@ export default memo(function ThinkTankList({
   const [lastElement, setLastElement] = useState(null);
   const groupLimit = 12;
   const [stopRequest, setStopRequest] = useState(false);
-
+  const [containerCount, setContainerCount] = useState(0);
   const observer = useRef(
     new IntersectionObserver((entries) => {
       const first = entries[0];
@@ -58,6 +59,7 @@ export default memo(function ThinkTankList({
             ? data.data.content.content
             : data.data.content
         );
+        setNbComments(data.data.nbComments ? data.data.nbComments : 0);
         setLoadingModal(false);
       } catch (e) {
         if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
@@ -112,7 +114,6 @@ export default memo(function ThinkTankList({
         secondProperty: shuffleArray(data.data),
       };
       let newarray = [...bigArray.get()];
-
       newarray.push(newPack);
       bigArray.set(newarray);
       if (data.data.length === 0 || data.data.length < groupLimit) {
@@ -156,14 +157,14 @@ export default memo(function ThinkTankList({
       }
     };
   }, [lastElement]);
- useEffect(()=>{
-   if(showModal){
-     document.querySelector("html").classList.add("unscrollable")
-   }else{
-     document.querySelector("html").classList.remove("unscrollable")
-   }
- },[showModal])
-  const [containerCount, setContainerCount] = useState(0);
+  useEffect(() => {
+    if (showModal) {
+      document.querySelector("html").classList.add("unscrollable");
+    } else {
+      document.querySelector("html").classList.remove("unscrollable");
+    }
+  }, [showModal]);
+
   return (
     <div className="big_container">
       {bigArray.get().map((packOfTwelve, counter) => {
@@ -243,14 +244,15 @@ export default memo(function ThinkTankList({
         url={modalVar[3]}
         tags={modalVar[2]}
         text={text}
+        nbComments={nbComments}
         date={modalVar[5]}
+        // nbComments={modalVar[8]}
         loadingModal={loadingModal}
         setSelectedTags={setSelectedTags}
         setAccountContent={setAccountContent}
         setHomeContent={setHomeContent}
         setShowAuth={setShowAuth}
       ></Modal>
-
     </div>
   );
 });

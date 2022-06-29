@@ -40,14 +40,17 @@
       align-items: center;
       font-size: 1.3rem;
       font-weight: lighter;
-      border: 1px solid $complementary;
+      border: 1px solid #2f2f2f;
       border-radius: 50%;
       height: 20px;
       width: 20px;
       margin-left: 5px;
       cursor: pointer;
       padding: 2px;
-      content: "2";
+      span{
+        line-height: 13px;
+        margin-bottom: 3px;
+      }
     }
   }
 

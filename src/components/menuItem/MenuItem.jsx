@@ -128,7 +128,7 @@ export default function MenuItem({
                       isCurrent ? setMenuOpen(0) : setMenuOpen(id)
                     }
                   >
-                    {isCurrent ? "-" : "+"}
+                    {isCurrent ? <span>-</span> : <span>+</span>}
                   </div>
                 </div>
                 <ul className="menu-how">
@@ -159,7 +159,7 @@ export default function MenuItem({
                       isCurrent ? setMenuOpen(0) : setMenuOpen(id)
                     }
                   >
-                    {isCurrent ? "-" : "+"}
+                    {isCurrent ? <span>-</span> : <span>+</span>}
                   </div>
                 </div>
                 <ul className="menu-fav">
@@ -202,7 +202,7 @@ export default function MenuItem({
                       isCurrent ? setMenuOpen(0) : setMenuOpen(id)
                     }
                   >
-                    {isCurrent ? "-" : "+"}
+                    {isCurrent ? <span>-</span> : <span>+</span>}
                   </div>
                 </div>
                 <ul className="menu-addYours">

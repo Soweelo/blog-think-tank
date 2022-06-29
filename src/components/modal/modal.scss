@@ -86,34 +86,59 @@
         .iconComm {
           transition: all 0.3s ease;
           z-index: 10;
-          &.false {
-            .icon--tocome {
-              display: none;
-
-            }
+          position: relative;
+          svg{
+            z-index: 2;
           }
-          &.expand {
-            min-width: 7rem;
+          .badge--nbComments{
+            position: absolute;
+            height: 20px;
+            width: 20px;
+            top: -14px;
+            left: -6px;
             background-color: white;
-            border: 1px solid #2f2f2f;
+            font-size: 9px;
             text-align: center;
-            border-radius: 10px;
             display: flex;
-            align-items: center;
             justify-content: center;
-            padding: 1rem;
-            transform-origin: center;
-            transform: translate(-113px,14px);
-            svg {
-              display: none;
+            align-content: center;
+            border: 1px solid #c8c8c8;
+            border-radius: 50%;
+            z-index: 1;
+            span{
+              color: $secondary;
+              padding-top: 2px;
+              font-weight: 900;
             }
           }
-          .icon--tocome {
-            display: flex;
-            color: $complementary;
-            font-size: 0.9rem;
-            line-height: 1.2rem;
-          }
+          //&.false {
+          //  .icon--tocome {
+          //    display: none;
+          //
+          //  }
+          //}
+          //&.expand {
+          //  min-width: 7rem;
+          //  background-color: white;
+          //  border: 1px solid #2f2f2f;
+          //  text-align: center;
+          //  border-radius: 10px;
+          //  display: flex;
+          //  align-items: center;
+          //  justify-content: center;
+          //  padding: 1rem;
+          //  transform-origin: center;
+          //  transform: translate(-113px,14px);
+          //  svg {
+          //    display: none;
+          //  }
+          //}
+          //.icon--tocome {
+          //  display: flex;
+          //  color: $complementary;
+          //  font-size: 0.9rem;
+          //  line-height: 1.2rem;
+          //}
         }
       }
       .iconsLeft{
@@ -133,7 +158,7 @@
           cursor: pointer;
 
           svg {
-            fill: #b6b8de;;
+            fill: $retro;
             z-index: 5;
             transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
             position: absolute;
@@ -220,7 +245,6 @@
     .modal-content::-webkit-scrollbar-track {
       background: rgba(255, 255, 255, 0);
     }
-
     @include mobile {
       height: 80vh;
       grid-template-columns: 1fr;
@@ -230,6 +254,13 @@
         img {
           border-radius: 10px 10px 0 0;
         }
+      }
+    }
+    .modal-comments {
+      display: none ;
+      transition: all 1s ease-in-out;
+      &.expand{
+        display: block;
       }
     }
   }
