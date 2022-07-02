@@ -192,6 +192,7 @@ export default memo(function ThinkTankList({
                       tags={p.tags}
                       text={p.content}
                       date={format(p.updated_at)}
+                      type={p.type}
                       showModal={showModal}
                       setShowModal={setShowModal}
                       modalVar={modalVar}
@@ -209,6 +210,7 @@ export default memo(function ThinkTankList({
                       images={p.images}
                       tags={p.tags}
                       text={p.content}
+                      type={p.type}
                       date={format(p.updated_at, lang)}
                       showModal={showModal}
                       setShowModal={setShowModal}
@@ -244,6 +246,7 @@ export default memo(function ThinkTankList({
         url={modalVar[3]}
         tags={modalVar[2]}
         text={text}
+        type={modalVar[8]}
         nbComments={nbComments}
         date={modalVar[5]}
         // nbComments={modalVar[8]}

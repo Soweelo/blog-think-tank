@@ -1,12 +1,10 @@
 import "./post.scss";
 import { ArrowBack, Close } from "@material-ui/icons";
 import React, { useContext, useEffect, useRef, useState } from "react";
-
 import "autoheight-textarea";
 import UserPostList from "./UserPostList";
 import CreatePost from "./CreatePost";
 import Scroll from "../../../scroll/scroll";
-import outDateCookieSession from "../../../../functions/cookiesController/outDateCookieSession";
 import { UserContext } from "../../../../context/UserContext";
 import { logout } from "../../../../context functions/apiCalls";
 import { useFetch } from "../../../../hooks/useFetch";
@@ -58,11 +56,6 @@ export default function Post({
       const response = await fetch(PF + "/api/tags?lang=" + lang).then((r) =>
         r.json()
       );
-      // allBrands.get().map((brand) => {
-      //   response.data.push({
-      //     name: brand.name.toLowerCase().replace(/\s/g, ""),
-      //   });
-      // });
       setAllTags(response.data);
     } catch (e) {
       if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {

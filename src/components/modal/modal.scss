@@ -233,13 +233,21 @@
           margin: 0 0 0.2rem 0;
           color: $complementary;
         }
-
       }
       .modal-comments {
-        display: none ;
         transition: all 1s ease-in-out;
+        height: 0;
+        opacity: 0;
+        overflow-y: hidden;
+       .commentContainer{
+         height: 0;
+       }
         &.expand{
-          display: block;
+          height: auto;
+          opacity: 1;
+          .commentContainer{
+            min-height: 250px;
+          }
         }
       }
     }
@@ -263,7 +271,5 @@
         }
       }
     }
-
   }
-
 }

@@ -14,10 +14,11 @@ export default memo(function ThinkTankItem({
   setShowModal,
   setModalVar,
   brand,
+    type,
 }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const updateModalVar = (e) => {
-    setModalVar([images, title, tags, url, text, date, brand, id]);
+    setModalVar([images, title, tags, url, text, date, brand, id,type]);
     setShowModal(true);
     // console.log([images,title,tags,url,text,date, brand])
   };

@@ -23,13 +23,12 @@ const Background = styled.div`
 `;
 
 const ModalWrapper = styled.div`
-  width: min(800px, 90%);
+  width: min(920px,95%);
   height: min(400px, 90vh);
   box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
   background: #fff;
   color: #000;
   display: grid;
-
   grid-template-columns: 1fr 1fr;
   position: relative;
   z-index: 21;
@@ -107,7 +106,6 @@ const ModalContent = styled.div`
   }
   .modal__textWrapper {
     margin: 0 0 1rem 1rem;
-    max-height: 100%;
     padding: 0 1rem 0 0;
   }
   a {
@@ -149,7 +147,7 @@ const CloseModalButton = styled(MdClose)`
   width: 32px;
   height: 32px;
   padding: 0;
-  z-index: 10;
+  z-index: 2000;
   color: #b6b9e2;
 `;
 
@@ -169,7 +167,9 @@ export default function Modal({
   setAccountContent,
   setHomeContent,
   setShowAuth,
+    type,
 }) {
+
   const { user } = useContext(UserContext);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [reportedPost, setReportedPost] = useState(false);
@@ -226,6 +226,7 @@ export default function Modal({
     if (showModal) {
       setReportedPost(false);
       setReportMessage("");
+      setOpenCommentList(false)
     }
   }, [showModal]);
   useEffect(() => {
@@ -240,7 +241,7 @@ export default function Modal({
         };
         let url = PF + "/api/reportings/store";
         let res = await fetch(url, requestOptions).then((res) => res.json());
-        console.log(res);
+
         if (res.success) {
           setReportedPost(true);
           setReportMessage("reported");
@@ -274,15 +275,13 @@ export default function Modal({
     setShowModal(false);
   };
   const openComment = () => {
-    console.log(openCommentList);
     setOpenCommentList(!openCommentList);
-    if (!openCommentList) {
-      let scrollAnchor =
-        document.getElementById("commentsSection").offsetHeight;
-      if (scrollAnchor) {
-        scrollAnchor.scrollIntoView({ behavior: "smooth" });
+      let scrollTarget = document.querySelector(".commentListContainer");
+      if(scrollTarget){
+        setTimeout(()=>{
+          scrollTarget.scrollIntoView({ behavior: "smooth",block:"start"});
+        },[200])
       }
-    }
   };
   return (
     <>
@@ -369,26 +368,37 @@ export default function Modal({
                       <div className="iconFav">
                         <Favorite />
                       </div>
-                      <div onClick={() => openComment()} className={"iconComm"}>
-                        <Comment />
-                        {nbComments > 0 && (
-                          <div className="badge--nbComments">
-                            <span>{nbComments}</span>
+                      {type===0?
+                          <div onClick={() => openComment()} className={"iconComm"}>
+                            <Comment />
+                            {nbComments > 0 && (
+                                <div className="badge--nbComments">
+                                  <span>{nbComments}</span>
+                                </div>
+                            )}
                           </div>
-                        )}
-                      </div>
+                          :null}
+
                     </div>
                   </div>
 
                   <div className="modal__bottom-ref" ref={reportRef}></div>
-                  <div
-                    className={
-                      "modal-comments " + (openCommentList ? "expand" : null)
-                    }
-                    id="commentsSection"
+                  { type === 0 ?
+                      <div
+                      className={
+                        "modal-comments " + (openCommentList ? "expand" : null)
+                      }
+                      id="commentsSection"
                   >
-                    <CommentList />
+                    <CommentList
+                        nbComments={nbComments}
+                        setShowAuth={setShowAuth}
+                        setShowModal={setShowModal}
+                        postId={id}
+                    />
                   </div>
+                      :null}
+
                 </ModalContent>
 
                 <CloseModalButton
