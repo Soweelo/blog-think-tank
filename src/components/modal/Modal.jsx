@@ -160,6 +160,7 @@ export default function Modal({
   url,
   text,
   nbComments,
+    setNbComments,
   date,
   id,
   loadingModal,
@@ -392,6 +393,7 @@ export default function Modal({
                   >
                     <CommentList
                         nbComments={nbComments}
+                        setNbComments={setNbComments}
                         setShowAuth={setShowAuth}
                         setShowModal={setShowModal}
                         postId={id}

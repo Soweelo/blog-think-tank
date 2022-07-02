@@ -248,6 +248,7 @@ export default memo(function ThinkTankList({
         text={text}
         type={modalVar[8]}
         nbComments={nbComments}
+        setNbComments={setNbComments}
         date={modalVar[5]}
         // nbComments={modalVar[8]}
         loadingModal={loadingModal}

@@ -1,0 +1,33 @@
+@import "../../global";
+.repliesList{
+
+  .showRepliesBtn {
+    cursor: pointer;
+    font-size: 14px;
+    color:$retro;
+    &:hover {
+      font-weight: bold;
+    }
+    svg {
+      height: 17px;
+      width: 17px;
+    }
+  }
+  .repliesContainer{
+    transition: all 0.2s ease-in-out;
+    height: 0;
+    opacity: 0;
+    overflow-y: hidden;
+    &.expand{
+      height: auto;
+      opacity: 1;
+      padding: 10px  0 1rem 30px;
+      .repliesWrapper{
+        .commentWrapper{
+          background-color: transparent;
+          padding: 0 0 10px 0;
+        }
+      }
+    }
+  }
+}
