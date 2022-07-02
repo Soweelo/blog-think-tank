@@ -12,12 +12,14 @@ import RepliesList from "../repliesList/RepliesList";
 export default function CommentList({nbComments, setNbComments, setShowAuth, setShowModal, postId}) {
     const {user, dispatch} = useContext(UserContext);
     const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-    const parentId = useTrait(0)
+    // const parentId = useTrait(0)
     const [allFirstLevelComments, setAllFirstLevelComments] = useState([])
     const [loadFirstLevelComments, setLoadFirstLevelComments] = useState(true) // used to send request for all first level comments thanks to a use effect. first render it must be true, then set to false.It'll be set to true again if a new comment is added.
-    const [commentIdToDelete, setIdToDelete] = useState(-1) //commentId to delete
+    const [commentIdToDelete, setCommentIdToDelete] = useState(-1) //commentId to delete
+    const [commentIdToReply, setCommentIdToReply] = useState(-1) //commentId to reply to
     let newComment = useRef();
     let formData = new FormData();
+
     function openLoginInterface() {
         setShowModal(false)
         setShowAuth(true);
@@ -34,7 +36,7 @@ export default function CommentList({nbComments, setNbComments, setShowAuth, set
             if (data.success) {
                 loadFirstLevelComments(true)
                 setNbComments(nbComments - 1)
-                setIdToDelete(-1)
+                setCommentIdToDelete(-1)
             } else {
                 if (data.message === "This session token is not valid") {
                     logout(dispatch);
@@ -50,7 +52,7 @@ export default function CommentList({nbComments, setNbComments, setShowAuth, set
     const getComments = async () => {
         try {
             const response = await fetch(
-                PF + "/api/comments/" + postId + "/" + parentId.get() + "/find?token=" + (user ? user.session : 0)
+                PF + "/api/comments/" + postId + "/0/find?token=" + (user ? user.session : 0)
             );
             const data = await response.json();
             console.log(data)
@@ -76,9 +78,10 @@ export default function CommentList({nbComments, setNbComments, setShowAuth, set
         e.preventDefault();
         formData.append("text", newComment.current.value);
         formData.append("post", postId);
-        formData.append("parent", parentId.get());
+        formData.append("parent", 0);
         submitComment();
     };
+
     const submitComment = async() =>{
         try {
             const requestOptions = {
@@ -104,7 +107,7 @@ export default function CommentList({nbComments, setNbComments, setShowAuth, set
     useEffect(() => {
         //if loadFirstLevelComments is true call the function for getting all posts level 0
         if (loadFirstLevelComments) {
-            // parentId.set(0)
+
             getComments()
             setLoadFirstLevelComments(false)
         }
@@ -126,7 +129,8 @@ export default function CommentList({nbComments, setNbComments, setShowAuth, set
                     <Create/>
                     <span>Wanna add a comment ?</span>
                     <span className="commentLoginLink">Please Login</span>
-                </div>}
+                </div>
+            }
             {!nbComments ? <h3 className="commentNone"> Still no comment on this Post</h3> :
                 <div className="commentList">
                     {allFirstLevelComments.map((comment, i) => {
@@ -139,11 +143,11 @@ export default function CommentList({nbComments, setNbComments, setShowAuth, set
                                 <div className="text">{comment.content}</div>
                                 <div className="bottom">
                                     <div className="actions">
-                                        <span>REPLY</span>
+                                        <span onClick={()=>setCommentIdToReply(comment.id)}>REPLY</span>
                                         {comment.owner ?
-                                            <span onClick={() => setIdToDelete(comment.id)}>DELETE</span> : null}
+                                            <span onClick={() => setCommentIdToDelete(comment.id)}>DELETE</span> : null}
                                     </div>
-                                    {comment.nb_responses ?
+
 
                                         <RepliesList nbResponses={comment.nb_responses}
                                                      setNbComments={setNbComments}
@@ -151,9 +155,10 @@ export default function CommentList({nbComments, setNbComments, setShowAuth, set
                                                      setShowAuth={setShowAuth}
                                                      setShowModal={setShowModal}
                                                      commentId={comment.id}
-                                                     postId={postId}/>
-                                        : null
-                                    }
+                                                     postId={postId}
+                                                     commentIdToReply={commentIdToReply}
+                                        />
+
                                 </div>
                             </div>
                         )
