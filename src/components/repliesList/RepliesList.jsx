@@ -86,7 +86,6 @@ setIsFolded(!isFolded)
                     PF + "/api/comments/" + postId + "/" + commentId + "/find?token=" + (user ? user.session : 0)
                 );
                 const data = await response.json();
-                console.log(data)
                 if (data.success) {
                     setAllReplies(data.data);
                     setLoadReplies(false)

@@ -65,7 +65,6 @@ export default function CommentList({nbComments, setNbComments, setShowAuth, set
                     PF + "/api/comments/" + postId + "/0/find?token=" + (user ? user.session : 0)
                 );
                 const data = await response.json();
-                console.log(data)
                 if (data.success) {
                     setAllFirstLevelComments(data.data);
                 } else {

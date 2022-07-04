@@ -15,7 +15,7 @@ const UserReducer = (state, action) => {
         error: false,
       };
 
-    case "LOGIN_FAIL":
+    case "LOGIN_FAILURE":
       return {
         user: null,
         lang: state.lang,

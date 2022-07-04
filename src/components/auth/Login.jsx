@@ -1,11 +1,11 @@
 import "./auth.scss";
 import styled from "styled-components";
-import { MdClose } from "react-icons/md";
-import { useRef, useState, useContext } from "react";
-import { Mail, Lock } from "@material-ui/icons";
-import { loginCall } from "../../context functions/apiCalls";
-import { UserContext } from "../../context/UserContext";
-import { CircularProgress } from "@material-ui/core";
+import {MdClose} from "react-icons/md";
+import {useRef, useState, useContext, useEffect} from "react";
+import {Mail, Lock, Person} from "@material-ui/icons";
+import {loginCall} from "../../context functions/apiCalls";
+import {UserContext} from "../../context/UserContext";
+import {CircularProgress} from "@material-ui/core";
 import sha512 from "../../functions/sha512";
 
 const CloseAuthButton = styled(MdClose)`
@@ -66,84 +66,87 @@ const StyledInput = styled.input`
   color: white;
   height: 40px;
 `;
-export default function Login({ switchContent, setShowAuth, isDisplayed }) {
-  const email = useRef();
-  const password = useRef();
-  const [message, setMessage] = useState("");
-  const { isFetching, dispatch } = useContext(UserContext);
-  const handleLoginSubmit = async (event) => {
-    event.preventDefault();
-    let hashedPsw = await sha512(password.current.value);
-    // console.log(email.current.value, hashedPsw);
+export default function Login({switchContent, setShowAuth, isDisplayed}) {
+    const email = useRef();
+    const password = useRef();
+    const [message, setMessage] = useState("");
+    const {isFetching, dispatch, error} = useContext(UserContext);
+    const handleLoginSubmit = async (event) => {
+        event.preventDefault();
+        let hashedPsw = await sha512(password.current.value);
+        // console.log(email.current.value, hashedPsw);
 
-    await loginCall(
-      {
-        email: email.current.value,
-        password: hashedPsw,
-      },
-      dispatch
+        await loginCall(
+            {
+                email: email.current.value,
+                password: hashedPsw,
+            },
+            dispatch
+        );
+    };
+    useEffect(() => {
+        if (error) {
+            setMessage(" Please check your username/password.")
+        }
+        console.log(error)
+    }, [error])
+    return (
+        <LoginContent>
+            <form onSubmit={handleLoginSubmit}>
+                <div className="login__input-wrapper">
+                    <h1>LOGIN</h1>
+                    <div className="login__input-container">
+                        <Person/>
+
+                        <StyledInput
+                            className="input-field"
+                            type="email"
+                            placeholder="Email or username"
+                            ref={email}
+                            required
+                        />
+                    </div>
+                    <div className="login__input-container">
+                        <Lock/>
+                        <StyledInput
+                            className="input-field"
+                            type="password"
+                            placeholder="Password"
+                            ref={password}
+                            minLength="5"
+                            maxLength="25"
+                            required
+                        />
+                    </div>
+                    <button
+                        className="btn login__btn-submit"
+                        type="submit"
+                        disabled={isFetching}
+                    >
+                        {isFetching ? (
+                            <CircularProgress color="secondary" size="20px"/>
+                        ) : (
+                            "Log In"
+                        )}
+                    </button>
+                    <div className="login__message--error">{message}</div>
+                    <div className="login__forgoten-psw" disabled={isFetching}>
+                        Forgotten password? <span>Click-here</span>!
+                    </div>
+                </div>
+                <div
+                    className=" login__btn-switch"
+                    onClick={switchContent}
+                    disabled={isFetching}
+                >
+                    Still not a Member? <span>REGISTER HERE </span>!
+                </div>
+            </form>
+            <CloseAuthButton
+                aria-label="Close Login"
+                onClick={() => setShowAuth((prev) => !prev)}
+                disabled={isFetching}
+            ></CloseAuthButton>
+        </LoginContent>
     );
-  };
-  return (
-    <LoginContent>
-      <form onSubmit={handleLoginSubmit}>
-        <div className="login__input-wrapper">
-          <h1>LOGIN</h1>
-
-          <div className="login__input-container">
-            <Mail />
-            <StyledInput
-              className="input-field"
-              type="email"
-              placeholder="Enter email"
-              ref={email}
-              required
-            />
-          </div>
-
-          <div className="login__input-container">
-            <Lock />
-            <StyledInput
-              className="input-field"
-              type="password"
-              placeholder="Password"
-              ref={password}
-              minLength="5"
-              maxLength="25"
-              required
-            />
-          </div>
-
-          <button
-            className="btn login__btn-submit"
-            type="submit"
-            disabled={isFetching}
-          >
-            {isFetching ? (
-              <CircularProgress color="secondary" size="20px" />
-            ) : (
-              "Log In"
-            )}
-          </button>
-          <div className="login__message--error">{message}</div>
-          <div className="login__forgoten-psw" disabled={isFetching}>
-            Forgotten password? <span>Click-here</span>!
-          </div>
-        </div>
-
-        <div
-          className=" login__btn-switch"
-          onClick={switchContent}
-          disabled={isFetching}
-        >
-          Still not a Member? <span>REGISTER HERE </span>!
-        </div>
-      </form>
-      <CloseAuthButton
-        aria-label="Close Login"
-        onClick={() => setShowAuth((prev) => !prev)}
-        disabled={isFetching}
-      ></CloseAuthButton>
-    </LoginContent>
-  );
 }

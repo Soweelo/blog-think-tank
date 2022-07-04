@@ -15,8 +15,10 @@ export const loginCall = async (userCredential, dispatch) => {
     );
     const now = new Date();
     const expiryDate = now.getTime() + 31536000;
+
     res.data.data["expiry"] = expiryDate;
     dispatch({ type: "LOGIN_SUCCESS", payload: res.data.data });
+
   } catch (err) {
     dispatch({ type: "LOGIN_FAILURE", payload: err });
   }
