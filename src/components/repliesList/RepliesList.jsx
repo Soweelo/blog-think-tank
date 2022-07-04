@@ -6,7 +6,16 @@ import {logout} from "../../context functions/apiCalls";
 import {UserContext} from "../../context/UserContext";
 import {format} from "timeago.js";
 
-export default function RepliesList({nbResponses,setNbComments,nbComments, commentId, postId, commentIdToReply,setShowAuth,setShowModal}) {
+export default function RepliesList({
+                                        nbResponses,
+                                        setNbComments,
+                                        nbComments,
+                                        commentId,
+                                        postId,
+                                        commentIdToReply,
+                                        setShowAuth,
+                                        setShowModal
+                                    }) {
     const {user, dispatch} = useContext(UserContext);
     const PF = process.env.REACT_APP_PUBLIC_FOLDER;
     const [isFolded, setIsFolded] = useState(true)
@@ -22,9 +31,10 @@ export default function RepliesList({nbResponses,setNbComments,nbComments, comme
         setShowAuth(true);
     }
 
-    const showReplies = () =>{
-        setIsFolded(!isFolded)
-        if(allReplies.length == 0){
+    const showReplies = () => {
+setIsFolded(!isFolded)
+
+        if (allReplies.length == 0) {
             setLoadReplies(true)
         }
     }
@@ -89,7 +99,7 @@ export default function RepliesList({nbResponses,setNbComments,nbComments, comme
         submitComment();
     };
 
-    const submitComment = async() =>{
+    const submitComment = async () => {
         try {
             const requestOptions = {
                 method: "POST",
@@ -102,7 +112,7 @@ export default function RepliesList({nbResponses,setNbComments,nbComments, comme
                 setLoadReplies(true)
                 setNbComments(nbComments + 1);
                 setUpdatedNbResponses(updatedNbResponses + 1)
-                newComment.current.value="";
+                newComment.current.value = "";
             } else {
                 if (res.message === "This session token is not valid") {
                     logout(dispatch);
@@ -113,47 +123,53 @@ export default function RepliesList({nbResponses,setNbComments,nbComments, comme
         }
     };
 
-    useEffect(()=>{
-        if(loadReplies){
+    useEffect(() => {
+        if (loadReplies) {
             getReplies()
         }
-    },[loadReplies])
+    }, [loadReplies])
     useEffect(() => {
         console.log(commentIdToDelete)
         if (commentIdToDelete > 0) {
             deleteComment()
         }
     }, [commentIdToDelete])
-    useEffect(()=>{
-        if(commentIdToReply == commentId){
+    useEffect(() => {
+        if (commentIdToReply == commentId) {
             showReplies()
+            setIsFolded(false)
         }
-    },[commentIdToReply])
+    }, [commentIdToReply])
     return (
         <div className="repliesList">
             {user ?
-                <div className={"commentAddYoursWrapper " + (commentIdToReply==commentId ? "expand" : "")
+                <div className={"commentAddYoursWrapper " + (commentIdToReply == commentId ? "expand" : "")
                 }>
                     <div className="commentPseudo">{user.pseudo}</div>
-                    <input type="text" placeholder="Add your comment here ..."  ref={newComment} onKeyDown={(e) => handleContentChange(e)}/></div>
-                :
-                <div className="commentLogin" onClick={() => openLoginInterface()}>
-                    <Create/>
-                    <span>Wanna add a comment ?</span>
-                    <span className="commentLoginLink">Please Login</span>
-                </div>
+                    <input type="text" placeholder="Add your comment here ..." ref={newComment}
+                           onKeyDown={(e) => handleContentChange(e)}/></div>
+                :(commentIdToReply == commentId?
+                    <div className="commentLogin" onClick={() => openLoginInterface()}>
+                        <Create/>
+                        <span>Wanna add a comment ?</span>
+                        <span className="commentLoginLink">Please Login</span>
+                    </div>:null
+                )
+
             }
             <div className="showRepliesBtn" onClick={() => showReplies()}>
                 {!isFolded ?
-                    <div>
-                        Hide {updatedNbResponses} {updatedNbResponses == 1 ? "reply" : "replies"}
-                        <ArrowDropUp/>
-                    </div>
-                    :
-                    <div>
-                        Show {updatedNbResponses} {updatedNbResponses == 1 ? "reply" : "replies"}
-                        <ArrowDropDown/>
-                    </div>
+                    (updatedNbResponses != 0 ?
+                        <div>
+                            Hide {updatedNbResponses} {updatedNbResponses == 1 ? "reply" : "replies"}
+                            <ArrowDropUp/>
+                        </div>
+                        : null)
+                    : (updatedNbResponses != 0 ?
+                        <div>
+                            Show {updatedNbResponses} {updatedNbResponses == 1 ? "reply" : "replies"}
+                            <ArrowDropDown/>
+                        </div> : null)
                 }
             </div>
             <div className={"repliesContainer " + (!isFolded ? "expand" : "")

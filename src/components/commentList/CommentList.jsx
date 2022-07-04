@@ -82,7 +82,7 @@ export default function CommentList({nbComments, setNbComments, setShowAuth, set
         submitComment();
     };
 
-    const submitComment = async() =>{
+    const submitComment = async () => {
         try {
             const requestOptions = {
                 method: "POST",
@@ -94,7 +94,7 @@ export default function CommentList({nbComments, setNbComments, setShowAuth, set
             if (res.success) {
                 setLoadFirstLevelComments(true)
                 setNbComments(nbComments + 1);
-                newComment.current.value="";
+                newComment.current.value = "";
             } else {
                 if (res.message === "This session token is not valid") {
                     logout(dispatch);
@@ -123,7 +123,8 @@ export default function CommentList({nbComments, setNbComments, setShowAuth, set
             {user ?
                 <div className="commentAddYoursWrapper">
                     <div className="commentPseudo">{user.pseudo}</div>
-                    <input type="text" placeholder="Add your comment here ..."  ref={newComment} onKeyDown={(e) => handleContentChange(e)}/></div>
+                    <input type="text" placeholder="Add your comment here ..." ref={newComment}
+                           onKeyDown={(e) => handleContentChange(e)}/></div>
                 :
                 <div className="commentLogin" onClick={() => openLoginInterface()}>
                     <Create/>
@@ -143,21 +144,22 @@ export default function CommentList({nbComments, setNbComments, setShowAuth, set
                                 <div className="text">{comment.content}</div>
                                 <div className="bottom">
                                     <div className="actions">
-                                        <span onClick={()=>setCommentIdToReply(comment.id)}>REPLY</span>
+                                        <span
+                                            onClick={() => commentIdToReply == comment.id ? setCommentIdToReply(-1) : setCommentIdToReply(comment.id)}>REPLY</span>
                                         {comment.owner ?
                                             <span onClick={() => setCommentIdToDelete(comment.id)}>DELETE</span> : null}
                                     </div>
 
 
-                                        <RepliesList nbResponses={comment.nb_responses}
-                                                     setNbComments={setNbComments}
-                                                     nbComments={nbComments}
-                                                     setShowAuth={setShowAuth}
-                                                     setShowModal={setShowModal}
-                                                     commentId={comment.id}
-                                                     postId={postId}
-                                                     commentIdToReply={commentIdToReply}
-                                        />
+                                    <RepliesList nbResponses={comment.nb_responses}
+                                                 setNbComments={setNbComments}
+                                                 nbComments={nbComments}
+                                                 setShowAuth={setShowAuth}
+                                                 setShowModal={setShowModal}
+                                                 commentId={comment.id}
+                                                 postId={postId}
+                                                 commentIdToReply={commentIdToReply}
+                                    />
 
                                 </div>
                             </div>

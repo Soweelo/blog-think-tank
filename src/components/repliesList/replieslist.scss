@@ -31,8 +31,9 @@
     &.expand{
       height: auto;
       opacity: 1;
-      padding: 10px  0 1rem 30px;
+      //padding: 10px  0 1rem 30px;
       .repliesWrapper{
+        padding: 10px  0 1rem 30px;
         .commentWrapper{
           background-color: transparent;
           padding: 0 0 10px 0;
