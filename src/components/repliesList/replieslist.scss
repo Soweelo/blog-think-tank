@@ -38,7 +38,25 @@
           background-color: transparent;
           padding: 0 0 10px 0;
         }
+        .lds-ring{
+          transform: none;
+          right: unset;
+          top: unset;
+          position: relative;
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          div{
+            height: 25px;
+            width: 25px;
+            border-width: 4px ;
+            border-color: #929191 transparent transparent transparent;
+          }
+        }
       }
+
     }
+
   }
 }

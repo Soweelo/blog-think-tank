@@ -1,11 +1,9 @@
 import "./commentlist.scss";
 import {useContext, useEffect, useRef, useState} from "react";
 import {UserContext} from "../../context/UserContext";
-import {ArrowDropDown, ArrowDropUp, Create} from "@material-ui/icons";
+import {Create} from "@material-ui/icons";
 import {format} from "timeago.js";
 import {logout} from "../../context functions/apiCalls";
-import useTrait from "../../hooks/useTrait";
-import arrayRemove from "../../functions/arrayRemove";
 import RepliesList from "../repliesList/RepliesList";
 
 
@@ -25,50 +23,7 @@ export default function CommentList({nbComments, setNbComments, setShowAuth, set
         setShowAuth(true);
     }
 
-    const deleteComment = async () => {
-        try {
-            //request delete
-            const response = await fetch(
-                PF + "/api/comments/" + commentIdToDelete + "?token=" + user.session,
-                {method: "DELETE"}
-            );
-            const data = await response.json();
-            if (data.success) {
-                loadFirstLevelComments(true)
-                setNbComments(nbComments - 1)
-                setCommentIdToDelete(-1)
-            } else {
-                if (data.message === "This session token is not valid") {
-                    logout(dispatch);
-                }
-            }
 
-        } catch (e) {
-            if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
-                console.error(e);
-            }
-        }
-    }
-    const getComments = async () => {
-        try {
-            const response = await fetch(
-                PF + "/api/comments/" + postId + "/0/find?token=" + (user ? user.session : 0)
-            );
-            const data = await response.json();
-            console.log(data)
-            if (data.success) {
-                setAllFirstLevelComments(data.data);
-            } else {
-                if (data.message === "This session token is not valid") {
-                    logout(dispatch);
-                }
-            }
-        } catch (e) {
-            if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
-                console.error(e);
-            }
-        }
-    }
     const handleContentChange = (e) => {
         if (e.key === "Enter" && e.target.value.length > 0) {
             submitHandler(e)
@@ -90,7 +45,6 @@ export default function CommentList({nbComments, setNbComments, setShowAuth, set
             };
             let url = PF + "/api/comments?token=" + user.session;
             let res = await fetch(url, requestOptions).then((res) => res.json());
-
             if (res.success) {
                 setLoadFirstLevelComments(true)
                 setNbComments(nbComments + 1);
@@ -105,6 +59,26 @@ export default function CommentList({nbComments, setNbComments, setShowAuth, set
         }
     };
     useEffect(() => {
+        const getComments = async () => {
+            try {
+                const response = await fetch(
+                    PF + "/api/comments/" + postId + "/0/find?token=" + (user ? user.session : 0)
+                );
+                const data = await response.json();
+                console.log(data)
+                if (data.success) {
+                    setAllFirstLevelComments(data.data);
+                } else {
+                    if (data.message === "This session token is not valid") {
+                        logout(dispatch);
+                    }
+                }
+            } catch (e) {
+                if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
+                    console.error(e);
+                }
+            }
+        }
         //if loadFirstLevelComments is true call the function for getting all posts level 0
         if (loadFirstLevelComments) {
 
@@ -113,7 +87,30 @@ export default function CommentList({nbComments, setNbComments, setShowAuth, set
         }
     }, [loadFirstLevelComments])
     useEffect(() => {
-        console.log(commentIdToDelete)
+        const deleteComment = async () => {
+            try {
+                //request delete
+                const response = await fetch(
+                    PF + "/api/comments/" + commentIdToDelete + "?token=" + user.session,
+                    {method: "DELETE"}
+                );
+                const data = await response.json();
+                if (data.success) {
+                    setLoadFirstLevelComments(true)
+                    setNbComments(nbComments - 1)
+                    setCommentIdToDelete(-1)
+                } else {
+                    if (data.message === "This session token is not valid") {
+                        logout(dispatch);
+                    }
+                }
+
+            } catch (e) {
+                if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
+                    console.error(e);
+                }
+            }
+        }
         if (commentIdToDelete > 0) {
             deleteComment()
         }
@@ -145,7 +142,7 @@ export default function CommentList({nbComments, setNbComments, setShowAuth, set
                                 <div className="bottom">
                                     <div className="actions">
                                         <span
-                                            onClick={() => commentIdToReply == comment.id ? setCommentIdToReply(-1) : setCommentIdToReply(comment.id)}>REPLY</span>
+                                            onClick={() => commentIdToReply === comment.id ? setCommentIdToReply(-1) : setCommentIdToReply(comment.id)}>REPLY</span>
                                         {comment.owner ?
                                             <span onClick={() => setCommentIdToDelete(comment.id)}>DELETE</span> : null}
                                     </div>

@@ -1,6 +1,5 @@
 import "./replieslist.scss"
 import {ArrowDropDown, ArrowDropUp, Create} from "@material-ui/icons";
-import arrayRemove from "../../functions/arrayRemove";
 import {useContext, useEffect, useRef, useState} from "react";
 import {logout} from "../../context functions/apiCalls";
 import {UserContext} from "../../context/UserContext";
@@ -21,6 +20,7 @@ export default function RepliesList({
     const [isFolded, setIsFolded] = useState(true)
     const [allReplies, setAllReplies] = useState([])
     const [loadReplies, setLoadReplies] = useState(false);
+    const [isLoading, setIsLoading] = useState(false)
     const [commentIdToDelete, setIdToDelete] = useState(-1) //commentId to delete
     const [updatedNbResponses, setUpdatedNbResponses] = useState(nbResponses); //by default the number of responses is got from api. when a response is created or deleted though, we update this number without rerendering
     let newComment = useRef();
@@ -34,57 +34,12 @@ export default function RepliesList({
     const showReplies = () => {
 setIsFolded(!isFolded)
 
-        if (allReplies.length == 0) {
+        if (allReplies.length === 0) {
             setLoadReplies(true)
         }
     }
-    const getReplies = async () => {
-        try {
-            const response = await fetch(
-                PF + "/api/comments/" + postId + "/" + commentId + "/find?token=" + (user ? user.session : 0)
-            );
-            const data = await response.json();
-            console.log(data)
-            if (data.success) {
-                setAllReplies(data.data);
-                setLoadReplies(false)
-            } else {
-                if (data.message === "This session token is not valid") {
-                    logout(dispatch);
-                }
-            }
-        } catch (e) {
-            if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
-                console.error(e);
-            }
-        }
 
-    }
-    const deleteComment = async () => {
-        try {
-            //request delete
-            const response = await fetch(
-                PF + "/api/comments/" + commentIdToDelete + "?token=" + user.session,
-                {method: "DELETE"}
-            );
-            const data = await response.json();
-            if (data.success) {
 
-            } else {
-                if (data.message === "This session token is not valid") {
-                    logout(dispatch);
-                }
-            }
-
-        } catch (e) {
-            if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
-                console.error(e);
-            }
-        }
-        setLoadReplies(true)
-        setNbComments(nbComments - 1)
-        setUpdatedNbResponses(updatedNbResponses - 1)
-    }
 
     const handleContentChange = (e) => {
         if (e.key === "Enter" && e.target.value.length > 0) {
@@ -124,31 +79,79 @@ setIsFolded(!isFolded)
     };
 
     useEffect(() => {
+        const getReplies = async () => {
+            setIsLoading(true)
+            try {
+                const response = await fetch(
+                    PF + "/api/comments/" + postId + "/" + commentId + "/find?token=" + (user ? user.session : 0)
+                );
+                const data = await response.json();
+                console.log(data)
+                if (data.success) {
+                    setAllReplies(data.data);
+                    setLoadReplies(false)
+                    setIsLoading(false)
+                } else {
+                    if (data.message === "This session token is not valid") {
+                        logout(dispatch);
+                    }
+                    setIsLoading(false)
+                }
+            } catch (e) {
+                if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
+                    console.error(e);
+                }
+            }
+
+
+        }
         if (loadReplies) {
             getReplies()
         }
     }, [loadReplies])
     useEffect(() => {
-        console.log(commentIdToDelete)
+        const deleteComment = async () => {
+            try {
+                //request delete
+                const response = await fetch(
+                    PF + "/api/comments/" + commentIdToDelete + "?token=" + user.session,
+                    {method: "DELETE"}
+                );
+                const data = await response.json();
+                if (data.success) {
+                } else {
+                    if (data.message === "This session token is not valid") {
+                        logout(dispatch);
+                    }
+                }
+            } catch (e) {
+                if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
+                    console.error(e);
+                }
+            }
+            setLoadReplies(true)
+            setNbComments(nbComments - 1)
+            setUpdatedNbResponses(updatedNbResponses - 1)
+        }
         if (commentIdToDelete > 0) {
             deleteComment()
         }
     }, [commentIdToDelete])
     useEffect(() => {
-        if (commentIdToReply == commentId) {
+        if (commentIdToReply === commentId) {
             showReplies()
             setIsFolded(false)
         }
-    }, [commentIdToReply])
+    }, [commentIdToReply,commentId])
     return (
         <div className="repliesList">
             {user ?
-                <div className={"commentAddYoursWrapper " + (commentIdToReply == commentId ? "expand" : "")
+                <div className={"commentAddYoursWrapper " + (commentIdToReply === commentId ? "expand" : "")
                 }>
                     <div className="commentPseudo">{user.pseudo}</div>
                     <input type="text" placeholder="Add your comment here ..." ref={newComment}
                            onKeyDown={(e) => handleContentChange(e)}/></div>
-                :(commentIdToReply == commentId?
+                :(commentIdToReply === commentId?
                     <div className="commentLogin" onClick={() => openLoginInterface()}>
                         <Create/>
                         <span>Wanna add a comment ?</span>
@@ -159,15 +162,15 @@ setIsFolded(!isFolded)
             }
             <div className="showRepliesBtn" onClick={() => showReplies()}>
                 {!isFolded ?
-                    (updatedNbResponses != 0 ?
+                    (updatedNbResponses !== 0 ?
                         <div>
-                            Hide {updatedNbResponses} {updatedNbResponses == 1 ? "reply" : "replies"}
+                            Hide {updatedNbResponses} {updatedNbResponses === 1 ? "reply" : "replies"}
                             <ArrowDropUp/>
                         </div>
                         : null)
-                    : (updatedNbResponses != 0 ?
+                    : (updatedNbResponses !== 0 ?
                         <div>
-                            Show {updatedNbResponses} {updatedNbResponses == 1 ? "reply" : "replies"}
+                            Show {updatedNbResponses} {updatedNbResponses === 1 ? "reply" : "replies"}
                             <ArrowDropDown/>
                         </div> : null)
                 }
@@ -176,6 +179,9 @@ setIsFolded(!isFolded)
             }>
 
                 <div className="repliesWrapper">
+
+
+                    {!isLoading ? <>
                     {allReplies.map((comment, i) => {
                         return (
                             <div key={i} className="commentWrapper">
@@ -194,8 +200,17 @@ setIsFolded(!isFolded)
                                 </div>
                             </div>
                         )
-                    })}
+                    })} </>
+                        : (
+                            <div className="lds-ring">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                            </div>
+                        )}
                 </div>
+
             </div>
         </div>
 
