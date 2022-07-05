@@ -29,3 +29,7 @@ export const loginRegister = (userInfo, dispatch) => {
 export const logout = (dispatch) => {
   dispatch({ type: "LOGOUT_SUCCESS" });
 };
+export const updateFavorites =(userInfo, dispatch)=>{
+  localStorage.setItem("user", JSON.stringify(userInfo));
+  dispatch({type:"FAVORITES_UPDATE" , payload: userInfo})
+}

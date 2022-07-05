@@ -51,6 +51,9 @@ export default function AccountContent({
   useEffect(() => {
     getAllBrands();
   }, []);
+  // const currentURL = window.location.href
+  // let tokenToSave = currentURL.substring(currentURL.indexOf('token=') + 1);
+  // console.log(tokenToSave);
 
   return (
     <div className="account-content__wrapper">

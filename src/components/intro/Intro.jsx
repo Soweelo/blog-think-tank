@@ -37,7 +37,6 @@ export default memo(function Intro({
     //         strings: ["WORLD 1.0", "WORLD 2.0", "WORLD 3.0"],
     //     });
     // }, []);
-
     useEffect(() => {
         const getTags = async () => {
             try {
@@ -53,10 +52,11 @@ export default memo(function Intro({
         };
         getTags();
     }, [lang]);
-
     useEffect(() => {
         setOption_welcome(getOptionByKey("01_welcome", allOptions));
     }, [allOptions]);
+
+
     return (
         <div ref={scrollRef} className="intro" id="intro">
             <div className="intro__welcome" id="topIntro">

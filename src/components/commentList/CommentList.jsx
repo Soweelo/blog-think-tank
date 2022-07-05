@@ -5,6 +5,7 @@ import {Create} from "@material-ui/icons";
 import {format} from "timeago.js";
 import {logout} from "../../context functions/apiCalls";
 import RepliesList from "../repliesList/RepliesList";
+import {useFetch} from "../../hooks/useFetch";
 
 
 export default function CommentList({nbComments, setNbComments, setShowAuth, setShowModal, postId}) {
@@ -17,7 +18,7 @@ export default function CommentList({nbComments, setNbComments, setShowAuth, set
     const [commentIdToReply, setCommentIdToReply] = useState(-1) //commentId to reply to
     let newComment = useRef();
     let formData = new FormData();
-
+    const fetch = useFetch();
     function openLoginInterface() {
         setShowModal(false)
         setShowAuth(true);
@@ -80,7 +81,6 @@ export default function CommentList({nbComments, setNbComments, setShowAuth, set
         }
         //if loadFirstLevelComments is true call the function for getting all posts level 0
         if (loadFirstLevelComments) {
-
             getComments()
             setLoadFirstLevelComments(false)
         }

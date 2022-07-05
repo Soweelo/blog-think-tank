@@ -15,7 +15,8 @@ export const LogoutSuccess = () => ({
   type: "LOGOUT_SUCCESS",
   payload: null,
 });
-export const LangSuccess = (lang) => ({
-  type: "LANG_SUCCESS",
-  payload: lang,
-});
+
+export const updateFavorites = (user) =>({
+  type:"FAVORITES_UPDATE",
+  payload:user,
+})

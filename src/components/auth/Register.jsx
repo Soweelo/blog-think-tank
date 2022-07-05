@@ -106,6 +106,7 @@ export default function Register({ setShowAuth, switchContent, isDisplayed }) {
       }
     }
   };
+
   return (
     <LoginContent>
       <form onSubmit={handleRegisterSubmit}>

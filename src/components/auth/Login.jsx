@@ -74,8 +74,6 @@ export default function Login({switchContent, setShowAuth, isDisplayed}) {
     const handleLoginSubmit = async (event) => {
         event.preventDefault();
         let hashedPsw = await sha512(password.current.value);
-        // console.log(email.current.value, hashedPsw);
-
         await loginCall(
             {
                 email: email.current.value,
@@ -88,8 +86,10 @@ export default function Login({switchContent, setShowAuth, isDisplayed}) {
         if (error) {
             setMessage(" Please check your username/password.")
         }
-        console.log(error)
     }, [error])
+    useEffect(()=>{
+      setMessage("")  ;
+    },[])
     return (
         <LoginContent>
             <form onSubmit={handleLoginSubmit}>
@@ -97,10 +97,9 @@ export default function Login({switchContent, setShowAuth, isDisplayed}) {
                     <h1>LOGIN</h1>
                     <div className="login__input-container">
                         <Person/>
-
                         <StyledInput
                             className="input-field"
-                            type="email"
+                            type="text"
                             placeholder="Email or username"
                             ref={email}
                             required

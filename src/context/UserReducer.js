@@ -22,7 +22,13 @@ const UserReducer = (state, action) => {
         isFetching: false,
         error: true,
       };
-
+    case "FAVORITES_UPDATE":
+      return {
+        user: action.payload,
+        lang: state.lang,
+        isFetching: false,
+        error: false,
+      };
     case "LOGOUT_SUCCESS":
       return {
         user: null,

@@ -156,6 +156,19 @@
       }
     }
     &.menu-fav {
+      .menu__login-required{
+        color:$retro;
+        cursor: pointer;
+
+        .link{
+          text-decoration: underline;
+        }
+        &:hover{
+          .link{
+            font-weight: bold;
+          }
+        }
+      }
       .tag-container {
         display: flex;
         flex-wrap: wrap;
