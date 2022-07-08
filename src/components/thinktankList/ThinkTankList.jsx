@@ -15,7 +15,7 @@ export default memo(function ThinkTankList({
   setShowAuth,
 }) {
   const fetch = useFetch();
-  const { lang } = useContext(UserContext);
+  const { user, lang } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
   const [loadingModal, setLoadingModal] = useState(false);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
@@ -100,6 +100,7 @@ export default memo(function ThinkTankList({
         offset: offset.get(),
         tags: tagsToDisplay.get(),
         lang: lang,
+     token: (user && user.session ? user.session: "") ,
       }),
     };
     try {

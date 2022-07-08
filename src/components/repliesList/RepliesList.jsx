@@ -188,7 +188,7 @@ setIsFolded(!isFolded)
                                     <div className="pseudo">{comment.member}</div>
                                     <div className="date">{format(comment.updated_at)}</div>
                                 </div>
-                                <div className="text">{comment.content}</div>
+                                <div className="text" dangerouslySetInnerHTML={{__html: comment.content}}></div>
                                 <div className="bottom">
                                     {comment.owner ?
                                         <div className="actions">
