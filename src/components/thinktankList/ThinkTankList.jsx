@@ -13,6 +13,7 @@ export default memo(function ThinkTankList({
   setSelectedTags,
   setHomeContent,
   setShowAuth,
+    showAuth,
 }) {
   const fetch = useFetch();
   const { user, lang } = useContext(UserContext);
@@ -129,22 +130,25 @@ export default memo(function ThinkTankList({
   };
 
   useEffect(() => {
-    selectedTags.length !== 0
-      ? tagsToDisplay.set(selectedTags)
-      : tagsToDisplay.set([]);
-    bigArray.set([]);
-    offset.set(0);
-    setContainerCount(0);
-    setStopRequest(false);
-    callThinktank();
-  }, [selectedTags, allTags]);
+    if(!showAuth){
+      selectedTags.length !== 0
+          ? tagsToDisplay.set(selectedTags)
+          : tagsToDisplay.set([]);
+      bigArray.set([]);
+      offset.set(0);
+      setContainerCount(0);
+      setStopRequest(false);
+      callThinktank();
+    }
+  }, [selectedTags, allTags, setShowAuth]);
 
   useEffect(() => {
-    if (!stopRequest && !loading) {
+    if (!stopRequest && !loading && !showAuth) {
       callThinktank();
       setContainerCount(containerCount + 1);
     }
   }, [offset.get()]);
+  console.log(showAuth)
   useEffect(() => {
     const currentElement = lastElement;
     // console.log(lastElement);

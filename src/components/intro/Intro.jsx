@@ -17,6 +17,7 @@ export default memo(function Intro({
                                        setShowAuth,
                                        setRegisterContent,
                                        setAccountContent,
+                                       showAuth,
                                    }) {
     const PF = process.env.REACT_APP_PUBLIC_FOLDER;
     const {lang} = useContext(UserContext);
@@ -50,8 +51,10 @@ export default memo(function Intro({
                 }
             }
         };
-        getTags();
-    }, [lang]);
+        if(!showAuth){
+            getTags();
+        }
+    }, [lang, showAuth]);
     useEffect(() => {
         setOption_welcome(getOptionByKey("01_welcome", allOptions));
     }, [allOptions]);
@@ -61,7 +64,7 @@ export default memo(function Intro({
         <div ref={scrollRef} className="intro" id="intro">
             <div className="intro__welcome" id="topIntro">
                 {/*<div className="intro__welcome-h2-wrapper">*/}
-                    {/*<h2 dangerouslySetInnerHTML={{__html: option_welcome}}></h2>*/}
+                {/*<h2 dangerouslySetInnerHTML={{__html: option_welcome}}></h2>*/}
                 {/*</div>*/}
                 {/*<h1>*/}
                 {/*    YOUR <span ref={textRef}></span>*/}
@@ -87,11 +90,12 @@ export default memo(function Intro({
                 setAccountContent={setAccountContent}
                 setHomeContent={setHomeContent}
                 setShowAuth={setShowAuth}
+                showAuth={showAuth}
             />
             <Scroll showBelow={400}/>
             <div className="intro__writePostBtnWrapper">
-                <WritePostBtn  setAccountContent={setAccountContent}
-                               setHomeContent={setHomeContent} setShowAuth={setShowAuth} modal={false}/>
+                <WritePostBtn setAccountContent={setAccountContent}
+                              setHomeContent={setHomeContent} setShowAuth={setShowAuth} modal={false}/>
             </div>
 
         </div>

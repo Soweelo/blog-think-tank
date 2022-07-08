@@ -19,13 +19,13 @@ export const UserContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(UserReducer, INITIAL_STATE);
   useEffect(() => {
     localStorage.setItem("user", JSON.stringify(state.user));
-    console.log("changes from state context")
+    // console.log("changes from state context")
     //
     // console.log("**state user:", state.user);
-    console.log(
-      '**localStorage.getItem("user"):',
-      localStorage.getItem("user")
-    );
+    // console.log(
+    //   '**localStorage.getItem("user"):',
+    //   localStorage.getItem("user")
+    // );
     // console.log(
     //   'JSON.parse(localStorage.getItem("user"))',
     //   JSON.parse(localStorage.getItem("user"))
@@ -39,7 +39,7 @@ export const UserContextProvider = ({ children }) => {
   }, [state.user]);
   useEffect(() => {
     localStorage.setItem("lang", JSON.stringify(state.lang));
-    console.log("lang", state.lang);
+    // console.log("lang", state.lang);
   }, [state.lang]);
 
   return (

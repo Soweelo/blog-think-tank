@@ -7,6 +7,7 @@ import {loginCall} from "../../context functions/apiCalls";
 import {UserContext} from "../../context/UserContext";
 import {CircularProgress} from "@material-ui/core";
 import sha512 from "../../functions/sha512";
+import Recover from "./Recover";
 
 const CloseAuthButton = styled(MdClose)`
   cursor: pointer;
@@ -32,6 +33,7 @@ const LoginContent = styled.div`
    scrollbar-width: thin;
   scrollbar-color: #fff0 #fff0;
   max-width: 91vw;
+  position:relative
     h1{
   line-height: 2rem;
   }
@@ -66,7 +68,7 @@ const StyledInput = styled.input`
   color: white;
   height: 40px;
 `;
-export default function Login({switchContent, setShowAuth, isDisplayed}) {
+export default function Login({switchContent, setShowAuth, setRecoveryContent,recoveryContent}) {
     const email = useRef();
     const password = useRef();
     const [message, setMessage] = useState("");
@@ -90,6 +92,7 @@ export default function Login({switchContent, setShowAuth, isDisplayed}) {
     useEffect(()=>{
       setMessage("")  ;
     },[])
+
     return (
         <LoginContent>
             <form onSubmit={handleLoginSubmit}>
@@ -129,7 +132,7 @@ export default function Login({switchContent, setShowAuth, isDisplayed}) {
                         )}
                     </button>
                     <div className="login__message--error">{message}</div>
-                    <div className="login__forgoten-psw" disabled={isFetching}>
+                    <div className="login__forgoten-psw" disabled={isFetching} onClick={()=>setRecoveryContent(true)}>
                         Forgotten password? <span>Click-here</span>!
                     </div>
                 </div>
@@ -146,6 +149,10 @@ export default function Login({switchContent, setShowAuth, isDisplayed}) {
                 onClick={() => setShowAuth((prev) => !prev)}
                 disabled={isFetching}
             ></CloseAuthButton>
+            {
+                recoveryContent &&
+                <Recover setRecoveryContent={setRecoveryContent} recoveryContent={recoveryContent}/>
+            }
         </LoginContent>
     );
 }

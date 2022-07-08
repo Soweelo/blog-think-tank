@@ -36,6 +36,7 @@ export default function Auth({
 }) {
   const LoginRef = useRef();
   const { user } = useContext(UserContext);
+  const [recoveryContent, setRecoveryContent] = useState(false)
   const animation = useSpring({
     config: {
       duration: 150,
@@ -75,6 +76,7 @@ export default function Auth({
       setHomeContent("5");
     }
   }, [user]);
+  console.log(recoveryContent)
   return (
     <>
       {showAuth ? (
@@ -86,11 +88,13 @@ export default function Auth({
           >
             <LoginWrapper showAuth={showAuth} className="login-wrapper">
               {!registerContent && (
-                <Login
-                  switchContent={switchContent}
-                  setShowAuth={setShowAuth}
-                  isDisplayed={!registerContent}
-                />
+                    <Login
+                      switchContent={switchContent}
+                      setShowAuth={setShowAuth}
+                      isDisplayed={!registerContent}
+                      setRecoveryContent={setRecoveryContent}
+                      recoveryContent={recoveryContent}
+                    />
               )}
               {registerContent && (
                 <Register

@@ -140,6 +140,7 @@ function App() {
                     allOptions={allOptions}
                     setHomeContent={setHomeContent}
                     setShowAuth={setShowAuth}
+                    showAuth={showAuth}
                     setRegisterContent={setRegisterContent}
                     setAccountContent={setAccountContent}
                   />
