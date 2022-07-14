@@ -76,7 +76,6 @@ export default function Auth({
       setHomeContent("5");
     }
   }, [user]);
-  console.log(recoveryContent)
   return (
     <>
       {showAuth ? (

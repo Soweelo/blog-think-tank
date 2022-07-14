@@ -101,8 +101,6 @@ setIsFolded(!isFolded)
                     console.error(e);
                 }
             }
-
-
         }
         if (loadReplies) {
             getReplies()

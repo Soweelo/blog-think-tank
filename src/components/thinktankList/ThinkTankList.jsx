@@ -148,7 +148,6 @@ export default memo(function ThinkTankList({
       setContainerCount(containerCount + 1);
     }
   }, [offset.get()]);
-  console.log(showAuth)
   useEffect(() => {
     const currentElement = lastElement;
     // console.log(lastElement);

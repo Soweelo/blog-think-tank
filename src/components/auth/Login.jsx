@@ -2,7 +2,7 @@ import "./auth.scss";
 import styled from "styled-components";
 import {MdClose} from "react-icons/md";
 import {useRef, useState, useContext, useEffect} from "react";
-import {Mail, Lock, Person} from "@material-ui/icons";
+import {Lock, Person} from "@material-ui/icons";
 import {loginCall} from "../../context functions/apiCalls";
 import {UserContext} from "../../context/UserContext";
 import {CircularProgress} from "@material-ui/core";

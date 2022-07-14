@@ -29,6 +29,14 @@ const UserReducer = (state, action) => {
         isFetching: false,
         error: false,
       };
+    case "UPDATE_USER":
+      return {
+        user: action.payload,
+        lang: state.lang,
+        isFetching: false,
+        error: false,
+      };
+
     case "LOGOUT_SUCCESS":
       return {
         user: null,

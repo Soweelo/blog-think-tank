@@ -20,3 +20,15 @@ export const updateFavorites = (user) =>({
   type:"FAVORITES_UPDATE",
   payload:user,
 })
+export const updatePassword = (userCredentials) =>({
+    type: "UPDATE_PASSWORD_START",
+  });
+
+  export const updatePasswordSuccess = (user) => ({
+    type: "LOGIN_SUCCESS",
+    payload: user,
+  });
+  export const updAtePasswordFailure = (error) => ({
+    type: "UPDATE_PASSWORD_FAILURE",
+    payload: error,
+  });

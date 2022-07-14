@@ -89,7 +89,9 @@
       .recover__message--error {
         font-size: 0.9rem;
         color: $delete;
-
+         &.success{
+           color: $validate;
+         }
       }
     }
   }

@@ -24,10 +24,7 @@ html.unscrollable{
   position: absolute;
   top: 40%;
 }
-//.small{
-//  width: 50px !important;
-//  height: 50px !important;
-//background-color: blue}
+
 @mixin mobile{
   @media (max-width: #{$mobilebreak}) {
     @content

@@ -7,6 +7,7 @@ import {loginCall} from "../../context functions/apiCalls";
 import {UserContext} from "../../context/UserContext";
 import {CircularProgress} from "@material-ui/core";
 import sha512 from "../../functions/sha512";
+import {useFetch} from "../../hooks/useFetch";
 
 const CloseAuthButton = styled(MdClose)`
   cursor: pointer;
@@ -85,22 +86,47 @@ const StyledInput = styled.input`
 `;
 export default function Recover({setRecoveryContent,recoveryContent}) {
     const email = useRef();
-
+    const [isLoading, setIsLoading]= useState(false)
     const [message, setMessage] = useState("");
-    const {isFetching, dispatch, error} = useContext(UserContext);
-    const handleLoginSubmit = async (event) => {
+    const [success, setSuccess] = useState(false)
+    const fetch = useFetch()
+    const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+    const handleLoginSubmit =  (event) => {
         event.preventDefault();
 
-    };
-    useEffect(() => {
-        if (error) {
-            setMessage(" Please check your username/password.")
-        }
-    }, [error])
-    useEffect(()=>{
-      setMessage("")  ;
-    },[])
+        const getRecovery = async()=>{
+            setIsLoading(true)
+            console.log("in get recovery", email.current.value)
+            try {
+                const response = await fetch(PF + "/api/members/sendReinitPasswordEmail?email=" + email.current.value).then((r) =>
+                    r.json()
+                );
+                if(response.success){
+                    setMessage("You can check your mailBox now :)")
+                    setIsLoading(false)
+                    setSuccess(true)
+                }else{
+                    setMessage(response.message)
+                    setIsLoading(false)
+                    setSuccess(false)
+                }
+            } catch (e) {
+                if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
+                    console.error(e);
+                }
+            }
 
+        }
+        console.log(isLoading)
+        if(!isLoading){
+            console.log("in condition")
+            getRecovery()
+        }
+
+    };
+
+
+console.log(isLoading)
     return (
         <RecoveryContent>
             <div className="recover__wrapper">
@@ -112,35 +138,31 @@ export default function Recover({setRecoveryContent,recoveryContent}) {
                             <Person/>
                             <StyledInput
                                 className="input-field"
-                                type="text"
+                                type="email"
                                 placeholder="Email"
                                 ref={email}
                                 required
                             />
                         </div>
-
                         <button
                             className="btn recover__btn-submit"
                             type="submit"
-                            disabled={isFetching}
+                            disabled={isLoading}
                         >
-                            {isFetching ? (
+                            {isLoading ? (
                                 <CircularProgress color="secondary" size="20px"/>
                             ) : (
                                 "Recover"
                             )}
                         </button>
-                        <div className="recover__message--error">{message}</div>
-
+                        <div className={"recover__message--error " + (success && "success")}>{message}</div>
                     </div>
-
                 </form>
             </div>
-
             <CloseAuthButton
                 aria-label="Close Login"
                 onClick={()=>{setRecoveryContent(false)}}
-                disabled={isFetching}
+                disabled={isLoading}
             ></CloseAuthButton>
         </RecoveryContent>
     );

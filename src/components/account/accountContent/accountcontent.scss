@@ -95,6 +95,9 @@
     color: $delete;
     font-weight: bold;
     //text-decoration: underline;
+    &.validate{
+      color:$validate;
+    }
   }
   .account__message{
     position: absolute;
@@ -109,6 +112,7 @@
     transform: translateX(50%);
     z-index: 10;
     opacity:1;
+
   }
   h2{
     margin-top: 2rem;

@@ -17,6 +17,7 @@ import { UserContext } from "./context/UserContext";
 import getCookie from "./functions/cookiesController/getCookie";
 import CookieBanner from "./components/cookieBanner/CookieBanner";
 import getOptionByKey from "./functions/getOptionByKey/GetOptionByKey";
+import ResetPassword from "./components/resetPassword/resetPassword";
 function App() {
   const { user, lang } = useContext(UserContext);
   const [mainMenuOpen, setMainMenuOpen] = useState(false);
@@ -29,6 +30,7 @@ function App() {
   const [isOpenedPopup, setIsOpenedPopup] = useState(false);
   const [cookiesBanner, setCookiesBanner] = useState(true);
   const [accountContent, setAccountContent] = useState(0);
+  const [showResetPassword, setShowResetPassword] = useState(false)
   const SectionMain = styled.div`
     background-image: url("${PF}/storage/app/public/4.jpg");
     @media (max-width: 768px) {
@@ -76,6 +78,12 @@ function App() {
         // console.warn("Error whilst registering service worker", err);
       });
   }
+ useEffect(()=>{
+   let url = window.location.href
+  if( url.includes("yworld3.com/?token=")){
+setShowResetPassword(true)
+  }
+ },[])
 
   return (
     <>
@@ -176,6 +184,10 @@ function App() {
           registerContent={registerContent}
           setRegisterContent={setRegisterContent}
         />
+
+        {showResetPassword &&
+        <ResetPassword showResetPassword={showResetPassword} setShowResetPassword={setShowResetPassword}/>
+        }
 
         <PopupMessage
           content={popupContent}

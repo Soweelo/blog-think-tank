@@ -23,6 +23,7 @@ export const loginCall = async (userCredential, dispatch) => {
     dispatch({ type: "LOGIN_FAILURE", payload: err });
   }
 };
+
 export const loginRegister = (userInfo, dispatch) => {
   dispatch({ type: "LOGIN_SUCCESS", payload: userInfo });
 };
@@ -32,4 +33,8 @@ export const logout = (dispatch) => {
 export const updateFavorites =(userInfo, dispatch)=>{
   localStorage.setItem("user", JSON.stringify(userInfo));
   dispatch({type:"FAVORITES_UPDATE" , payload: userInfo})
+}
+export const updateUser =  (userInfo, dispatch) =>{
+  localStorage.setItem("user", JSON.stringify(userInfo));
+    dispatch({ type: "UPDATE_USER", payload: userInfo });
 }
