@@ -243,17 +243,17 @@
       position: absolute;
       content: "";
       width: 100%;
-      height: 9px;
-      bottom: 1px;
+      height: 10px;
+      bottom: -1px;
       left: 0;
       background-color: $primary;
       z-index: 10;
       @include pad {
-        bottom: -3px;
+        bottom: -7px;
       }
     }
     @include pad{
-      height: 66px;
+      //height: 66px;
     }
     @include mobile {
       border-radius: 20px;
@@ -274,7 +274,7 @@
       }
     }
     ul {
-      transform: translateY(97%);
+      transform: translateY(100%);
       height: auto;
       top: unset;
       opacity: 1;
@@ -303,7 +303,8 @@
         }
       }
       @include pad {
-        transform: translateY(101%);
+        transform: translateY(100%);
+        max-width: 400px;
       }
       @include mobile {
         border: none;
@@ -316,7 +317,7 @@
   }
   @include pad{
     font-size:13px;
-    height: 66px;
+    //height: 66px;
   }
   @include mobile{
     height: unset;
