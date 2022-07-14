@@ -2,7 +2,7 @@ import "./bottombar.scss";
 
 import { useContext, useEffect, useState } from "react";
 import getOptionByKey from "../../functions/getOptionByKey/GetOptionByKey";
-import { Home, Person, Search } from "@material-ui/icons";
+import {Favorite, Home, Person, Search} from "@material-ui/icons";
 import { UserContext } from "../../context/UserContext";
 
 export default function Bottombar({
@@ -46,6 +46,19 @@ export default function Bottombar({
             window[`scrollTo`]({ top: 0, behavior: `smooth` });
         }else{
             changeContent(e)
+        }
+    }
+    const handleClickFavorites = (e) => {
+        if(homeContent !== "0"){
+            let target = document.getElementById("menu-read")
+            setHomeContent("0")
+            if (target){
+                target.scrollIntoView({ behavior: "smooth",block: "center" });
+            }
+        }
+        let target = document.getElementById("menu-read")
+        if (target){
+            target.scrollIntoView({ behavior: "smooth",block: "center" });
         }
     }
     const handleClickReadByTag = ()=>{
@@ -101,6 +114,9 @@ export default function Bottombar({
       <div className="account" onClick={() => openLoginInterface()}>
         <Person />
       </div>
+        <div className="account" onClick={() => handleClickFavorites()}>
+            <Favorite />
+        </div>
     </div>
   );
 }

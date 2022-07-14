@@ -91,7 +91,7 @@ export default memo(function Topbar({
             }}
             className="heading-left__item"
           >
-            Your world 3.0
+            {/*Your world 3.0*/}
           </p>
         </div>
         <div

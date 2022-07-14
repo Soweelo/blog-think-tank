@@ -36,7 +36,17 @@
     }
   }
   .account{
-    flex:1.7;
+    flex:1;
+    display: none;
+    width:32px;
+    height: 25px;
+    cursor:pointer;
+    @include mobile{
+      display: flex;
+    }
+  }
+  .favorites{
+    flex:1;
     display: none;
     width:32px;
     height: 25px;
