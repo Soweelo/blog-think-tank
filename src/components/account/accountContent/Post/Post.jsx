@@ -83,8 +83,9 @@ export default function Post({
 
       <ArrowBack
         className="account-content__mobileView"
-        onClick={() => {
-          setMobileView("menu");
+        onClick={(e) => {
+          e.preventDefault();
+        setMobileView("menu");
         }}
       />
       {openConfirm && (

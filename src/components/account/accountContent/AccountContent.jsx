@@ -12,7 +12,6 @@ import Brand from "./Brand/Brand";
 export default function AccountContent({
   accountContent,
   setAccountContent,
-  mobileView,
   setMobileView,
   lang,
   setHomeContent,
@@ -51,10 +50,6 @@ export default function AccountContent({
   useEffect(() => {
     getAllBrands();
   }, []);
-  // const currentURL = window.location.href
-  // let tokenToSave = currentURL.substring(currentURL.indexOf('token=') + 1);
-  // console.log(tokenToSave);
-
   return (
     <div className="account-content__wrapper">
       {(() => {
@@ -74,8 +69,7 @@ export default function AccountContent({
           case 2:
             return (
               <Brand
-                setMobileView={setMobileView}
-                mobileView={mobileView}
+                  setMobileView={setMobileView}
                 setAccountContent={setAccountContent}
                 accountContent={accountContent}
                 accountBrandForm={accountBrandForm}
@@ -93,6 +87,7 @@ export default function AccountContent({
                 <ArrowBack
                   onClick={() => {
                     setAccountContent(2);
+                    setMobileView("menu")
                   }}
                 />
                 <AccountBrandForm
@@ -107,7 +102,7 @@ export default function AccountContent({
           default:
             return (
               <AccountParams
-                setMobileView={setMobileView}
+                  setMobileView={setMobileView}
                 setHomeContent={setHomeContent}
               />
             );

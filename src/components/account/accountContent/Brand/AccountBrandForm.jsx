@@ -15,13 +15,14 @@ const StyledInput = styled.input`
   border-radius: 20px;
   height: 40px;
   width: max(50%, 300px);
+  max-width: 100%;
 `;
 export default function AccountBrandForm({
   formContent,
   setBackMessage,
   setAccountContent,
   brandContent,
-  F,
+
 }) {
   const { user, dispatch } = useContext(UserContext);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
@@ -126,8 +127,9 @@ export default function AccountBrandForm({
       setMessage("Your brand name or link length is not valid");
     }
   };
+  // console.log(formContent)
   return (
-    <>
+    <div  className="account-content__account-params-wrapper">
       <h2>{formContent === 1 ? "Edit your Link" : "Add a new Link"}</h2>
       <div className="account__form-message">{message}</div>
       <form onSubmit={formContent === 1 ? submitEditBrand : submitAddBrand}>
@@ -155,6 +157,6 @@ export default function AccountBrandForm({
           Save
         </button>
       </form>
-    </>
+    </div>
   );
 }

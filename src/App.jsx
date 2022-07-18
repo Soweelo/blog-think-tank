@@ -31,6 +31,7 @@ function App() {
   const [cookiesBanner, setCookiesBanner] = useState(true);
   const [accountContent, setAccountContent] = useState(0);
   const [showResetPassword, setShowResetPassword] = useState(false)
+  const [mobileView, setMobileView] = useState("menu");//for account ,contains what is displayed for mobiles: menu or content
   const SectionMain = styled.div`
     background-image: url("${PF}/storage/app/public/4.jpg");
     @media (max-width: 768px) {
@@ -138,6 +139,8 @@ setShowResetPassword(true)
                         setHomeContent={setHomeContent}
                         accountContent={accountContent}
                         setAccountContent={setAccountContent}
+                        mobileView={mobileView}
+                        setMobileView={setMobileView}
                       />
                     )}
                   </>

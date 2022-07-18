@@ -1,7 +1,7 @@
 ***Render des switch:
 {(()=>{
     switch(var){
-        case 1:)
+        case 1:
             return(<div></div>)
         default:
             return(<div></div>)

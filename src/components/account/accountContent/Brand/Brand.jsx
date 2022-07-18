@@ -16,7 +16,7 @@ import { UserContext } from "../../../../context/UserContext";
 import { logout } from "../../../../context functions/apiCalls";
 
 export default function Brand({
-  setMobileView,
+ setMobileView,
   setAccountContent,
   accountBrandForm,
   setAccountBrandForm,
@@ -86,7 +86,8 @@ export default function Brand({
     <div className="account-content__brands-wrapper">
       <ArrowBack
         className="mobileView"
-        onClick={() => {
+        onClick={(e) => {
+          e.preventDefault();
           setMobileView("menu");
         }}
       />
