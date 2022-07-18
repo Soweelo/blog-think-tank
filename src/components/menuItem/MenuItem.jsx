@@ -264,7 +264,7 @@ export default function MenuItem({
                             </>
                         );
 
-                    default:
+                    case 3:
                         return (
                             <>
                                 <div
@@ -318,39 +318,39 @@ export default function MenuItem({
                             </>
                         );
 
-                    // default:
-                    //     return (
-                    //         <>
-                    //             <div
-                    //                 className="menu__item-wrapper"
-                    //                 onClick={(e) =>
-                    //                     isCurrent ? setMenuOpen(0) : setMenuOpen(id)
-                    //                 }
-                    //             >
-                    //                 <div className="menu__item--title">{getTitle(id)}</div>
-                    //                 <div
-                    //                     className="menu__item--seeMore"
-                    //                     onClick={(e) =>
-                    //                         isCurrent ? setMenuOpen(0) : setMenuOpen(id)
-                    //                     }
-                    //                 >
-                    //                     {isCurrent ? <span>-</span> : <span>+</span>}
-                    //                 </div>
-                    //             </div>
-                    //             <ul className="menu-addYours">
-                    //                 <li
-                    //                     className="hoverable"
-                    //                     dangerouslySetInnerHTML={{__html: option_create_text_1}}
-                    //                     onClick={() => openLoginInterface()}
-                    //                 ></li>
-                    //                 <li
-                    //                     className="hoverable"
-                    //                     dangerouslySetInnerHTML={{__html: option_create_text_2}}
-                    //                     onClick={() => openLoginInterface()}
-                    //                 ></li>
-                    //             </ul>
-                    //         </>
-                    //     );
+                    default:
+                        return (
+                            <>
+                                 <div
+                                     className="menu__item-wrapper"
+                                     onClick={(e) =>
+                                         isCurrent ? setMenuOpen(0) : setMenuOpen(id)
+                                     }
+                                 >
+                                     <div className="menu__item--title">{getTitle(id)}</div>
+                                     <div
+                                         className="menu__item--seeMore"
+                                         onClick={(e) =>
+                                             isCurrent ? setMenuOpen(0) : setMenuOpen(id)
+                                         }
+                                     >
+                                         {isCurrent ? <span>-</span> : <span>+</span>}
+                                     </div>
+                                 </div>
+                                 <ul className="menu-addYours">
+                                     <li
+                                         className="hoverable"
+                                         dangerouslySetInnerHTML={{__html: option_create_text_1}}
+                                         onClick={() => openLoginInterface()}
+                                     ></li>
+                                     <li
+                                         className="hoverable"
+                                         dangerouslySetInnerHTML={{__html: option_create_text_2}}
+                                         onClick={() => openLoginInterface()}
+                                     ></li>
+                                 </ul>
+                             </>
+                         );
                 }
             })()}
 
