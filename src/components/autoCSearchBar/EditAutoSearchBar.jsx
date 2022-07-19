@@ -18,8 +18,10 @@ export default function EditAutoCSearchbar({
   postSelectedItemId,
   firstIsBrand,
 }) {
+
   const [isSuggestion, setIsSuggestion] = useState(false);
   const searchText = useTrait("");
+  const inputContent = useRef()
   const isNewTag = useTrait(false);
   const equalValues = useTrait(0);
   const updateSuggestion = (e) => {
@@ -46,6 +48,7 @@ export default function EditAutoCSearchbar({
   };
 
   const addItem = (e) => {
+    console.log(inputContent.current.value, searchText.get())
     if (selectedItems.length < (firstIsBrand ? max + 1 : max)) {
       // console.log(e.target.className.includes("suggestion-select-item"));
 
@@ -63,9 +66,9 @@ export default function EditAutoCSearchbar({
         postSelectedItems.set([...postSelectedItems.get(), newTagName]);
 
         //** send  item id to parent
-        if (e.target.attributes["tagsuggest-id"].value != 0) {
+        if ( e.target.attributes["tagsuggest-id"] && e.target.attributes["tagsuggest-id"].value != 0) {
           let newTagId = e.target.attributes["tagsuggest-id"].value;
-          postSelectedItemId.set(newTagId);
+         if(postSelectedItemId) {postSelectedItemId.set(newTagId)};
         }
         // console.log("in here");
         //**send signal to parent for updating the post
@@ -77,6 +80,7 @@ export default function EditAutoCSearchbar({
           "tagcontainer--input" + id + e.target.getAttribute("data-postid")
         )[0].value = "";
         searchText.set("");
+        // inputContent.current.value = ""
         // **close suggestions
         setIsSuggestion(false);
       } else {
@@ -141,6 +145,7 @@ export default function EditAutoCSearchbar({
               e.preventDefault();
             }
           }}
+          ref={inputContent}
           onChange={(e) => {
             updateSuggestion(e);
             setEMessage(["", "black"]);

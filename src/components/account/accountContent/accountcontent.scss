@@ -116,10 +116,11 @@
   .account__message {
     position: absolute;
     top: 36px;
-    color: $primary;
-    background-color: rgba(0, 128, 0, 1);
+    color: $complementary;
+    background-color: $primary;
     padding: 0.7rem;
     border-radius: 20px;
+    border:1px solid  $complementary;
     //right: 50vw;
     z-index: 10;
     opacity: 1;

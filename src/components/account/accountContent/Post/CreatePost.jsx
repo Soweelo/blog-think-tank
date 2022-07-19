@@ -55,7 +55,6 @@ export default function CreatePost({
   };
   //end submit new post
   //handle postContentChange
-
   //end handle postContentChange
   const submitPost = async () => {
     try {
@@ -92,6 +91,8 @@ export default function CreatePost({
         postTags.set([]);
         postContent.current.value = "";
       } else {
+        setPostMessage(res.message);
+
         if (res.message === "This session token is not valid") {
           logout(dispatch);
         }
@@ -115,34 +116,12 @@ export default function CreatePost({
           </autoheight-textarea>
         </div>
         <hr className="account-content__postHr" />
-        {file && (
-          <div className="account-content__postImgContainer">
-            <img
-              className="account-content__postImg"
-              src={URL.createObjectURL(file)}
-              alt={""}
-            />
-          </div>
-        )}
+
         <form className="account-content__postBottom" onSubmit={submitHandler}>
           <div className="account-content__postOptions">
-            <label htmlFor="file" className="account-content__postOption">
-              <PermMedia className="account-content__postIcon red" />
-              <span className="account-content__postOptionText">
-                Photo or Video
-              </span>
 
-              <input
-                style={{ display: "none" }}
-                type="file"
-                id="file"
-                accept=".png,.jpeg,.jpg"
-                onChange={(e) => setFile(e.target.files[0])}
-              />
-            </label>
             {allBrands.get().length > 0 && (
               <>
-                <hr className="account-content__postHr" />
                 <div className="account-content__postOption">
                   <div className="account-content__postOption-label-wrapper">
                     <LocalActivity className="account-content__postIcon green" />
@@ -174,7 +153,7 @@ export default function CreatePost({
                 </div>
               </>
             )}
-            <hr className="account-content__postHr" />
+         
             <div className="account-content__postOption">
               <div className="account-content__postOption-label-wrapper">
                 <Label className="account-content__postIcon blue" />
@@ -198,6 +177,30 @@ export default function CreatePost({
                 </div>
               </div>
             </div>
+
+            <label htmlFor="file" className="account-content__postOption">
+              <PermMedia className="account-content__postIcon red" />
+              <span className="account-content__postOptionText">
+                Photo or Video
+              </span>
+
+              <input
+                  style={{ display: "none" }}
+                  type="file"
+                  id="file"
+                  accept=".png,.jpeg,.jpg"
+                  onChange={(e) => setFile(e.target.files[0])}
+              />
+            </label>
+            {file && (
+                <div className="account-content__postImgContainer">
+                  <img
+                      className="account-content__postImg"
+                      src={URL.createObjectURL(file)}
+                      alt={""}
+                  />
+                </div>
+            )}
           </div>
 
           <button className="btn account-content__postButton" type="submit">
