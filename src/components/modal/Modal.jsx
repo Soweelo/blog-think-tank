@@ -169,6 +169,7 @@ export default function Modal({
   setHomeContent,
   setShowAuth,
     type,
+    setMobileView
 }) {
 
   const { user } = useContext(UserContext);
@@ -414,6 +415,7 @@ export default function Modal({
                     setShowAuth={setShowAuth}
                     modal={true}
                     setShowModal={setShowModal}
+                    setMobileView={setMobileView}
                   />
                 </div>
               </ModalWrapper>

@@ -18,7 +18,7 @@ export default function AccountContent({
                                            setHomeContent,
                                            accountBrandForm,
                                            setAccountBrandForm,
-    brandContent, setBrandContent
+                                           brandContent, setBrandContent
                                        }) {
     const [brandMessage, setBrandMessage] = useState("");
     const {user, dispatch} = useContext(UserContext);
@@ -53,7 +53,7 @@ export default function AccountContent({
         getAllBrands();
     }, []);
 
-  console.log("brandContent dans Parent accountContent",brandContent)
+    // console.log("brandContent dans Parent accountContent", brandContent)
     return (
         <div className="account-content__wrapper">
             {(() => {

@@ -14,6 +14,7 @@ export default memo(function ThinkTankList({
   setHomeContent,
   setShowAuth,
     showAuth,
+    setMobileView
 }) {
   const fetch = useFetch();
   const { user, lang } = useContext(UserContext);
@@ -260,6 +261,7 @@ export default memo(function ThinkTankList({
         setAccountContent={setAccountContent}
         setHomeContent={setHomeContent}
         setShowAuth={setShowAuth}
+        setMobileView={setMobileView}
       ></Modal>
     </div>
   );

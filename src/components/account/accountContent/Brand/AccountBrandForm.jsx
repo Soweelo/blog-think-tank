@@ -2,6 +2,7 @@ import {useContext, useState} from "react";
 import styled from "styled-components";
 import {UserContext} from "../../../../context/UserContext";
 import {logout} from "../../../../context functions/apiCalls";
+import {CircularProgress} from "@material-ui/core";
 
 const StyledInput = styled.input`
   display: block;
@@ -26,6 +27,7 @@ export default function AccountBrandForm({
     const {user, dispatch} = useContext(UserContext);
     const PF = process.env.REACT_APP_PUBLIC_FOLDER;
     const [message, setMessage] = useState("");
+    const [isFetching, setIsFetching] = useState(false)
     const [brandId, setBrandId] = useState(
         accountBrandForm == 1 ? brandContent[0] : ""
     );
@@ -47,6 +49,7 @@ export default function AccountBrandForm({
     //add Brand
     const submitAddBrand = async (event) => {
         event.preventDefault();
+        setIsFetching(true)
         // try{
         if (
             5 < brandName.length &&
@@ -72,21 +75,25 @@ export default function AccountBrandForm({
             if (data.success == true) {
                 // console.log(response);
                 setBackMessage(data.message);
+                setIsFetching(false)
                 setAccountContent(2);
             } else {
-                console.log(response);
+                // console.log(response);
                 setMessage(data.message);
                 if (data.message === "This session token is not valid") {
                     logout(dispatch);
                 }
+                setIsFetching(false)
             }
         } else {
             setMessage("Your brand name or link length is not valid");
+            setIsFetching(false)
         }
     };
     //edit Brand
     const submitEditBrand = async (event) => {
         event.preventDefault();
+        setIsFetching(true)
         // try{
         if (
             5 < brandName.length &&
@@ -113,18 +120,21 @@ export default function AccountBrandForm({
                 // console.log(response);
                 setBackMessage(data.message);
                 setAccountContent(2);
+                setIsFetching(false)
             } else {
                 // console.log(response);
                 setMessage(data.message);
                 if (data.message === "This session token is not valid") {
                     logout(dispatch);
                 }
+                setIsFetching(false)
             }
         } else {
             setMessage("Your brand name or link length is not valid");
+            setIsFetching(false)
         }
     };
-    console.log(brandContent)
+    // console.log(brandContent)
     return (
         <div className="account-content__account-params-wrapper">
             <h2>{accountBrandForm === 1 ? "Edit your Link" : "Add a new Link"}</h2>
@@ -138,6 +148,7 @@ export default function AccountBrandForm({
                         placeholder={accountBrandForm === 1 ? brandName : "Type Your Link name"}
                         onChange={handleBrandNameChange}
                         value={brandName}
+                        disabled={isFetching}
                     />
                 </div>
                 <div className="account__input-container">
@@ -148,10 +159,11 @@ export default function AccountBrandForm({
                         placeholder={accountBrandForm === 1 ? brandLink : "Type Your Link URL"}
                         onChange={handleBrandLinkChange}
                         value={brandLink}
+                        disabled={isFetching}
                     />
                 </div>
-                <button className="btn account__btn-submit" type="submit">
-                    Save
+                <button className="btn account__btn-submit" type="submit" disabled={isFetching}>
+                    {isFetching ? <CircularProgress size="20px" /> : "SAVE"}
                 </button>
             </form>
         </div>

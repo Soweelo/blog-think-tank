@@ -18,6 +18,7 @@ export default memo(function Intro({
                                        setRegisterContent,
                                        setAccountContent,
                                        showAuth,
+                                        setMobileView,
                                    }) {
     const PF = process.env.REACT_APP_PUBLIC_FOLDER;
     const {lang} = useContext(UserContext);
@@ -88,6 +89,7 @@ export default memo(function Intro({
                 allTags={allTags}
                 setSelectedTags={setSelectedTags}
                 setAccountContent={setAccountContent}
+                setMobileView={setMobileView}
                 setHomeContent={setHomeContent}
                 setShowAuth={setShowAuth}
                 showAuth={showAuth}
@@ -95,7 +97,7 @@ export default memo(function Intro({
             <Scroll showBelow={400}/>
             <div className="intro__writePostBtnWrapper">
                 <WritePostBtn setAccountContent={setAccountContent}
-                              setHomeContent={setHomeContent} setShowAuth={setShowAuth} modal={false}/>
+                              setHomeContent={setHomeContent} setShowAuth={setShowAuth} modal={false}  setMobileView={setMobileView}/>
             </div>
 
         </div>

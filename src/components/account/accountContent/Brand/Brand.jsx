@@ -1,4 +1,3 @@
-import "./brand.scss";
 import {
   ArrowBack,
   Close,
@@ -39,10 +38,10 @@ export default function Brand({
 
   const getBrandById = (elemId) => {
     allBrands.get().map((brand, i) => {
-        console.log(brand, elemId)
+        // console.log(brand, elemId)
       if (brand.id === elemId) {
           setBrandContent([brand.id, brand.name, brand.link])
-          console.log([brand.id, brand.name, brand.link]);
+          // console.log([brand.id, brand.name, brand.link]);
            return;
       }
        return;
@@ -53,12 +52,12 @@ export default function Brand({
         e.preventDefault();
         const id = e.target.attributes["data-value"].value;
         setIdToUpdate(id);
-        console.log(id, e.target)
+        // console.log(id, e.target)
         getBrandById(parseInt(id))
         //
         setAccountContent(3);
         setAccountBrandForm(1);
-        console.log(brandContent)
+        // console.log(brandContent)
     }
   const deleteBrand = async (id) => {
     try {
@@ -98,7 +97,7 @@ export default function Brand({
 //         getBrandById(idToUpdate.get())
 //     }
 // },[idToUpdate])
-console.log("brandcontent dans BRAND List",brandContent)
+// console.log("brandcontent dans BRAND List",brandContent)
   return (
     <div className="account-content__brands-wrapper">
       <ArrowBack

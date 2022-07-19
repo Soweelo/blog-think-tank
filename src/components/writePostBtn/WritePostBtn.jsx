@@ -3,10 +3,11 @@ import {UserContext} from "../../context/UserContext";
 import {Add} from "@material-ui/icons";
 import "./writepostbtn.scss"
 
-export default function  WritePostBtn ({setAccountContent, setHomeContent, setShowAuth, setShowModal, modal}) {
+export default function  WritePostBtn ({setAccountContent, setHomeContent, setShowAuth, setShowModal, modal, setMobileView}) {
     const { user } = useContext(UserContext);
     const handleWritePost = () => {
         setAccountContent(1)
+        setMobileView("content")
         if(user){
             setHomeContent("5")
         }else{

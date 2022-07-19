@@ -146,6 +146,7 @@ function App() {
                                                 accountBrandForm={accountBrandForm}
                                                 brandContent={brandContent}
                                                 setBrandContent={setBrandContent}
+
                                             />
                                         )}
                                     </>
@@ -159,6 +160,7 @@ function App() {
                                         showAuth={showAuth}
                                         setRegisterContent={setRegisterContent}
                                         setAccountContent={setAccountContent}
+                                        setMobileView={setMobileView}
                                     />
                                 );
                         }
