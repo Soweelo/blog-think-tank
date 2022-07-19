@@ -133,6 +133,7 @@ export default function Post({
           allBrands={allBrands}
         />
       </div>
+      <div  className="account-content__subTitle">Your previous posts...</div>
 
       <UserPostList
         setIdToDelete={setIdToDelete}
