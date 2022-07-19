@@ -1,16 +1,10 @@
 import "./brand.scss";
 import {
   ArrowBack,
-  Cancel,
   Close,
-  EmojiEmotions,
-  Label,
-  PermMedia,
-  Room,
 } from "@material-ui/icons";
 import { useContext, useEffect, useState } from "react";
 import useTrait from "../../../../hooks/useTrait";
-import outDateCookieSession from "../../../../functions/cookiesController/outDateCookieSession";
 import { useFetch } from "../../../../hooks/useFetch";
 import { UserContext } from "../../../../context/UserContext";
 import { logout } from "../../../../context functions/apiCalls";
@@ -22,6 +16,7 @@ export default function Brand({
   setAccountBrandForm,
   brandContent,
   setBrandContent,
+                                  // callbackBrandContent,
   getAllBrands,
   allBrands,
 }) {
@@ -31,6 +26,7 @@ export default function Brand({
   const [openConfirm, setOpenConfirm] = useState(false);
   const [idToDelete, setIdToDelete] = useState(null);
   const [nb_postsToDelete, setnb_postsIdToDelete] = useState(0);
+  const [idToUpdate, setIdToUpdate] = useState(null)
   const fetch = useFetch();
   const askConfirm = (e) => {
     e.preventDefault();
@@ -40,17 +36,30 @@ export default function Brand({
     setnb_postsIdToDelete(np_posts);
     setOpenConfirm(true);
   };
-  const getBrandById = (id) => {
+
+  const getBrandById = (elemId) => {
     allBrands.get().map((brand, i) => {
-      if (brand.id === id) {
-        setBrandContent([brand.id, brand.name, brand.link]);
-        // console.log(brandContent);
-        return;
+        console.log(brand, elemId)
+      if (brand.id === elemId) {
+          setBrandContent([brand.id, brand.name, brand.link])
+          console.log([brand.id, brand.name, brand.link]);
+           return;
       }
-      return;
+       return;
     });
-    return brandContent;
+ return
   };
+    const editBrand =(e) =>{
+        e.preventDefault();
+        const id = e.target.attributes["data-value"].value;
+        setIdToUpdate(id);
+        console.log(id, e.target)
+        getBrandById(parseInt(id))
+        //
+        setAccountContent(3);
+        setAccountBrandForm(1);
+        console.log(brandContent)
+    }
   const deleteBrand = async (id) => {
     try {
       const response = await fetch(
@@ -81,7 +90,15 @@ export default function Brand({
   };
   useEffect(() => {
     getAllBrands();
+
   }, [accountBrandForm]);
+// useEffect(()=> {
+//     console.log(idToUpdate.get())
+//     if(idToUpdate){
+//         getBrandById(idToUpdate.get())
+//     }
+// },[idToUpdate])
+console.log("brandcontent dans BRAND List",brandContent)
   return (
     <div className="account-content__brands-wrapper">
       <ArrowBack
@@ -137,14 +154,14 @@ export default function Brand({
         </div>
       )}
       <div className="account-content__info-line">
-        <h2>My Links</h2>
+        <h2>My Brands</h2>
 
         <div className="account-content__buttons">
           <div
             className="btn account-content__buttons-btn-create"
             onClick={() => {
-              setAccountContent(3);
-              setAccountBrandForm(0);
+                setAccountBrandForm(0);
+                setAccountContent(3);
             }}
           >
             ADD NEW LINK
@@ -164,10 +181,8 @@ export default function Brand({
                 <div
                   className="btn account-content__buttons-btn-edit"
                   data-value={brand.id}
-                  onClick={() => {
-                    setAccountContent(3);
-                    setAccountBrandForm(1);
-                    getBrandById(brand.id);
+                  onClick={(e) => {
+                  editBrand(e)
                   }}
                 >
                   EDIT
