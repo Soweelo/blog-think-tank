@@ -145,8 +145,6 @@ export default function CommentList({nbComments, setNbComments, setShowAuth, set
                                         {comment.owner ?
                                             <span onClick={() => setCommentIdToDelete(comment.id)}>DELETE</span> : null}
                                     </div>
-
-
                                     <RepliesList nbResponses={comment.nb_responses}
                                                  setNbComments={setNbComments}
                                                  nbComments={nbComments}
@@ -156,7 +154,6 @@ export default function CommentList({nbComments, setNbComments, setShowAuth, set
                                                  postId={postId}
                                                  commentIdToReply={commentIdToReply}
                                     />
-
                                 </div>
                             </div>
                         )

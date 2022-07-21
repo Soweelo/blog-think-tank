@@ -18,7 +18,8 @@ export default function AccountContent({
                                            setHomeContent,
                                            accountBrandForm,
                                            setAccountBrandForm,
-                                           brandContent, setBrandContent
+                                           brandContent, setBrandContent,
+    setIsOpenedPopup,setPopupContent,
                                        }) {
     const [brandMessage, setBrandMessage] = useState("");
     const {user, dispatch} = useContext(UserContext);
@@ -109,6 +110,8 @@ export default function AccountContent({
                             <AccountParams
                                 setMobileView={setMobileView}
                                 setHomeContent={setHomeContent}
+                                setPopupContent={setPopupContent}
+                                setIsOpenedPopup={setIsOpenedPopup}
                             />
                         );
                 }

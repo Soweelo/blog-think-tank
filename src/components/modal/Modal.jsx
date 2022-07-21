@@ -8,6 +8,7 @@ import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
 import WritePostBtn from "../writePostBtn/WritePostBtn";
 import { UserContext } from "../../context/UserContext";
 import CommentList from "../commentList/CommentList";
+import {logout} from "../../context functions/apiCalls";
 
 const Background = styled.div`
   width: 100%;
@@ -163,6 +164,7 @@ export default function Modal({
     setNbComments,
   date,
   id,
+    isReported,
   loadingModal,
   setSelectedTags,
   setAccountContent,
@@ -172,11 +174,11 @@ export default function Modal({
     setMobileView
 }) {
 
-  const { user } = useContext(UserContext);
+  const { user, dispatch } = useContext(UserContext);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-  const [reportedPost, setReportedPost] = useState(false);
+  const [reportedPost, setReportedPost] = useState(parseInt(isReported)=== 1);
   const [loadingReport, setLoadingReport] = useState(false);
-  const [reportMessage, setReportMessage] = useState("");
+  const [reportMessage, setReportMessage] = useState(parseInt(isReported) !==0 ?"reported":"");
   const [openCommentList, setOpenCommentList] = useState(false);
   const modalRef = useRef();
   const reportRef = useRef();
@@ -214,55 +216,89 @@ export default function Modal({
 
   const reportPost = (e) => {
     e.preventDefault();
-    console.log("click");
     if (user) {
       setLoadingReport(true);
-      console.log("user");
     } else {
-      console.log("no user");
       setReportedPost(true);
-      setReportMessage("Please loggin to report");
+      setReportMessage("Please login to report");
     }
   };
   useEffect(() => {
     if (showModal) {
-      setReportedPost(false);
-      setReportMessage("");
-      setOpenCommentList(false)
+      setOpenCommentList(false);
     }
   }, [showModal]);
+  useEffect(()=>{
+    if(showModal){
+      if(parseInt(isReported) === 1){
+        setReportMessage("reported")
+        setReportedPost(true)
+      }else{
+        setReportMessage("")
+        setReportedPost(false)
+      }
+    }
+  },[isReported, showModal])
   useEffect(() => {
-    const getModalReport = async () => {
-      try {
-        let formData = new FormData();
-        formData.append("token", user.session);
-        formData.append("post_id", id);
-        const requestOptions = {
-          method: "POST",
-          body: formData,
-        };
-        let url = PF + "/api/reportings/store";
-        let res = await fetch(url, requestOptions).then((res) => res.json());
 
-        if (res.success) {
-          setReportedPost(true);
-          setReportMessage("reported");
-        } else {
-          console.log(res.message);
-          if (res.message == "Member already does reporting for this post") {
+    const getModalReport = async () => {
+      console.log(reportedPost)
+      if(!reportedPost){
+        try {
+          let formData = new FormData();
+          formData.append("token", user.session);
+          formData.append("post_id", id);
+          const requestOptions = {
+            method: "POST",
+            body: formData,
+          };
+          let url = PF + "/api/reportings/store";
+          let res = await fetch(url, requestOptions).then((res) => res.json());
+          if (res.success) {
             setReportedPost(true);
-            setReportMessage("Already reported!");
+            setReportMessage("reported");
           } else {
-            setReportedPost(true);
-            setReportMessage("This post was deleted");
+            // console.log(res.message);
+            if (res.message == "Member already does reporting for this post"){
+              setReportedPost(true);
+              setReportMessage("Already reported!");
+            } else {
+              setReportedPost(true);
+              setReportMessage("This post was deleted");
+            }
+          }
+          setLoadingReport(false);
+        } catch (e) {
+          if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
+            console.error(e);
           }
         }
-        setLoadingReport(false);
-      } catch (e) {
-        if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
-          console.error(e);
+      }else{
+        console.log("delete")
+        try {
+          //request delete
+          const response = await fetch(
+              PF + "/api/reportings/destroy?token=" + user.session+"&post_id="+id,
+              {method: "DELETE"}
+          );
+          const data = await response.json();
+          if (data.success) {
+            setReportMessage("Not reported anymore")
+            setReportedPost(false)
+          } else {
+            if (data.message === "This session token is not valid") {
+              setReportMessage("Please log in")
+              logout(dispatch);
+            }
+          }
+          setLoadingReport(false);
+        } catch (e) {
+          if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
+            console.error(e);
+          }
         }
       }
+
     };
     if (loadingReport) {
       //    call url api with session token and id
@@ -367,9 +403,9 @@ export default function Modal({
                       <div className="iconShare">
                         <Share />
                       </div>
-                      <div className="iconFav">
-                        <Favorite />
-                      </div>
+                      {/*<div className="iconFav">*/}
+                      {/*  <Favorite />*/}
+                      {/*</div>*/}
                       {type===0?
                           <div onClick={() => openComment()} className={"iconComm"}>
                             <Comment />

@@ -1,5 +1,5 @@
 import "./post.scss";
-import { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import useTrait from "../../../../hooks/useTrait";
 import { format } from "timeago.js";
 import EditAutoCSearchbar from "../../../autoCSearchBar/EditAutoSearchBar";
@@ -10,8 +10,7 @@ import { CircularProgress } from "@material-ui/core";
 import outDateCookieSession from "../../../../functions/cookiesController/outDateCookieSession";
 import { UserContext } from "../../../../context/UserContext";
 import { logout } from "../../../../context functions/apiCalls";
-import { htmlToDOM } from "html-react-parser";
-import { checkHtmlElement } from "@testing-library/jest-dom/dist/utils";
+
 
 export default function UserPostList({
   setIdToDelete,
@@ -323,9 +322,11 @@ export default function UserPostList({
   // function createMarkup(content) {
   //   return { __html: content };
   // }
-
   return (
     <div className="account-content__post-wrapper">
+      {( newPost.id || allPosts.get().length >0) &&
+      <div  className="account-content__subTitle">Your previous posts...</div>
+      }
       {newPost.id && (
         <div className="account-content__post-container">
           <div className="account-content__top">

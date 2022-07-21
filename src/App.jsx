@@ -146,7 +146,8 @@ function App() {
                                                 accountBrandForm={accountBrandForm}
                                                 brandContent={brandContent}
                                                 setBrandContent={setBrandContent}
-
+                                                setpopupContent={setPopupContent}
+                                                setIsOpenedPopup={setIsOpenedPopup}
                                             />
                                         )}
                                     </>

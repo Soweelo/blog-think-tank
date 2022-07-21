@@ -1,7 +1,25 @@
 @import "../../../../global";
 .account-content__account-params-wrapper{
-
+h2{
+  display: flex;
+  .account-content__buttons-btn-delete{
+    color:$delete;
+    border:1px solid $delete !important;
+    padding: 0.4rem 0.8rem;
+    margin: 0 0.5rem 0.5rem auto;
+  font-size: 0.9rem;
+    @include mobile{
+      margin: 0 0  0 auto
+    }
+    &:hover{
+      font-weight: bold;
+      background-color: $shadow;
+      color: $primary;
+    }
+  }
+}
   .account-content__info-container{
+
     .account-content__info-line{
       box-sizing: border-box;
       display: flex;

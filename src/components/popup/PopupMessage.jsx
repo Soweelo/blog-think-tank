@@ -1,7 +1,7 @@
 import "./popupmessage.scss";
 import Close from "@material-ui/icons/Close";
 import { useSpring, animated } from "react-spring";
-import { useRef } from "react";
+import {useEffect, useRef} from "react";
 export default function PopupMessage({ content, setIsOpen, isOpen }) {
   const modalRef = useRef();
   const animation = useSpring({
@@ -11,6 +11,11 @@ export default function PopupMessage({ content, setIsOpen, isOpen }) {
     opacity: isOpen ? 1 : 0,
     transform: isOpen ? `translateY(45px)` : "translateY(-110vh)",
   });
+  useEffect(()=>{
+    setTimeout(()=>{
+      setIsOpen(false)
+    },[5000])
+  },[])
   return (
     <animated.div
       style={animation}

@@ -8,7 +8,7 @@ import {logout} from "../../context functions/apiCalls";
 import useTrait from "../../hooks/useTrait";
 import AccountContentMenuItem from "./accountContentMenuItem";
 
-export default function Account({setHomeContent, accountContent, setAccountContent, lang, mobileView, setMobileView, setAccountBrandForm, accountBrandForm, brandContent, setBrandContent}) {
+export default function Account({setHomeContent, accountContent, setAccountContent, lang, mobileView, setMobileView, setAccountBrandForm, accountBrandForm, brandContent, setBrandContent, setIsOpenedPopup, setPopupContent}) {
     const {user, dispatch} = useContext(UserContext);
 
     // const changeMobileViewContent = useTrait(false)
@@ -87,7 +87,8 @@ export default function Account({setHomeContent, accountContent, setAccountConte
                         setAccountBrandForm={setAccountBrandForm}
                         brandContent={brandContent}
                         setBrandContent={setBrandContent}
-
+                        setPopupContent={setPopupContent}
+                        setIsOpenedPopup={setIsOpenedPopup}
                     />
                 </div>
             </div>

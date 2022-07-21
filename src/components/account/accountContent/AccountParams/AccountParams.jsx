@@ -7,11 +7,11 @@ import {
     StarOutline,
 } from "@material-ui/icons";
 import {useFetch} from "../../../../hooks/useFetch";
-import {useContext, useEffect, useRef, useState} from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import {UserContext} from "../../../../context/UserContext";
 import {logout, updateUser} from "../../../../context functions/apiCalls";
 
-export default function AccountParams({setMobileView, setHomeContent}) {
+export default function AccountParams({setMobileView, setHomeContent, setIsOpenedPopup, setPopupContent}) {
     // console.log("rerender account params");
     const fetch = useFetch();
     const {user, dispatch} = useContext(UserContext);
@@ -23,9 +23,10 @@ export default function AccountParams({setMobileView, setHomeContent}) {
     const [status, setStatus] = useState("");
     const [password, setPassword] = useState("");
     const [changeUserInfo, setChangeUserInfo] = useState(true);
-    const [message, setMessage] = useState([0,""]);// array with 0 for error 1 for success, and second argument is message text
+    const [message, setMessage] = useState([0, ""]);// array with 0 for error 1 for success, and second argument is message text
     const newPassword = useRef()
     const [modifyPassword, setModifyPassword] = useState(false)
+    const [openConfirm, setOpenConfirm] = useState(false);
     const getMemberbySession = async () => {
         try {
             setIsFetching(true);
@@ -44,7 +45,6 @@ export default function AccountParams({setMobileView, setHomeContent}) {
                     logout(dispatch);
                 }
             }
-
             setIsFetching(false);
         } catch (e) {
             if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
@@ -55,25 +55,25 @@ export default function AccountParams({setMobileView, setHomeContent}) {
     const handlePasswordSubmit = async (event) => {
         event.preventDefault();
         setIsFetching(true)
-        setMessage([0,""])
+        setMessage([0, ""])
         console.log("hello", newPassword.current.value)
         try {
             const requestOptions = {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
+                headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({
-                    password:newPassword.current.value,
+                    password: newPassword.current.value,
                 }),
             };
             let url = PF + "/api/members?token=" + user.session;
             let res = await fetch(url, requestOptions).then((res) => res.json());
             console.log(res)
-            if(res.success){
+            if (res.success) {
                 console.log(res.data);
-                setMessage([1,res.message])
+                setMessage([1, res.message])
                 setModifyPassword(false)
-            }else{
-                setMessage([0,res.message])
+            } else {
+                setMessage([0, res.message])
             }
             setIsFetching(false)
         } catch (e) {
@@ -83,15 +83,41 @@ export default function AccountParams({setMobileView, setHomeContent}) {
             setIsFetching(false)
         }
     }
+    const deleteAccount = async () => {
+        try {
+            const response = await fetch(
+                PF + "/api/members?token=" + user.session,
+                { method: "DELETE"}
+            );
+            const data = await response.json();
+            console.log(data)
+            if (data.success) {
+                logout(dispatch);
+                // setPostMessage(data.message);
+            } else {
+                if (data.message === "This session token is not valid") {
+                    logout(dispatch);
+                }else{
+                    logout(dispatch);
+                }
+            }
+        } catch (e) {
+            if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
+                console.error(e);
+            }
+        }
+        setOpenConfirm(false);
+    }
     useEffect(() => {
         if (changeUserInfo) {
             getMemberbySession();
             setChangeUserInfo(false);
         }
     }, [changeUserInfo]);
-useEffect(()=>{
-    setModifyPassword(false)
-},[])
+    useEffect(() => {
+        setModifyPassword(false)
+    }, [])
+
     return (
         <div className="account-content__account-params-wrapper">
             <ArrowBack
@@ -100,8 +126,42 @@ useEffect(()=>{
                     setMobileView("menu");
                 }}
             />
-            <h2>My Account</h2>
-            <div className={"account__form-message"+(message[0]?" validate":"")}>{message[1]}</div>
+            <h2>My Account
+                <div
+                className="btn account-content__buttons-btn-delete"
+                onClick={() => setOpenConfirm(true)}
+            >
+                DELETE ACCOUNT
+            </div></h2>
+
+            <div className={"account__form-message" + (message[0] ? " validate" : "")}>{message[1]}</div>
+            {openConfirm && (
+                <div className="account__message--delete">
+                    <div className="account__message-delete-text">
+                        Are you sure you want to delete your account?
+                        <br/>
+
+                        All your posts and brands will be lost...
+                    </div>
+
+                    <div className="account__message-delete-btn">
+                        <button
+                            onClick={() => {
+                                deleteAccount();
+                            }}
+                        >
+                            yes
+                        </button>
+                        <button
+                            onClick={() => {
+                                setOpenConfirm(false);
+                            }}
+                        >
+                            No
+                        </button>
+                    </div>
+                </div>
+            )}
             <div className="account-content__info-container">
                 <div className="account-content__info-line">
                     <div className="account-content__label">
@@ -118,22 +178,24 @@ useEffect(()=>{
 
                     {modifyPassword ?
                         <>
-                            <input ref={newPassword} className="account-content__value" placeholder="New password" disabled={isFetching}></input>
-                            < button className="account__btn-submit btn" onClick={handlePasswordSubmit} disabled={isFetching}>
-                                {isFetching?
-                                        <div className="lds-ring">
-                                            <div></div>
-                                            <div></div>
-                                            <div></div>
-                                            <div></div>
-                                        </div>
-                                    :"SAVE"}
+                            <input ref={newPassword} className="account-content__value" placeholder="New password"
+                                   disabled={isFetching}></input>
+                            < button className="account__btn-submit btn" onClick={handlePasswordSubmit}
+                                     disabled={isFetching}>
+                                {isFetching ?
+                                    <div className="lds-ring">
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                    </div>
+                                    : "SAVE"}
                             </button>
-                        </>:
+                        </> :
                         <>
                             <div className="account-content__value">{password}</div>
                             < button className="account-content__buttons-btn-edit btn"
-                                     onClick={()=>setModifyPassword(true)}>Modificate
+                                     onClick={() => setModifyPassword(true)}>Modificate
                             </button>
                         </>
                     }

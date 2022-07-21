@@ -48,7 +48,6 @@ export default function EditAutoCSearchbar({
   };
 
   const addItem = (e) => {
-    console.log(inputContent.current.value, searchText.get())
     if (selectedItems.length < (firstIsBrand ? max + 1 : max)) {
       // console.log(e.target.className.includes("suggestion-select-item"));
 

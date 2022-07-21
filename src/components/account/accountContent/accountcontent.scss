@@ -33,7 +33,7 @@
     top: 50%;
     right: 50%;
     background-color: white;
-    height: 10rem;
+    min-height: 13rem;
     width: 15rem;
     border: 1px solid #ff000036;
     transform: translate(50%, -50%);
@@ -47,6 +47,8 @@
     .account__message-delete-text {
       padding: 0.5rem;
       font-size: 0.9rem;
+      text-align: center;
+      line-height: 26px;
     }
 
     .account__message-delete-btn {
