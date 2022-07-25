@@ -1,14 +1,15 @@
 import "./modal.scss";
 import styled from "styled-components";
-import { MdClose } from "react-icons/md";
-import { useRef, useEffect, useCallback, useState, useContext } from "react";
-import { useSpring, animated } from "react-spring";
-import { Favorite, Share, Comment, Report } from "@material-ui/icons";
+import {MdClose} from "react-icons/md";
+import {useRef, useEffect, useCallback, useState, useContext} from "react";
+import {useSpring, animated} from "react-spring";
+import {Favorite, Share, Comment, Report} from "@material-ui/icons";
 import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
 import WritePostBtn from "../writePostBtn/WritePostBtn";
-import { UserContext } from "../../context/UserContext";
+import {UserContext} from "../../context/UserContext";
 import CommentList from "../commentList/CommentList";
 import {logout} from "../../context functions/apiCalls";
+import SharePost from "../sharePost/SharePost";
 
 const Background = styled.div`
   width: 100%;
@@ -153,319 +154,323 @@ const CloseModalButton = styled(MdClose)`
 `;
 
 export default function Modal({
-  showModal,
-  setShowModal,
-  images,
-  tags,
-  title,
-  url,
-  text,
-  nbComments,
-    setNbComments,
-  date,
-  id,
-    isReported,
-  loadingModal,
-  setSelectedTags,
-  setAccountContent,
-  setHomeContent,
-  setShowAuth,
-    type,
-    setMobileView
-}) {
+                                  showModal,
+                                  setShowModal,
+                                  images,
+                                  tags,
+                                  title,
+                                  url,
+                                  text,
+                                  nbComments,
+                                  setNbComments,
+                                  date,
+                                  id,
+                                  isReported,
+                                  loadingModal,
+                                  setSelectedTags,
+                                  setAccountContent,
+                                  setHomeContent,
+                                  setShowAuth,
+                                  type,
+                                  setMobileView
+                              }) {
 
-  const { user, dispatch } = useContext(UserContext);
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-  const [reportedPost, setReportedPost] = useState(parseInt(isReported)=== 1);
-  const [loadingReport, setLoadingReport] = useState(false);
-  const [reportMessage, setReportMessage] = useState(parseInt(isReported) !==0 ?"reported":"");
-  const [openCommentList, setOpenCommentList] = useState(false);
-  const modalRef = useRef();
-  const reportRef = useRef();
-  // console.log(reportRef);
-  const animation = useSpring({
-    config: {
-      duration: 450,
-    },
-    opacity: showModal ? 1 : 0,
-    transform: showModal ? `translateY(0%)` : "translateY(-100%)",
-  });
-  const [isClicked, setIsClicked] = useState(false);
-  const closeModal = (e) => {
-    if (modalRef.current === e.target) {
-      setShowModal(false);
-    }
-  };
-
-  const keyPress = useCallback(
-    (e) => {
-      if (e.key === "Escape" && showModal) {
-        setShowModal(false);
-        // console.log(text);
-        setIsClicked(false);
-      }
-    },
-    [setShowModal, showModal, setIsClicked]
-  );
-
-  useEffect(() => {
-    document.addEventListener("keydown", keyPress);
-    return () => document.removeEventListener("keydown", keyPress);
-  }, [keyPress]);
-  //reporting a post
-
-  const reportPost = (e) => {
-    e.preventDefault();
-    if (user) {
-      setLoadingReport(true);
-    } else {
-      setReportedPost(true);
-      setReportMessage("Please login to report");
-    }
-  };
-  useEffect(() => {
-    if (showModal) {
-      setOpenCommentList(false);
-    }
-  }, [showModal]);
-  useEffect(()=>{
-    if(showModal){
-      if(parseInt(isReported) === 1){
-        setReportMessage("reported")
-        setReportedPost(true)
-      }else{
-        setReportMessage("")
-        setReportedPost(false)
-      }
-    }
-  },[isReported, showModal])
-  useEffect(() => {
-
-    const getModalReport = async () => {
-      console.log(reportedPost)
-      if(!reportedPost){
-        try {
-          let formData = new FormData();
-          formData.append("token", user.session);
-          formData.append("post_id", id);
-          const requestOptions = {
-            method: "POST",
-            body: formData,
-          };
-          let url = PF + "/api/reportings/store";
-          let res = await fetch(url, requestOptions).then((res) => res.json());
-          if (res.success) {
-            setReportedPost(true);
-            setReportMessage("reported");
-          } else {
-            // console.log(res.message);
-            if (res.message == "Member already does reporting for this post"){
-              setReportedPost(true);
-              setReportMessage("Already reported!");
-            } else {
-              setReportedPost(true);
-              setReportMessage("This post was deleted");
-            }
-          }
-          setLoadingReport(false);
-        } catch (e) {
-          if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
-            console.error(e);
-          }
+    const {user, dispatch} = useContext(UserContext);
+    const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+    const [reportedPost, setReportedPost] = useState(parseInt(isReported) === 1);
+    const [loadingReport, setLoadingReport] = useState(false);
+    const [reportMessage, setReportMessage] = useState(parseInt(isReported) !== 0 ? "reported" : "");
+    const [openCommentList, setOpenCommentList] = useState(false);
+    const [sharePostOpened, setSharePostOpened] = useState(false)
+    const modalRef = useRef();
+    const reportRef = useRef();
+    // console.log(reportRef);
+    const animation = useSpring({
+        config: {
+            duration: 450,
+        },
+        opacity: showModal ? 1 : 0,
+        transform: showModal ? `translateY(0%)` : "translateY(-100%)",
+    });
+    const [isClicked, setIsClicked] = useState(false);
+    const closeModal = (e) => {
+        if (modalRef.current === e.target) {
+            setShowModal(false);
         }
-      }else{
-        console.log("delete")
-        try {
-          //request delete
-          const response = await fetch(
-              PF + "/api/reportings/destroy?token=" + user.session+"&post_id="+id,
-              {method: "DELETE"}
-          );
-          const data = await response.json();
-          if (data.success) {
-            setReportMessage("Not reported anymore")
-            setReportedPost(false)
-          } else {
-            if (data.message === "This session token is not valid") {
-              setReportMessage("Please log in")
-              logout(dispatch);
-            }
-          }
-          setLoadingReport(false);
-        } catch (e) {
-          if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
-            console.error(e);
-          }
-        }
-      }
-
     };
-    if (loadingReport) {
-      //    call url api with session token and id
-      //    --> if success set reported to true
-      //    --> if failure "you already signaled this post
-      getModalReport();
-    }
-  }, [loadingReport]);
-  // console.log(date);
-  const handleClickOnTag = (e) => {
-    setSelectedTags([e]);
-    setShowModal(false);
-  };
-  const openComment = () => {
-    setOpenCommentList(!openCommentList);
-      let scrollTarget = document.querySelector(".commentListContainer");
-      if(scrollTarget){
-        setTimeout(()=>{
-          scrollTarget.scrollIntoView({ behavior: "smooth",block:"start"});
-        },[200])
-      }
-  };
-  return (
-    <>
-      {showModal ? (
-        <Background onClick={closeModal} className="backgtound">
-          {!loadingModal ? (
-            <animated.div
-              style={animation}
-              ref={modalRef}
-              className="animated-div modal"
-            >
-              <ModalWrapper showModal={showModal} className="modal-wrapper">
-                <ModalImgWrapper className="modal-img-wrapper">
-                  {images ? (
-                    <img
-                      src={PF + "/" + images.small}
-                      srcSet={`${PF + "/" + images.thumb} 768w, ${
-                        PF + "/" + images.small
-                      } 3200w`}
-                      alt={title}
-                    />
-                  ) : (
-                    <img
-                      src={
-                        PF +
-                        "/storage/app/public/your-world-3-0-default-black-background.jpeg"
-                      }
-                      alt={title}
-                    />
-                  )}
-                </ModalImgWrapper>
+    const keyPress = useCallback(
+        (e) => {
+            if (e.key === "Escape" && showModal) {
+                setShowModal(false);
+                // console.log(text);
+                setIsClicked(false);
+            }
+        },
+        [setShowModal, showModal, setIsClicked]
+    );
 
-                <ModalContent className="modal-content">
-                  <h1>{title}</h1>
-                  <div className="tags">
-                    {tags.map((p, index) => (
-                      <p
-                        key={index}
-                        onClick={() => handleClickOnTag(tags[index])}
-                      >
-                        #{tags[index]}
-                      </p>
-                    ))}
-                  </div>
-                  <p className="modal__date">
-                    <CalendarTodayIcon />
-                    {date}
-                  </p>
-                  <div
-                    className="modal__textWrapper"
-                    dangerouslySetInnerHTML={{ __html: text }}
-                  ></div>
-                  {url !== 0 && (
-                    <div className="modal__button-wrapper">
-                      <a href={url} target="blank">
-                        See website
-                      </a>
-                    </div>
-                  )}
-                  <div className="modal__bottom">
-                    <div className="iconsLeft">
-                      <div
-                        className={
-                          "modal__report-wrapper " +
-                          (reportedPost ? "reported" : "")
+    useEffect(() => {
+        document.addEventListener("keydown", keyPress);
+        return () => document.removeEventListener("keydown", keyPress);
+    }, [keyPress]);
+    //reporting a post
+
+    const reportPost = (e) => {
+        e.preventDefault();
+        if (user) {
+            setLoadingReport(true);
+        } else {
+            setReportedPost(true);
+            setReportMessage("Please login to report");
+        }
+    };
+    useEffect(() => {
+        if (showModal) {
+            setOpenCommentList(false);
+            setSharePostOpened(false)
+        }
+    }, [showModal]);
+    useEffect(() => {
+        if (showModal) {
+            if (parseInt(isReported) === 1) {
+                setReportMessage("reported")
+                setReportedPost(true)
+            } else {
+                setReportMessage("")
+                setReportedPost(false)
+            }
+        }
+    }, [isReported, showModal])
+    useEffect(() => {
+
+        const getModalReport = async () => {
+            console.log(reportedPost)
+            if (!reportedPost) {
+                try {
+                    let formData = new FormData();
+                    formData.append("token", user.session);
+                    formData.append("post_id", id);
+                    const requestOptions = {
+                        method: "POST",
+                        body: formData,
+                    };
+                    let url = PF + "/api/reportings/store";
+                    let res = await fetch(url, requestOptions).then((res) => res.json());
+                    if (res.success) {
+                        setReportedPost(true);
+                        setReportMessage("reported");
+                    } else {
+                        // console.log(res.message);
+                        if (res.message == "Member already does reporting for this post") {
+                            setReportedPost(true);
+                            setReportMessage("Already reported!");
+                        } else {
+                            setReportedPost(true);
+                            setReportMessage("This post was deleted");
                         }
-                        title={
-                          reportedPost
-                            ? "You reported this Post"
-                            : "Report this Post"
+                    }
+                    setLoadingReport(false);
+                } catch (e) {
+                    if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
+                        console.error(e);
+                    }
+                }
+            } else {
+
+                try {
+                    //request delete
+                    const response = await fetch(
+                        PF + "/api/reportings/destroy?token=" + user.session + "&post_id=" + id,
+                        {method: "DELETE"}
+                    );
+                    const data = await response.json();
+                    if (data.success) {
+                        setReportMessage("Not reported anymore")
+                        setReportedPost(false)
+                    } else {
+                        if (data.message === "This session token is not valid") {
+                            setReportMessage("Please log in")
+                            logout(dispatch);
                         }
-                        onClick={(e) => reportPost(e)}
-                      >
-                        <Report className="report-icon" />
-                        <div className="modal__reported">
-                          <span>{reportMessage}</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="iconsRight">
-                      <div className="iconShare">
-                        <Share />
-                      </div>
-                      {/*<div className="iconFav">*/}
-                      {/*  <Favorite />*/}
-                      {/*</div>*/}
-                      {type===0?
-                          <div onClick={() => openComment()} className={"iconComm"}>
-                            <Comment />
-                            {nbComments > 0 && (
-                                <div className="badge--nbComments">
-                                  <span>{nbComments}</span>
+                    }
+                    setLoadingReport(false);
+                } catch (e) {
+                    if (!(e instanceof DOMException) || e.code !== e.ABORT_ERR) {
+                        console.error(e);
+                    }
+                }
+            }
+
+        };
+        if (loadingReport) {
+            //    call url api with session token and id
+            //    --> if success set reported to true
+            //    --> if failure "you already signaled this post
+            getModalReport();
+        }
+    }, [loadingReport]);
+    // console.log(date);
+    const handleClickOnTag = (e) => {
+        setSelectedTags([e]);
+        setShowModal(false);
+    };
+    const openComment = () => {
+        setOpenCommentList(!openCommentList);
+        let scrollTarget = document.querySelector(".commentListContainer");
+        if (scrollTarget) {
+            setTimeout(() => {
+                scrollTarget.scrollIntoView({behavior: "smooth", block: "start"});
+            }, [200])
+        }
+    };
+    return (
+        <>
+            {showModal ? (
+                <Background onClick={closeModal} className="backgtound">
+                    {!loadingModal ? (
+                        <animated.div
+                            style={animation}
+                            ref={modalRef}
+                            className="animated-div modal"
+                        >
+                            {sharePostOpened &&
+                            <SharePost sharePostOpened={sharePostOpened} setSharePosteOpened={setSharePostOpened} postId={id} setShowModal={setShowModal} setShowAuth={setShowAuth}/>
+                            }
+                            <ModalWrapper showModal={showModal} className="modal-wrapper">
+                                <ModalImgWrapper className="modal-img-wrapper">
+                                    {images ? (
+                                        <img
+                                            src={PF + "/" + images.small}
+                                            srcSet={`${PF + "/" + images.thumb} 768w, ${
+                                                PF + "/" + images.small
+                                            } 3200w`}
+                                            alt={title}
+                                        />
+                                    ) : (
+                                        <img
+                                            src={
+                                                PF +
+                                                "/storage/app/public/your-world-3-0-default-black-background.jpeg"
+                                            }
+                                            alt={title}
+                                        />
+                                    )}
+                                </ModalImgWrapper>
+
+                                <ModalContent className="modal-content">
+                                    <h1>{title}</h1>
+                                    <div className="tags">
+                                        {tags.map((p, index) => (
+                                            <p
+                                                key={index}
+                                                onClick={() => handleClickOnTag(tags[index])}
+                                            >
+                                                #{tags[index]}
+                                            </p>
+                                        ))}
+                                    </div>
+                                    <p className="modal__date">
+                                        <CalendarTodayIcon/>
+                                        {date}
+                                    </p>
+                                    <div
+                                        className="modal__textWrapper"
+                                        dangerouslySetInnerHTML={{__html: text}}
+                                    ></div>
+                                    {url !== 0 && (
+                                        <div className="modal__button-wrapper">
+                                            <a href={url} target="blank">
+                                                See website
+                                            </a>
+                                        </div>
+                                    )}
+                                    <div className="modal__bottom">
+                                        <div className="iconsLeft">
+                                            <div
+                                                className={
+                                                    "modal__report-wrapper " +
+                                                    (reportedPost ? "reported" : "")
+                                                }
+                                                title={
+                                                    reportedPost
+                                                        ? "You reported this Post"
+                                                        : "Report this Post"
+                                                }
+                                                onClick={(e) => reportPost(e)}
+                                            >
+                                                <Report className="report-icon"/>
+                                                <div className="modal__reported">
+                                                    <span>{reportMessage}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="iconsRight">
+                                            <div className="iconShare" onClick={() => setSharePostOpened(true)}>
+                                                <Share/>
+                                            </div>
+                                            {/*<div className="iconFav">*/}
+                                            {/*  <Favorite />*/}
+                                            {/*</div>*/}
+                                            {type === 0 ?
+                                                <div onClick={() => openComment()} className={"iconComm"}>
+                                                    <Comment/>
+                                                    {nbComments > 0 && (
+                                                        <div className="badge--nbComments">
+                                                            <span>{nbComments}</span>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                : null}
+
+                                        </div>
+                                    </div>
+
+                                    <div className="modal__bottom-ref" ref={reportRef}></div>
+                                    {type === 0 ?
+                                        <div
+                                            className={
+                                                "modal-comments " + (openCommentList ? "expand" : null)
+                                            }
+                                            id="commentsSection"
+                                        >
+                                            <CommentList
+                                                nbComments={nbComments}
+                                                setNbComments={setNbComments}
+                                                setShowAuth={setShowAuth}
+                                                setShowModal={setShowModal}
+                                                postId={id}
+                                            />
+                                        </div>
+                                        : null}
+
+                                </ModalContent>
+
+                                <CloseModalButton
+                                    aria-label="Close modal"
+                                    onClick={() => setShowModal((prev) => !prev)}
+                                ></CloseModalButton>
+                                <div className="modal__WritePostBtnContainer">
+                                    <WritePostBtn
+                                        setAccountContent={setAccountContent}
+                                        setHomeContent={setHomeContent}
+                                        setShowAuth={setShowAuth}
+                                        modal={true}
+                                        setShowModal={setShowModal}
+                                        setMobileView={setMobileView}
+                                    />
                                 </div>
-                            )}
-                          </div>
-                          :null}
-
-                    </div>
-                  </div>
-
-                  <div className="modal__bottom-ref" ref={reportRef}></div>
-                  { type === 0 ?
-                      <div
-                      className={
-                        "modal-comments " + (openCommentList ? "expand" : null)
-                      }
-                      id="commentsSection"
-                  >
-                    <CommentList
-                        nbComments={nbComments}
-                        setNbComments={setNbComments}
-                        setShowAuth={setShowAuth}
-                        setShowModal={setShowModal}
-                        postId={id}
-                    />
-                  </div>
-                      :null}
-
-                </ModalContent>
-
-                <CloseModalButton
-                  aria-label="Close modal"
-                  onClick={() => setShowModal((prev) => !prev)}
-                ></CloseModalButton>
-                <div className="modal__WritePostBtnContainer">
-                  <WritePostBtn
-                    setAccountContent={setAccountContent}
-                    setHomeContent={setHomeContent}
-                    setShowAuth={setShowAuth}
-                    modal={true}
-                    setShowModal={setShowModal}
-                    setMobileView={setMobileView}
-                  />
-                </div>
-              </ModalWrapper>
-            </animated.div>
-          ) : (
-            <div className="lds-ring">
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-            </div>
-          )}
-        </Background>
-      ) : null}
-    </>
-  );
+                            </ModalWrapper>
+                        </animated.div>
+                    ) : (
+                        <div className="lds-ring">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    )}
+                </Background>
+            ) : null}
+        </>
+    );
 }

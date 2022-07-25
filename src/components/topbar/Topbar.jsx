@@ -99,12 +99,12 @@ export default memo(function Topbar({
           dangerouslySetInnerHTML={{ __html: option_header }}
         ></div>
         <div className="nav">
-          <div className="nav__link">
-            <Favorite />
-          </div>
-          <div className="nav__link">
-            <Search />
-          </div>
+          {/*<div className="nav__link">*/}
+          {/*  <Favorite />*/}
+          {/*</div>*/}
+          {/*<div className="nav__link">*/}
+          {/*  <Search />*/}
+          {/*</div>*/}
           <div className="nav__link" onClick={() => openLoginInterface()}>
             <Person />
           </div>

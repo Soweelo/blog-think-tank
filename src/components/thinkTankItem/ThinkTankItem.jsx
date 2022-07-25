@@ -52,17 +52,17 @@ export default memo(function ThinkTankItem({
         <div className="thinktankItem__message">{title}</div>
         {url !== 0 && <div className="thinktankItem__url">{brand}</div>}
 
-        <div className="thinktankItem__icons">
-          <div className="icon1">
-            <Favorite />
-          </div>
-          <div className="icon2">
-            <Share />
-          </div>
-          <div className="icon3">
-            <Comment />
-          </div>
-        </div>
+        {/*<div className="thinktankItem__icons">*/}
+        {/*  <div className="icon1">*/}
+        {/*    <Favorite />*/}
+        {/*  </div>*/}
+        {/*  <div className="icon2">*/}
+        {/*    <Share />*/}
+        {/*  </div>*/}
+        {/*  <div className="icon3">*/}
+        {/*    <Comment />*/}
+        {/*  </div>*/}
+        {/*</div>*/}
       </div>
     </>
   );

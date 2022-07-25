@@ -103,9 +103,9 @@ export default function Bottombar({
       <div className="home" onClick={(e) => handleClickHome(e)} id="0">
         <Home />
       </div>
-        <div className="search" onClick={handleClickReadByTag}>
-            <Search />
-        </div>
+        {/*<div className="search" onClick={handleClickReadByTag}>*/}
+        {/*    <Search />*/}
+        {/*</div>*/}
       <div className="hamburger" onClick={ () =>setMainMenuOpen(!mainMenuOpen)}>
         <span className="line1"></span>
         <span className="line2"></span>
@@ -114,9 +114,9 @@ export default function Bottombar({
       <div className="account" onClick={() => openLoginInterface()}>
         <Person />
       </div>
-        <div className="account" onClick={() => handleClickFavorites()}>
-            <Favorite />
-        </div>
+        {/*<div className="account" onClick={() => handleClickFavorites()}>*/}
+        {/*    <Favorite />*/}
+        {/*</div>*/}
     </div>
   );
 }

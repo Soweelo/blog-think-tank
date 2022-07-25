@@ -41,9 +41,9 @@ export default function MainMenu({
   return (
     <div className={"menu " + (mainMenuOpen && "active")}>
       <div className="menu__icon-wrapper">
-        <div className="menu__icon">
-          <Favorite />
-        </div>
+        {/*<div className="menu__icon">*/}
+        {/*  <Favorite />*/}
+        {/*</div>*/}
         <div className="menu__icon" onClick={(e) => changeContent(e)} id="0">
           <Home />
         </div>

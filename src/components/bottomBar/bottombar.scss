@@ -15,6 +15,7 @@
   z-index: 14;
   .home{
     flex:1;
+    //flex: 0.6;
     display: none;
     width:32px;
     height: 25px;
@@ -25,7 +26,8 @@
     }
   }
   .search{
-    flex:1;
+    //flex:1;
+    flex:0.6;
     display: none;
     width:32px;
     height: 25px;
