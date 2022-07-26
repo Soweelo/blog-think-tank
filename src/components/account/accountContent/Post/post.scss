@@ -1,4 +1,5 @@
 @import "../../../../global";
+
 .account-content__post {
   width: 100%;
   border-radius: 10px;
@@ -13,20 +14,24 @@
   border-radius: 20px;
   background-color: transparent
 }
-.account-content__mobileView{
-  display: none!important;
+
+.account-content__mobileView {
+  display: none !important;
   margin-left: 1rem;
   cursor: pointer;
-  @include mobile{
+  @include mobile {
     display: flex !important;
   }
 }
+
 .account-content__postTop {
   display: flex;
   align-items: center;
-  autoheight-textarea{
+  flex-direction: column;
+  autoheight-textarea {
     width: 100%;
-    div{
+
+    div {
       box-sizing: border-box;
       font-size: 0.9rem;
       width: 100%;
@@ -52,6 +57,15 @@
   width: 100%;
   white-space: pre-line;
   resize: none;
+  &:first-child{
+    margin: 1rem 0;
+  }
+  .radio{
+    font-size: 14px;
+    span{
+      color: $retro;
+    }
+  }
 }
 
 .account-content__postInput:focus {
@@ -63,7 +77,7 @@
   color: $tertiary;
   width: 100%;
   margin-left: 0;
-  opacity:0.3
+  opacity: 0.3
 }
 
 .account-content__postBottom {
@@ -73,149 +87,170 @@
   flex-direction: column;
 }
 
-.account-content__postOptions{
+.account-content__postOptions {
   display: flex;
   //margin-left: 20px;
   max-width: 100%;
   flex-wrap: wrap;
   flex-direction: column;
-  @include mobile{
-    margin-left:5px;
+  @include mobile {
+    margin-left: 5px;
   }
 }
 
-.account-content__postOption{
+.account-content__postOption {
   display: flex;
   align-content: baseline;
   //align-items: center;
   margin-right: 0;
   cursor: pointer;
-  margin-top:10px;
+  margin-top: 10px;
   flex-wrap: wrap;
-  .account-content__postOption-label-wrapper{
+
+  .account-content__postOption-label-wrapper {
     display: flex;
     align-items: center;
-    margin-top:10px
-    ;max-height: 45px;
-    svg.green{
+    margin-top: 10px;
+    max-height: 45px;
+
+    svg.green {
       color: $validate;
     }
   }
 }
 
-.account-content__postIcon{
+.account-content__postIcon {
   font-size: 18px;
   margin-right: 3px;
   flex-wrap: wrap;
-  &.red{
-    color: $delete }
-  &.blue{
-    color:$edit;
+
+  &.red {
+    color: $delete
+  }
+
+  &.blue {
+    color: $edit;
   }
 }
 
-.account-content__postOptionText{
+.account-content__postOptionText {
   font-size: 14px;
   font-weight: 500;
   margin: auto 5px auto;
   min-width: 50px;
 }
-.account-content__postEditAutoSearch-Wrapper{
-  width: min(100%,580px);
+
+.account-content__postEditAutoSearch-Wrapper {
+  width: min(100%, 580px);
   margin-top: 0.5rem;
 }
-.account-content__postButton{
+
+.account-content__postButton {
   margin-right: 1rem;
   padding: 0.5rem 0.9rem;
-  cursor:pointer;
+  cursor: pointer;
   transition: all 100ms ease-in-out;
-  color:$validate;
-  border:1px solid $validate !important;
-  margin-top:0.5rem;
+  color: $validate;
+  border: 1px solid $validate !important;
+  margin-top: 0.5rem;
 
   text-transform: uppercase;
-  padding:0.2rem;
-width:7rem;
-  margin:auto;
+  padding: 0.2rem;
+  width: 7rem;
+  margin: auto;
 
-  @include mobile{
+  @include mobile {
     font-size: 0.9rem;
     margin: 0.7rem auto;
   }
-  &:hover{
+
+  &:hover {
     font-weight: bold;
     background-color: $shadow;
     color: $primary;
   }
-  &.display-none{
+
+  &.display-none {
     display: none;
   }
 }
 
-.account-content__postImgContainer{
+.account-content__postImgContainer {
   padding: 10px 10px 20px;
   position: relative;
-  @include mobile{
+  @include mobile {
 
   }
 }
 
-.account-content__postImg{
+.account-content__postImg {
   width: 100%;
   max-height: min(300px, 90vh);
   object-fit: contain;
 }
 
-.account-content__postCancelImg{
+.account-content__postCancelImg {
   position: absolute;
   top: 17px;
   right: 20px;
   cursor: pointer;
   opacity: 0.7;
 }
-.account-content__post-wrapper{
-width: 100%;
+
+.account-content__post-wrapper {
+  width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center; align-items: center;
-  margin-top:1rem;
-  .account-content__post-container{
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+
+  .account-content__post-container {
     box-sizing: border-box;
     -webkit-box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.68);
     box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.38);
-    width: min(98%,650px);
+    width: min(98%, 650px);
     margin: 1rem auto;
     padding: 1rem;
 
-    .account-content__top{
+    .account-content__post-label-type{
+      width: 100%;
+      text-align: center;
+      color: $tertiary;
+    }
+    .account-content__top {
       display: flex;
-      .account-content__post-date{
+
+      .account-content__post-date {
         font-size: 0.8rem;
         color: gray;
         padding: 0.5rem;
       }
-      .account-content__buttons-btn-delete{
-        color:$delete;
-        border:1px solid $delete !important;
+
+      .account-content__buttons-btn-delete {
+        color: $delete;
+        border: 1px solid $delete !important;
         padding: 0.4rem 0.8rem;
         margin: 0.5rem 0.5rem 0.5rem auto;
 
-        @include mobile{
-        font-size: 0.9rem;
-        margin: 0.7rem auto;
-      }
-        &:hover{
+        @include mobile {
+          font-size: 0.9rem;
+          margin: 0.7rem 0 0.7rem auto;
+        }
+
+        &:hover {
           font-weight: bold;
           background-color: $shadow;
           color: $primary;
         }
       }
     }
-    .account-content__content-input{
+
+    .account-content__content-input {
       display: flex;
       flex-direction: column;
 
-      .account-content__text{
+      .account-content__text {
         box-sizing: border-box;
         font-size: 0.9rem;
         width: 100%;
@@ -223,73 +258,83 @@ width: 100%;
         border-color: transparent;
         cursor: pointer;
         padding: 0.3rem;
-        resize :none;
+        resize: none;
         height: unset;
       }
-      .account-content__buttons{
+
+      .account-content__buttons {
         height: 0;
         display: flex;
         justify-content: center;
         opacity: 0;
         align-items: center;
         transition: height 0.2s ease-in-out;
-        &.visible{
+
+        &.visible {
           opacity: 1;
           height: 50px;
-          .btn{
+
+          .btn {
             margin-right: 1rem;
 
-            cursor:pointer;
-            transition: all 100ms ease-in-out;
-
-         ;
+            cursor: pointer;
+            transition: all 100ms ease-in-out;;
             text-transform: uppercase;
-            padding:0.2rem;
-            &.account-content__buttons-btn-save{
-              color:$validate;
-              border:1px solid $validate !important;
+            padding: 0.2rem;
+
+            &.account-content__buttons-btn-save {
+              color: $validate;
+              border: 1px solid $validate !important;
               padding: 0.4rem 0.8rem;
             }
-            &.account-content__buttons-btn-delete{
-              color:$delete;
-              border:1px solid $delete !important;
+
+            &.account-content__buttons-btn-delete {
+              color: $delete;
+              border: 1px solid $delete !important;
               padding: 0.4rem 0.8rem;
             }
-            @include mobile{
+
+            @include mobile {
               font-size: 0.9rem;
               margin: 0.7rem auto;
             }
-            &:hover{
+
+            &:hover {
               font-weight: bold;
               background-color: $shadow;
               color: $primary;
             }
-        }
+          }
 
         }
       }
     }
-    .account-content__postBrand{
+
+    .account-content__postBrand {
       display: flex;
-      .account-content__postOption-label-wrapper{
+
+      .account-content__postOption-label-wrapper {
         display: flex;
         align-items: center;
         margin-right: 0.7rem;
-        svg.green{
+
+        svg.green {
           color: $validate;
         }
 
       }
-      .tag{
-          display: flex;
-          align-items: center;
-          padding: 5px;
-          border: 1px solid gray;
-          border-radius: 5px;
-          height: 25px;
-          margin: 2px 5px;
-        }
+
+      .tag {
+        display: flex;
+        align-items: center;
+        padding: 5px;
+        border: 1px solid gray;
+        border-radius: 5px;
+        height: 25px;
+        margin: 2px 5px;
+      }
     }
+
     .account-content__postTags {
       display: flex;
       align-content: baseline;
@@ -297,12 +342,14 @@ width: 100%;
       cursor: pointer;
       margin-top: 0.4rem;
       flex-wrap: wrap;
+
       .account-content__postOption-label-wrapper {
         display: flex;
         align-items: center;
         margin-top: 10px;
         max-height: 45px;;
       }
+
       .account-content__postTagContainer {
         //display: flex;
         //justify-content: center;
@@ -313,7 +360,8 @@ width: 100%;
     }
   }
 }
-.account-content__subTitle{
+
+.account-content__subTitle {
   width: 100%;
   display: flex;
   justify-content: center;

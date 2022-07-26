@@ -39,15 +39,18 @@ export default function CreatePost({
   const postTags = useTrait([]);
   const postBrand = useTrait([]);
   const postBrandId = useTrait(null);
+  const postType = useTrait(0);
   let postContent = useRef();
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const fetch = useFetch();
+
   //submit new post
   const submitHandler = (e) => {
     e.preventDefault();
     formData.append("text", postContent.current.value);
     formData.append("image", file);
     formData.append("brand", postBrandId.get());
+    formData.append("type", postType.get())
     postTags.get().map((tag) => {
       formData.append("tags[]", tag);
     });
@@ -59,9 +62,9 @@ export default function CreatePost({
   const submitPost = async () => {
     try {
       setIsFetching(true);
-      // for (const [key, value] of formData.entries()) {
-      //   console.log(key, value);
-      // }
+      for (const [key, value] of formData.entries()) {
+        // console.log(key, value);
+      }
       const requestOptions = {
         method: "POST",
         body: formData,
@@ -82,6 +85,7 @@ export default function CreatePost({
           id: res.data.id,
           images: file,
           tags: tagsArray,
+          type:postType.get(),
         });
         setPostMessage(res.message);
         setEMessage(["", "red"]);
@@ -90,6 +94,7 @@ export default function CreatePost({
         postBrandId.set(null);
         postTags.set([]);
         postContent.current.value = "";
+        postType.set(0)
       } else {
         setPostMessage(res.message);
 
@@ -102,11 +107,30 @@ export default function CreatePost({
       console.log(e);
     }
   };
+// console.log(postType.get())
   // console.log("postBrand", postBrand.get());
   return (
     <div className="account-content__post">
       <div className="account-content__postWrapper">
         <div className="account-content__postTop">
+          <div className="account-content__postInput">
+            <div className="radio">
+              <label>
+                <input type="radio" value="option1"
+                       checked={postType.get() === 0}
+                       onChange={ () => postType.set(0)} />
+                think tank mode <span>(unables comments on your post)</span>
+              </label>
+            </div>
+            <div className="radio">
+              <label>
+                <input type="radio" value="option2"
+                       checked={postType.get() === 1}
+                       onChange={ () => postType.set(1)} />
+                message mode <span>(disables comments on your post)</span>
+              </label>
+            </div>
+          </div>
           <autoheight-textarea>
             <textarea
               placeholder={"What's in your mind " + user.pseudo + "?"}

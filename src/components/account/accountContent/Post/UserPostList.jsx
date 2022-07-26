@@ -322,6 +322,7 @@ export default function UserPostList({
   // function createMarkup(content) {
   //   return { __html: content };
   // }
+  // console.log(newPost.type)
   return (
     <div className="account-content__post-wrapper">
       {( newPost.id || allPosts.get().length >0) &&
@@ -329,6 +330,7 @@ export default function UserPostList({
       }
       {newPost.id && (
         <div className="account-content__post-container">
+          <div className="account-content__post-label-type">{newPost.type == 0 ? "think tank" : "message"}</div>
           <div className="account-content__top">
             <div className="account-content__post-date">
               {format(newPost.updated_at)}
@@ -370,7 +372,7 @@ export default function UserPostList({
             <div
               className={
                 "account-content__buttons " +
-                (postContentButton[0] == newPost.id && " visible")
+                (postContentButton[0] === newPost.id && " visible")
               }
             >
               <div
@@ -539,6 +541,7 @@ export default function UserPostList({
       {allPosts.get().map((post, i) => {
         return (
           <div className="account-content__post-container" key={i}>
+            <div className="account-content__post-label-type">{post.type === 0 ? "think tank" : "message"}</div>
             <div className="account-content__top">
               <div className="account-content__post-date">
                 {format(post.updated_at)}
