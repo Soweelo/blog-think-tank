@@ -116,18 +116,24 @@ export default function CreatePost({
           <div className="account-content__postInput">
             <div className="radio">
               <label>
-                <input type="radio" value="option1"
-                       checked={postType.get() === 0}
-                       onChange={ () => postType.set(0)} />
-                think tank mode <span>(unables comments on your post)</span>
+                <div>
+                  <input type="radio" value="option1"
+                         checked={postType.get() === 0}
+                         onChange={ () => postType.set(0)} />
+                  think tank mode
+                </div>
+              <span>(unables comments on your post)</span>
               </label>
             </div>
             <div className="radio">
               <label>
-                <input type="radio" value="option2"
-                       checked={postType.get() === 1}
-                       onChange={ () => postType.set(1)} />
-                message mode <span>(disables comments on your post)</span>
+                <div>
+                  <input type="radio" value="option2"
+                         checked={postType.get() === 1}
+                         onChange={ () => postType.set(1)} />
+                  message mode
+                </div>
+                <span>(disables comments on your post)</span>
               </label>
             </div>
           </div>

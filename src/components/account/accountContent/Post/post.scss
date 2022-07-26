@@ -62,9 +62,15 @@
   }
   .radio{
     font-size: 14px;
-    span{
-      color: $retro;
+    label{
+      display: flex;
+      flex-direction: column;
+      span{
+        color: $retro;
+        margin-left: 19px;
+      }
     }
+
   }
 }
 
