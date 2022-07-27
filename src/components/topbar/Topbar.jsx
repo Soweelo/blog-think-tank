@@ -19,6 +19,7 @@ export default memo(function Topbar({
   // const { lang, dispatch } = useContext(LangContext);
   const fetch = useFetch();
   const [option_header, setOption_header] = useState("");
+  const [option_header_smartphone, setOption_header_smartphone] = useState("");
   const options = dataLangToArray(allLang);
   function dataLangToArray(data) {
     const result = [];
@@ -60,8 +61,9 @@ export default memo(function Topbar({
   }, [PF]);
 
   useEffect(() => {
-    let result = getOptionByKey("01_header", allOptions);
-    setOption_header(result);
+
+    setOption_header(getOptionByKey("01_header", allOptions));
+    setOption_header_smartphone( getOptionByKey("01_header_sm", allOptions))
   }, [allOptions]);
   function setName() {
     // console.log(lang, allLang)
@@ -91,12 +93,16 @@ export default memo(function Topbar({
             }}
             className="heading-left__item"
           >
-            {/*Your world 3.0*/}
+            YW3
           </p>
         </div>
         <div
           className="heading-center__item foster"
           dangerouslySetInnerHTML={{ __html: option_header }}
+        ></div>
+        <div
+            className="heading-center__item foster-mobile"
+            dangerouslySetInnerHTML={{ __html: option_header_smartphone }}
         ></div>
         <div className="nav">
           {/*<div className="nav__link">*/}

@@ -20,13 +20,24 @@
       display: flex;
       align-items: center;
       width: 25%;
+      @include mobile{
+        width: 16%;
+      }
 
        .heading-left__item{
           text-decoration: none;
          color: inherit;
          margin-left: 20px;
          cursor: pointer;
-
+         font-weight: 800;
+         font-size: 35px;
+         //font-family: 'Comfortaa', cursive;
+         //font-weight: 700;
+         font-family: 'Varela Round', sans-serif;
+         @include mobile{
+           margin-left:5px;
+           font-size: 27px;
+         }
 
          .icon {
            font-size: 30px;
@@ -46,10 +57,27 @@
         display: none;
       }
     }
+    .foster-mobile{
+      display: none;
+
+      font-weight: 700;
+      @include pad{
+        display: block;
+        font-size: 15px;
+      }
+      @include mobile{
+        font-size: 12px;
+        word-spacing: -3px;
+        letter-spacing: -0.01rem;
+      }
+    }
     .nav{
       display: flex;
       margin-right: 15px;
       align-items: center;
+      @include mobile{
+        margin-right: 5px;
+      }
       .nav__link{
         margin-right: 15px;
         font-size: 18px;
@@ -80,52 +108,52 @@
 
   }
 
-  &::before{
-    content: "";
-    position: absolute;
-    top:10px;
-    left:10px;
-    height: 15px;
-    width: 15px;
-    background-image:url('https://api.yworld3.com/storage/app/public/icon-blue-48.png');
-    background-size:contain;
-    background-repeat: no-repeat;
-    animation: opacity 2s 2.5s linear forwards;
-    opacity: 0;
-    z-index: 10;
-  }
-  &::after{
-    content: "";
-    position: absolute;
-    top:-115px;
-    left:-100px;
-    height: 40px;
-    width: 40px;
-    border-radius: 50%;
-    background-image:url('https://api.yworld3.com/storage/app/public/earthmap.png');
-    background-size:cover;
-    border:1px solid #64c7cb;
-    animation: earthmoves 4s linear 0s infinite ,appears 2s linear forwards;
-    box-shadow:0 0 25px RGBA(255,255,255, 0.10),
-    -8px -8px 15px rgba(100, 199, 203, 0.56) inset,
-    2px 2px 25px rgba(100, 199, 203, 0.18) inset,
-    -45px -45px 25px rgba(100, 199, 203, 0.13) inset,
-    25px 25px 45px rgba(100, 199, 203, 0.6) inset;
-
-  }
-  @keyframes earthmoves {
-    0% { background-position:0 0 }
-    100% { background-position:267px 0 }
-  }
-  @keyframes appears {
-    to{
-      transform: rotate(10deg) translate(110px ,90px);
-    }
-  }
-  @keyframes opacity {
-    to{
-      opacity: 1;
-    }
-  }
+  //&::before{
+  //  content: "";
+  //  position: absolute;
+  //  top:10px;
+  //  left:10px;
+  //  height: 15px;
+  //  width: 15px;
+  //  background-image:url('https://api.yworld3.com/storage/app/public/icon-blue-48.png');
+  //  background-size:contain;
+  //  background-repeat: no-repeat;
+  //  animation: opacity 2s 2.5s linear forwards;
+  //  opacity: 0;
+  //  z-index: 10;
+  //}
+  //&::after{
+  //  content: "";
+  //  position: absolute;
+  //  top:-115px;
+  //  left:-100px;
+  //  height: 40px;
+  //  width: 40px;
+  //  border-radius: 50%;
+  //  background-image:url('https://api.yworld3.com/storage/app/public/earthmap.png');
+  //  background-size:cover;
+  //  border:1px solid #64c7cb;
+  //  animation: earthmoves 4s linear 0s infinite ,appears 2s linear forwards;
+  //  box-shadow:0 0 25px RGBA(255,255,255, 0.10),
+  //  -8px -8px 15px rgba(100, 199, 203, 0.56) inset,
+  //  2px 2px 25px rgba(100, 199, 203, 0.18) inset,
+  //  -45px -45px 25px rgba(100, 199, 203, 0.13) inset,
+  //  25px 25px 45px rgba(100, 199, 203, 0.6) inset;
+  //
+  //}
+  //@keyframes earthmoves {
+  //  0% { background-position:0 0 }
+  //  100% { background-position:267px 0 }
+  //}
+  //@keyframes appears {
+  //  to{
+  //    transform: rotate(10deg) translate(110px ,90px);
+  //  }
+  //}
+  //@keyframes opacity {
+  //  to{
+  //    opacity: 1;
+  //  }
+  //}
 
 }
