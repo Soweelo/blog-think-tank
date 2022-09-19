@@ -116,8 +116,8 @@ export default function Brand({
             </div>
           ) : (
             <div className="account__message-delete-text">
-              Delete this brand?
-              <br /> None of your posts is tagged with this link.
+              Delete this link?
+              <br /> None of your post is tagged with it.
             </div>
           )}
 
@@ -153,7 +153,7 @@ export default function Brand({
         </div>
       )}
       <div className="account-content__info-line">
-        <h2>My Brands</h2>
+        <h2>My Links</h2>
 
         <div className="account-content__buttons">
           <div

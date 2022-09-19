@@ -127,6 +127,7 @@ export default function Post({
         </div>
       )}
       <div id="account-content__top">
+        <div className="account-content__new-post-title">New Post</div>
         <CreatePost
           allTags={allTags}
           setAllTags={setAllTags}

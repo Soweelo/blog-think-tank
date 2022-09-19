@@ -179,7 +179,7 @@ export default function CreatePost({
                   <div className="account-content__postOption-label-wrapper">
                     <LocalActivity className="account-content__postIcon green" />
                     <span className="account-content__postOptionText">
-                      Brand
+                      Link
                     </span>
                   </div>
 

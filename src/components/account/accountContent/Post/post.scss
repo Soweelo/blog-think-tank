@@ -12,7 +12,7 @@
   margin-top: 0.5rem;
   //border: 1px solid $complementary;
   border-radius: 20px;
-  background-color: transparent
+  background-color: $primary;
 }
 
 .account-content__mobileView {
@@ -213,6 +213,8 @@
 
   .account-content__post-container {
     box-sizing: border-box;
+    background-color: $primary;
+    border-radius: 15px;
     -webkit-box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.68);
     box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.38);
     width: min(98%, 650px);
@@ -226,7 +228,6 @@
     }
     .account-content__top {
       display: flex;
-
       .account-content__post-date {
         font-size: 0.8rem;
         color: gray;

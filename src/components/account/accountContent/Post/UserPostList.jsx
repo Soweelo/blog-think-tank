@@ -424,7 +424,7 @@ export default function UserPostList({
             <div className="account-content__postBrand">
               <div className="account-content__postOption-label-wrapper">
                 <LocalActivity className="account-content__postIcon green" />
-                <span className="account-content__postOptionText">Brand</span>
+                <span className="account-content__postOptionText">Link</span>
               </div>
               <div className="tag">{newPost.brand}</div>
             </div>
@@ -655,7 +655,7 @@ export default function UserPostList({
               <div className="account-content__postBrand">
                 <div className="account-content__postOption-label-wrapper">
                   <LocalActivity className="account-content__postIcon green" />
-                  <span className="account-content__postOptionText">Brand</span>
+                  <span className="account-content__postOptionText">Link</span>
                 </div>
                 <div className="tag">{post.brand.name}</div>
               </div>

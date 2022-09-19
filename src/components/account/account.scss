@@ -20,7 +20,7 @@
   }
   .account__para-container {
     width: min(1200px, 95%);
-    background-color: $primary;
+    background-color:rgb(199,199,199);
     color: $secondary;
     box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 16px;
     padding: 0;
@@ -159,7 +159,6 @@
     width: 66%;
     box-sizing: border-box;
     overflow-y: scroll;
-
     scrollbar-width: inherit;
     @include mobile {
       width: 0;
