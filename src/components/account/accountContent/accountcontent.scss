@@ -88,13 +88,13 @@
     border: 1px solid $validate;
     color: $validate;
     width: 8rem;
-    text-transform: uppercase;
+    text-transform: capitalize;
     //font-weight:bold;
     cursor: pointer;
     margin-top: 2rem;
     transition: all 100ms ease-in-out;
     font-size: 1rem;
-    letter-spacing: 2px;
+    //letter-spacing: 2px;
 
     &:hover {
       background-color: $tertiary;

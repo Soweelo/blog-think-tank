@@ -32,7 +32,7 @@
     scrollbar-width: none;
     display: flex;
     min-height: 80vh;
-   
+
     p {
       //margin-bottom: 3rem;
       br {
@@ -110,15 +110,17 @@
         }
       }
       button {
-        width: 110px;
+        //width: 110px;
         color: $primary;
         margin: 0.1rem 0 1rem;
         border: 1px solid $primary;
         cursor: pointer;
         opacity: 0.7;
         padding-left: 1rem;
+        padding-right: 1rem;
         margin-left: 1rem;
         transition: font-weight 50ms ease-in-out;
+        white-space: nowrap;
         &:hover {
           font-weight: bolder;
           background-color: rgba(211, 211, 211, 0.05);

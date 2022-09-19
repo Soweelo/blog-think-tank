@@ -10,7 +10,7 @@ import { CircularProgress } from "@material-ui/core";
 import outDateCookieSession from "../../../../functions/cookiesController/outDateCookieSession";
 import { UserContext } from "../../../../context/UserContext";
 import { logout } from "../../../../context functions/apiCalls";
-
+import getOptionByKey from "../../../../functions/getOptionByKey/GetOptionByKey";
 
 export default function UserPostList({
   setIdToDelete,
@@ -21,6 +21,7 @@ export default function UserPostList({
   reRenderPostsList,
   setRerenderPostsList,
   newPost,
+  allOptions,
 }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const { user, dispatch } = useContext(UserContext);
@@ -31,6 +32,13 @@ export default function UserPostList({
   const [postContent, setPostContent] = useState([-1, ""]);
   const postTagsToChange = useTrait(-1);
   //**
+  const [option_delete, setOption_delete] = useState("");
+  const [option_previous_posts, setOption_previous_posts] = useState("");
+  const [option_save, setOption_save] = useState("");
+  const [option_undo, setOption_undo] = useState("");
+  const [option_display_default_image, setOption_display_default_image] =
+    useState("");
+  const [option_no_image_post, setOption_no_image_post] = useState("");
 
   const postTags = useTrait([]);
   const [eMessage, setEMessage] = useState(["", "blue"]);
@@ -48,7 +56,7 @@ export default function UserPostList({
   // DELETE POST
   const askConfirm = (e) => {
     e.preventDefault();
-    setPostMessage("")
+    setPostMessage("");
     const id = e.target.attributes["data-value"].value;
     // console.log(id);
     setIdToDelete(id);
@@ -57,7 +65,7 @@ export default function UserPostList({
   // const parse = require("html-react-parser");
   // end DELETE POST
   const submitEditContent = async (event) => {
-    setPostMessage("")
+    setPostMessage("");
     const id = event.target.attributes["data-value"].value;
     // console.log(id, postContent, "condition length", postContent[1].length);
     event.preventDefault();
@@ -95,7 +103,7 @@ export default function UserPostList({
   // console.log("newPost", newPost);
   //* ADD TAG
   const addATagToPost = async () => {
-    setPostMessage("")
+    setPostMessage("");
     try {
       const requestOptions = {
         method: "POST",
@@ -133,7 +141,7 @@ export default function UserPostList({
 
   //* DELETE TAG
   const deleteATagToPost = async () => {
-    setPostMessage("")
+    setPostMessage("");
     try {
       const requestOptions = {
         method: "POST",
@@ -224,7 +232,7 @@ export default function UserPostList({
   //***deleteImg
   const deletePostImg = async (id) => {
     // console.log("delete");
-    setPostMessage("")
+    setPostMessage("");
     try {
       const requestOptions = {
         method: "DELETE",
@@ -275,7 +283,7 @@ export default function UserPostList({
     // console.
   };
   const updatePostImg = async () => {
-    setPostMessage("")
+    setPostMessage("");
     try {
       setIsFetching(true);
       const requestOptions = {
@@ -323,14 +331,31 @@ export default function UserPostList({
   //   return { __html: content };
   // }
   // console.log(newPost.type)
+
+  //set all options to translate
+  useEffect(() => {
+    setOption_previous_posts(getOptionByKey("06_previous_posts", allOptions));
+    setOption_delete(getOptionByKey("06_delete", allOptions));
+    setOption_save(getOptionByKey("06_save", allOptions));
+    setOption_display_default_image(
+      getOptionByKey("06_display_default_image", allOptions)
+    );
+    setOption_no_image_post(getOptionByKey("06_no_image_post", allOptions));
+    setOption_undo(getOptionByKey("06_undo", allOptions));
+  }, [allOptions]);
   return (
     <div className="account-content__post-wrapper">
-      {( newPost.id || allPosts.get().length >0) &&
-      <div  className="account-content__subTitle">Your previous posts...</div>
-      }
+      {(newPost.id || allPosts.get().length > 0) && (
+        <div
+          className="account-content__subTitle"
+          dangerouslySetInnerHTML={{ __html: option_previous_posts }}
+        ></div>
+      )}
       {newPost.id && (
         <div className="account-content__post-container">
-          <div className="account-content__post-label-type">{newPost.type == 0 ? "think tank" : "message"}</div>
+          <div className="account-content__post-label-type">
+            {newPost.type == 0 ? "think tank" : "message"}
+          </div>
           <div className="account-content__top">
             <div className="account-content__post-date">
               {format(newPost.updated_at)}
@@ -340,7 +365,8 @@ export default function UserPostList({
               data-value={newPost.id}
               onClick={(e) => askConfirm(e)}
             >
-              DELETE POST
+              <span dangerouslySetInnerHTML={{ __html: option_delete }}></span>{" "}
+              {" POST"}
             </div>
           </div>
 
@@ -382,17 +408,15 @@ export default function UserPostList({
                   submitEditContent(e);
                   // console.log("ok");
                 }}
-              >
-                SAVE
-              </div>
+                dangerouslySetInnerHTML={{ __html: option_save }}
+              ></div>
               <div
                 className="btn account-content__buttons-btn-delete"
                 onClick={() => {
                   undoChangeContent();
                 }}
-              >
-                UNDO
-              </div>
+                dangerouslySetInnerHTML={{ __html: option_undo }}
+              ></div>
             </div>
           </div>
 
@@ -448,89 +472,98 @@ export default function UserPostList({
           </div>
           <form onSubmit={submitHandlerPostImg}>
             <label
-                htmlFor={"file-" + newPost.id}
-                className="account-content__postOption"
+              htmlFor={"file-" + newPost.id}
+              className="account-content__postOption"
             >
               <PermMedia className="account-content__postIcon red" />
               <span className="account-content__postOptionText">
-                Photo or Video
+                Photo / Video
               </span>
 
               <input
-                  style={{ display: "none" }}
-                  type="file"
-                  id={"file-" + newPost.id}
-                  accept=".png,.jpeg,.jpg"
-                  onChange={(e) => {
-                    setFile(e.target.files[0]);
-                    changedImgPostId.set(newPost.id);
-                    handleFileChange(e);
-                  }}
-                  // onChange={(e) => setFile([e.target.files[0]])}
-                  // value={file[0] == post.id ? file[1] : post.file}
+                style={{ display: "none" }}
+                type="file"
+                id={"file-" + newPost.id}
+                accept=".png,.jpeg,.jpg"
+                onChange={(e) => {
+                  setFile(e.target.files[0]);
+                  changedImgPostId.set(newPost.id);
+                  handleFileChange(e);
+                }}
+                // onChange={(e) => setFile([e.target.files[0]])}
+                // value={file[0] == post.id ? file[1] : post.file}
               />
             </label>
             <div className="account-content__postImgContainer">
-
-                {changedImgPostId.get() == newPost.id ? (
-                    file ? (
-                        <>
-                          <img
-                              className="account-content__postImg"
-                              src={URL.createObjectURL(file)}
-                              alt=""
-                          />
-                          <Cancel
-                              className="account-content__postCancelImg"
-                              onClick={() => {
-                                deletePostImg(newPost.id);
-                                setFile(null);
-                                // changedImgPostId.set(-1);
-                              }}
-                          />
-                        </>
-                    ) : (
-                        <p>
-                          This post has no image. <b>Your world 3.0</b> I'll display
-                          a default image
-                        </p>
-                    )
-                ) : newPost.images ? (
-                    <>
-                      <img
-                          className="account-content__postImg"
-                          src={URL.createObjectURL(newPost.images)}
-                          alt=""
-                      />
-                      {/*{console.log(newPost.tags)}*/}
-                      <Cancel
-                          className="account-content__postCancelImg"
-                          onClick={() => {
-                            deletePostImg(newPost.id);
-                            changedImgPostId.set(newPost.id);
-                            setFile(null);
-                          }}
-                      />
-                    </>
+              {changedImgPostId.get() == newPost.id ? (
+                file ? (
+                  <>
+                    <img
+                      className="account-content__postImg"
+                      src={URL.createObjectURL(file)}
+                      alt=""
+                    />
+                    <Cancel
+                      className="account-content__postCancelImg"
+                      onClick={() => {
+                        deletePostImg(newPost.id);
+                        setFile(null);
+                        // changedImgPostId.set(-1);
+                      }}
+                    />
+                  </>
                 ) : (
-                    <p>
-                      This post has no image. <b>Your world 3.0</b> I'll display a
-                      default image
-                    </p>
-                )}
-
+                  <>
+                    <p
+                      dangerouslySetInnerHTML={{ __html: option_no_image_post }}
+                    ></p>
+                    <p
+                      dangerouslySetInnerHTML={{
+                        __html: option_display_default_image,
+                      }}
+                    ></p>
+                  </>
+                )
+              ) : newPost.images ? (
+                <>
+                  <img
+                    className="account-content__postImg"
+                    src={URL.createObjectURL(newPost.images)}
+                    alt=""
+                  />
+                  {/*{console.log(newPost.tags)}*/}
+                  <Cancel
+                    className="account-content__postCancelImg"
+                    onClick={() => {
+                      deletePostImg(newPost.id);
+                      changedImgPostId.set(newPost.id);
+                      setFile(null);
+                    }}
+                  />
+                </>
+              ) : (
+                <>
+                  <p
+                    dangerouslySetInnerHTML={{ __html: option_no_image_post }}
+                  ></p>
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html: option_display_default_image,
+                    }}
+                  ></p>
+                </>
+              )}
             </div>
             <button
-                className={
-                  "btn account-content__postButton " +
-                  (changedImgPostId.get() == newPost.id && file
-                      ? null
-                      : "display-none")
-                }
-                disabled={isFetching}
-                type="submit"
-
-                style={{ marginLeft: "calc(50% - 43px)" }}
+              className={
+                "btn account-content__postButton " +
+                (changedImgPostId.get() == newPost.id && file
+                  ? null
+                  : "display-none")
+              }
+              disabled={isFetching}
+              type="submit"
+              style={{ marginLeft: "calc(50% - 43px)" }}
             >
               {isFetching ? <CircularProgress size="20px" /> : "SAVE"}
             </button>
@@ -541,7 +574,9 @@ export default function UserPostList({
       {allPosts.get().map((post, i) => {
         return (
           <div className="account-content__post-container" key={i}>
-            <div className="account-content__post-label-type">{post.type === 0 ? "think tank" : "message"}</div>
+            <div className="account-content__post-label-type">
+              {post.type === 0 ? "think tank" : "message"}
+            </div>
             <div className="account-content__top">
               <div className="account-content__post-date">
                 {format(post.updated_at)}
@@ -551,7 +586,10 @@ export default function UserPostList({
                 data-value={post.id}
                 onClick={(e) => askConfirm(e)}
               >
-                DELETE POST
+                <span
+                  dangerouslySetInnerHTML={{ __html: option_delete }}
+                ></span>{" "}
+                {"POST"}
               </div>
             </div>
 
@@ -601,17 +639,15 @@ export default function UserPostList({
                     submitEditContent(e);
                     // console.log("ok");
                   }}
-                >
-                  SAVE
-                </div>
+                  dangerouslySetInnerHTML={{ __html: option_save }}
+                ></div>
                 <div
                   className="btn account-content__buttons-btn-delete"
                   onClick={() => {
                     undoChangeContent();
                   }}
-                >
-                  UNDO
-                </div>
+                  dangerouslySetInnerHTML={{ __html: option_undo }}
+                ></div>
               </div>
             </div>
 
@@ -666,94 +702,112 @@ export default function UserPostList({
             </div>
             <form onSubmit={submitHandlerPostImg}>
               <label
-                  htmlFor={"file-" + post.id}
-                  className="account-content__postOption"
+                htmlFor={"file-" + post.id}
+                className="account-content__postOption"
               >
                 <PermMedia className="account-content__postIcon red" />
                 <span className="account-content__postOptionText">
-                  Photo or Video
+                  Photo / Video
                 </span>
 
                 <input
-                    style={{ display: "none" }}
-                    type="file"
-                    id={"file-" + post.id}
-                    accept=".png,.jpeg,.jpg"
-                    onChange={(e) => {
-                      setFile(e.target.files[0]);
-                      changedImgPostId.set(post.id);
-                      handleFileChange(e);
-                    }}
-                    // onChange={(e) => setFile([e.target.files[0]])}
-                    // value={file[0] == post.id ? file[1] : post.file}
+                  style={{ display: "none" }}
+                  type="file"
+                  id={"file-" + post.id}
+                  accept=".png,.jpeg,.jpg"
+                  onChange={(e) => {
+                    setFile(e.target.files[0]);
+                    changedImgPostId.set(post.id);
+                    handleFileChange(e);
+                  }}
+                  // onChange={(e) => setFile([e.target.files[0]])}
+                  // value={file[0] == post.id ? file[1] : post.file}
                 />
               </label>
               <div className="account-content__postImgContainer">
                 <div
-                    className="account-content__postImgContainer"
-                    // onClick={(e) => console.log(post.id)}
+                  className="account-content__postImgContainer"
+                  // onClick={(e) => console.log(post.id)}
                 >
                   {changedImgPostId.get() == post.id ? (
-                      file ? (
-                          <>
-                            <img
-                                className="account-content__postImg"
-                                src={URL.createObjectURL(file)}
-                                alt=""
-                            />
-                            <Cancel
-                                className="account-content__postCancelImg"
-                                onClick={() => {
-                                  deletePostImg(post.id);
-                                  setFile(null);
-                                  // changedImgPostId.set(-1);
-                                }}
-                            />
-                          </>
-                      ) : (
-                          <p>
-                            This post has no image. <b>Your world 3.0</b> I'll
-                            display a default image
-                          </p>
-                      )
-                  ) : post.images ? (
+                    file ? (
                       <>
                         <img
-                            className="account-content__postImg"
-                            src={PF + "/" + post.images.small}
-                            srcSet={`${PF + "/" + post.images.thumb} 768w, ${
-                                PF + "/" + post.images.small
-                            } 3200w`}
-                            // alt={title}
+                          className="account-content__postImg"
+                          src={URL.createObjectURL(file)}
+                          alt=""
                         />
                         <Cancel
-                            className="account-content__postCancelImg"
-                            onClick={() => {
-                              deletePostImg(post.id);
-                              changedImgPostId.set(post.id);
-                              setFile(null);
-                            }}
+                          className="account-content__postCancelImg"
+                          onClick={() => {
+                            deletePostImg(post.id);
+                            setFile(null);
+                            // changedImgPostId.set(-1);
+                          }}
                         />
                       </>
+                    ) : (
+                      <>
+                        <p
+                          dangerouslySetInnerHTML={{
+                            __html: option_no_image_post,
+                          }}
+                        >
+                          {" "}
+                        </p>
+                        <p
+                          dangerouslySetInnerHTML={{
+                            __html: option_display_default_image,
+                          }}
+                        ></p>
+                      </>
+                    )
+                  ) : post.images ? (
+                    <>
+                      <img
+                        className="account-content__postImg"
+                        src={PF + "/" + post.images.small}
+                        srcSet={`${PF + "/" + post.images.thumb} 768w, ${
+                          PF + "/" + post.images.small
+                        } 3200w`}
+                        // alt={title}
+                      />
+                      <Cancel
+                        className="account-content__postCancelImg"
+                        onClick={() => {
+                          deletePostImg(post.id);
+                          changedImgPostId.set(post.id);
+                          setFile(null);
+                        }}
+                      />
+                    </>
                   ) : (
-                      <p>
-                        This post has no image. <b>Your world 3.0</b> I'll display
-                        a default image
-                      </p>
+                    <>
+                      <p
+                        dangerouslySetInnerHTML={{
+                          __html: option_no_image_post,
+                        }}
+                      ></p>
+                      <p
+                        dangerouslySetInnerHTML={{
+                          __html: option_display_default_image,
+                        }}
+                      ></p>
+                    </>
                   )}
                 </div>
               </div>
               <button
-                  className={
-                    "btn account-content__postButton " +
-                    (changedImgPostId.get() == post.id && file
-                        ? null
-                        : "display-none")
-                  }
-                  disabled={isFetching}
-                  type="submit"
-                  // style="margin-left: calc(50% - 43px)"
-                  style={{ marginLeft: "calc(50% - 43px)" }}
+                className={
+                  "btn account-content__postButton " +
+                  (changedImgPostId.get() == post.id && file
+                    ? null
+                    : "display-none")
+                }
+                disabled={isFetching}
+                type="submit"
+                // style="margin-left: calc(50% - 43px)"
+                style={{ marginLeft: "calc(50% - 43px)" }}
               >
                 {isFetching ? <CircularProgress size="20px" /> : "SAVE"}
               </button>

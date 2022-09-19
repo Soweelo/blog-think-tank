@@ -8,11 +8,13 @@ import Scroll from "../../../scroll/scroll";
 import { UserContext } from "../../../../context/UserContext";
 import { logout } from "../../../../context functions/apiCalls";
 import { useFetch } from "../../../../hooks/useFetch";
+import getOptionByKey from "../../../../functions/getOptionByKey/GetOptionByKey";
 export default function Post({
   setMobileView,
   lang,
   setHomeContent,
   allBrands,
+  allOptions,
 }) {
   const { user, dispatch } = useContext(UserContext);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
@@ -23,6 +25,7 @@ export default function Post({
   const [rerenderPostsList, setRerenderPostsList] = useState(true);
   const [newPost, setNewPost] = useState({});
   const fetch = useFetch();
+
   //delete post
   const deletePost = async (id) => {
     try {
@@ -85,7 +88,7 @@ export default function Post({
         className="account-content__mobileView"
         onClick={(e) => {
           e.preventDefault();
-        setMobileView("menu");
+          setMobileView("menu");
         }}
       />
       {openConfirm && (
@@ -131,10 +134,9 @@ export default function Post({
           newPost={newPost}
           setNewPost={setNewPost}
           allBrands={allBrands}
+          allOptions={allOptions}
         />
       </div>
-
-
 
       <UserPostList
         setIdToDelete={setIdToDelete}
@@ -148,6 +150,7 @@ export default function Post({
         newPost={newPost}
         setNewPost={setNewPost}
         allBrands={allBrands}
+        allOptions={allOptions}
       />
     </div>
   );

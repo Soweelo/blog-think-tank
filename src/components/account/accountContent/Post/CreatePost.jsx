@@ -5,7 +5,7 @@ import {
   Flag,
   LocalActivity,
 } from "@material-ui/icons";
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import useTrait from "../../../../hooks/useTrait";
 import "autoheight-textarea";
 import EditAutoCSearchbar from "../../../autoCSearchBar/EditAutoSearchBar";
@@ -14,6 +14,7 @@ import { CircularProgress } from "@material-ui/core";
 import { UserContext } from "../../../../context/UserContext";
 import { logout } from "../../../../context functions/apiCalls";
 import AutoCSearchbar from "../../../autoCSearchBar/AutoCSearchbar";
+import getOptionByKey from "../../../../functions/getOptionByKey/GetOptionByKey";
 
 export default function CreatePost({
   allTags,
@@ -21,11 +22,24 @@ export default function CreatePost({
   setPostMessage,
   setNewPost,
   allBrands,
+  allOptions,
 }) {
   const { user, dispatch } = useContext(UserContext);
   const [eMessage, setEMessage] = useState("");
   const [eBrandMessage, setEBrandMessage] = useState(["", "black"]);
   const [isFetching, setIsFetching] = useState(false);
+  const [option_unable_comments, setOption_unable_comments] = useState("");
+  const [option_disable_comments, setOption_disable_comments] = useState("");
+  const [option_in_your_mind, setOption_in_your_mind] = useState("");
+  //getting options
+
+  useEffect(() => {
+    setOption_unable_comments(getOptionByKey("06_unable_comments", allOptions));
+    setOption_disable_comments(
+      getOptionByKey("06_disable_comments", allOptions)
+    );
+    setOption_in_your_mind(getOptionByKey("06_in_your_mind", allOptions));
+  }, [allOptions]);
   //formatting allBarnds for editAutoCSearchBar
   let adaptedBrands = [];
   allBrands.get().map((brand) => {
@@ -50,7 +64,7 @@ export default function CreatePost({
     formData.append("text", postContent.current.value);
     formData.append("image", file);
     formData.append("brand", postBrandId.get());
-    formData.append("type", postType.get())
+    formData.append("type", postType.get());
     postTags.get().map((tag) => {
       formData.append("tags[]", tag);
     });
@@ -85,7 +99,7 @@ export default function CreatePost({
           id: res.data.id,
           images: file,
           tags: tagsArray,
-          type:postType.get(),
+          type: postType.get(),
         });
         setPostMessage(res.message);
         setEMessage(["", "red"]);
@@ -94,7 +108,7 @@ export default function CreatePost({
         postBrandId.set(null);
         postTags.set([]);
         postContent.current.value = "";
-        postType.set(0)
+        postType.set(0);
       } else {
         setPostMessage(res.message);
 
@@ -107,7 +121,7 @@ export default function CreatePost({
       console.log(e);
     }
   };
-// console.log(postType.get())
+  // console.log(postType.get())
   // console.log("postBrand", postBrand.get());
   return (
     <div className="account-content__post">
@@ -117,29 +131,39 @@ export default function CreatePost({
             <div className="radio">
               <label>
                 <div>
-                  <input type="radio" value="option1"
-                         checked={postType.get() === 0}
-                         onChange={ () => postType.set(0)} />
+                  <input
+                    type="radio"
+                    value="option1"
+                    checked={postType.get() === 0}
+                    onChange={() => postType.set(0)}
+                  />
                   think tank mode
                 </div>
-              <span>(unables comments on your post)</span>
+                <span
+                  dangerouslySetInnerHTML={{ __html: option_unable_comments }}
+                ></span>
               </label>
             </div>
             <div className="radio">
               <label>
                 <div>
-                  <input type="radio" value="option2"
-                         checked={postType.get() === 1}
-                         onChange={ () => postType.set(1)} />
+                  <input
+                    type="radio"
+                    value="option2"
+                    checked={postType.get() === 1}
+                    onChange={() => postType.set(1)}
+                  />
                   message mode
                 </div>
-                <span>(disables comments on your post)</span>
+                <span
+                  dangerouslySetInnerHTML={{ __html: option_disable_comments }}
+                ></span>
               </label>
             </div>
           </div>
           <autoheight-textarea>
             <textarea
-              placeholder={"What's in your mind " + user.pseudo + "?"}
+              placeholder={option_in_your_mind + " " + user.pseudo + "?"}
               className="account-content__postInput"
               ref={postContent}
             />
@@ -149,7 +173,6 @@ export default function CreatePost({
 
         <form className="account-content__postBottom" onSubmit={submitHandler}>
           <div className="account-content__postOptions">
-
             {allBrands.get().length > 0 && (
               <>
                 <div className="account-content__postOption">
@@ -183,7 +206,7 @@ export default function CreatePost({
                 </div>
               </>
             )}
-         
+
             <div className="account-content__postOption">
               <div className="account-content__postOption-label-wrapper">
                 <Label className="account-content__postIcon blue" />
@@ -215,21 +238,21 @@ export default function CreatePost({
               </span>
 
               <input
-                  style={{ display: "none" }}
-                  type="file"
-                  id="file"
-                  accept=".png,.jpeg,.jpg"
-                  onChange={(e) => setFile(e.target.files[0])}
+                style={{ display: "none" }}
+                type="file"
+                id="file"
+                accept=".png,.jpeg,.jpg"
+                onChange={(e) => setFile(e.target.files[0])}
               />
             </label>
             {file && (
-                <div className="account-content__postImgContainer">
-                  <img
-                      className="account-content__postImg"
-                      src={URL.createObjectURL(file)}
-                      alt={""}
-                  />
-                </div>
+              <div className="account-content__postImgContainer">
+                <img
+                  className="account-content__postImg"
+                  src={URL.createObjectURL(file)}
+                  alt={""}
+                />
+              </div>
             )}
           </div>
 
