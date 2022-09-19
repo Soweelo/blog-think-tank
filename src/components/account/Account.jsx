@@ -30,6 +30,7 @@ export default function Account({
   const [option_myposts, setOption_myposts] = useState("");
   const [option_myaccount, setOption_myaccount] = useState("");
   const [option_mylinks, setOption_mylinks] = useState("");
+  const acceptedAdds = useTrait(true);
   // const changeMobileViewContent = useTrait(false)
   let menuItems = [
     {
@@ -101,6 +102,38 @@ export default function Account({
                 );
               })}
             </ul>
+          </div>
+          <div className="account__menubar-accept-add">
+            <p>La publicité sélective est notre seule source de revenu</p>
+            <div className="radio">
+              <label>
+                <div>
+                  <input
+                      type="radio"
+                      value="option1"
+                      checked={acceptedAdds.get()}
+                      onChange={() => acceptedAdds.set(true)}
+                  />
+                  J'accepte de la voir et contribue au développement du réseau
+                </div>
+
+              </label>
+            </div>
+            <div className="radio">
+              <label>
+                <div>
+                  <input
+                      type="radio"
+                      value="option2"
+                      checked={!acceptedAdds.get()}
+                      onChange={() => acceptedAdds.set(false)}
+                  />
+              Je refuse de la voir
+                </div>
+
+              </label>
+            </div>
+
           </div>
         </div>
         <div

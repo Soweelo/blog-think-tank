@@ -154,6 +154,24 @@
         }
       }
     }
+    .account__menubar-accept-add{
+      padding:1rem;
+      font-size: 13px;
+      .radio{
+        margin-top:10px;
+        label{
+          cursor: pointer;
+          div{
+            display: flex;
+            justify-content: start;
+            align-items: start;
+            input{
+              margin: 0 10px 0 0;
+            }
+          }
+        }
+      }
+    }
   }
   .account__content-display {
     width: 66%;
