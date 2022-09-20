@@ -130,18 +130,19 @@ export default function CreatePost({
           <div className="account-content__postInput">
             <div className="radio">
               <label>
-                <div>
+                <div >
                   <input
                     type="radio"
                     value="option1"
                     checked={postType.get() === 0}
                     onChange={() => postType.set(0)}
                   />
-                  think tank mode
+                  {option_unable_comments}
+                  {/*think tank mode*/}
                 </div>
-                <span
-                  dangerouslySetInnerHTML={{ __html: option_unable_comments }}
-                ></span>
+                {/*<span*/}
+                {/*  dangerouslySetInnerHTML={{ __html: option_unable_comments }}*/}
+                {/*></span>*/}
               </label>
             </div>
             <div className="radio">
@@ -153,17 +154,19 @@ export default function CreatePost({
                     checked={postType.get() === 1}
                     onChange={() => postType.set(1)}
                   />
-                  message mode
+                  {/*message mode*/}
+                  {option_disable_comments}
                 </div>
-                <span
-                  dangerouslySetInnerHTML={{ __html: option_disable_comments }}
-                ></span>
+                {/*<span*/}
+                {/*  dangerouslySetInnerHTML={{ __html: option_disable_comments }}*/}
+                {/*></span>*/}
               </label>
             </div>
           </div>
           <autoheight-textarea>
             <textarea
-              placeholder={option_in_your_mind + " " + user.pseudo + "?"}
+              // placeholder={option_in_your_mind + " " + user.pseudo + "?"}
+              placeholder={"Message"}
               className="account-content__postInput"
               ref={postContent}
             />
@@ -234,7 +237,7 @@ export default function CreatePost({
             <label htmlFor="file" className="account-content__postOption">
               <PermMedia className="account-content__postIcon red" />
               <span className="account-content__postOptionText">
-                Photo or Video
+                Photo / Video
               </span>
 
               <input
