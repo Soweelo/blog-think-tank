@@ -184,9 +184,7 @@
 .account-content__postImgContainer {
   padding: 10px 10px 20px;
   position: relative;
-  @include mobile {
 
-  }
 }
 
 .account-content__postImg {
@@ -374,4 +372,21 @@
   justify-content: center;
   align-items: center;
   margin-top: 2rem;
+}
+.account-content__newLinkWrapper{
+  margin-left: 33px;
+  .account-content__seeMore{
+    color: $retro;
+    position: relative;
+    width: max-content;
+    &::after{
+      position: absolute;
+      content: '';
+      bottom:-2px;
+      left: 0;
+      height: 1px;
+      width: 100%;
+      background-color: $retro;
+    }
+  }
 }

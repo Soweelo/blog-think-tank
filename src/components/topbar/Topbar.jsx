@@ -61,9 +61,8 @@ export default memo(function Topbar({
   }, [PF]);
 
   useEffect(() => {
-
     setOption_header(getOptionByKey("01_header", allOptions));
-    setOption_header_smartphone( getOptionByKey("01_header_sm", allOptions))
+    setOption_header_smartphone(getOptionByKey("01_header_sm", allOptions));
   }, [allOptions]);
   function setName() {
     // console.log(lang, allLang)
@@ -93,7 +92,7 @@ export default memo(function Topbar({
             }}
             className="heading-left__item"
           >
-            YW3
+            Y
           </p>
         </div>
         <div
@@ -101,8 +100,8 @@ export default memo(function Topbar({
           dangerouslySetInnerHTML={{ __html: option_header }}
         ></div>
         <div
-            className="heading-center__item foster-mobile"
-            dangerouslySetInnerHTML={{ __html: option_header_smartphone }}
+          className="heading-center__item foster-mobile"
+          dangerouslySetInnerHTML={{ __html: option_header_smartphone }}
         ></div>
         <div className="nav">
           {/*<div className="nav__link">*/}

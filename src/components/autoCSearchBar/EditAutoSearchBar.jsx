@@ -18,10 +18,9 @@ export default function EditAutoCSearchbar({
   postSelectedItemId,
   firstIsBrand,
 }) {
-
   const [isSuggestion, setIsSuggestion] = useState(false);
   const searchText = useTrait("");
-  const inputContent = useRef()
+  const inputContent = useRef();
   const isNewTag = useTrait(false);
   const equalValues = useTrait(0);
   const updateSuggestion = (e) => {
@@ -48,12 +47,17 @@ export default function EditAutoCSearchbar({
   };
 
   const addItem = (e) => {
+    // console.log(e.target);
+    // console.log(e.target.parentNode);
+    // console.log(e.target.attributes["tagsuggest"].value); voir la valeur du noeud parent
     if (selectedItems.length < (firstIsBrand ? max + 1 : max)) {
       // console.log(e.target.className.includes("suggestion-select-item"));
-
-      let newTagName = e.target.className.includes("suggestion-select-item")
-        ? e.target.attributes["tagsuggest"].value
-        : e.target.value;
+      console.log("aa");
+      let newTagName =
+        e.target.className.includes("suggestion-select-item") ||
+        e.target.parentNode.className.includes("suggestion-select-item")
+          ? e.target.attributes["tagsuggest"].value
+          : e.target.value;
 
       // check if searched item exists in allItems
       let existsSuchItem = allItems.filter(
@@ -65,9 +69,14 @@ export default function EditAutoCSearchbar({
         postSelectedItems.set([...postSelectedItems.get(), newTagName]);
 
         //** send  item id to parent
-        if ( e.target.attributes["tagsuggest-id"] && e.target.attributes["tagsuggest-id"].value != 0) {
+        if (
+          e.target.attributes["tagsuggest-id"] &&
+          e.target.attributes["tagsuggest-id"].value != 0
+        ) {
           let newTagId = e.target.attributes["tagsuggest-id"].value;
-         if(postSelectedItemId) {postSelectedItemId.set(newTagId)};
+          if (postSelectedItemId) {
+            postSelectedItemId.set(newTagId);
+          }
         }
         // console.log("in here");
         //**send signal to parent for updating the post
@@ -163,8 +172,8 @@ export default function EditAutoCSearchbar({
             onClick={addItem}
             tagsuggest={searchText.get()}
           >
-            <p>#{searchText.get()}</p>
-            <span>New Tag</span>
+            <p tagsuggest={searchText.get()}>#{searchText.get()}</p>
+            <span tagsuggest={searchText.get()}>New Tag</span>
           </div>
         )}
         {/*{console.log("all items", allItems, removeDuplicates(allItems))}*/}

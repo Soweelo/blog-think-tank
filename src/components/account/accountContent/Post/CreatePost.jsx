@@ -15,6 +15,7 @@ import { UserContext } from "../../../../context/UserContext";
 import { logout } from "../../../../context functions/apiCalls";
 import AutoCSearchbar from "../../../autoCSearchBar/AutoCSearchbar";
 import getOptionByKey from "../../../../functions/getOptionByKey/GetOptionByKey";
+import AddBrand from "./AddBrand";
 
 export default function CreatePost({
   allTags,
@@ -31,6 +32,8 @@ export default function CreatePost({
   const [option_unable_comments, setOption_unable_comments] = useState("");
   const [option_disable_comments, setOption_disable_comments] = useState("");
   const [option_in_your_mind, setOption_in_your_mind] = useState("");
+  const [newLinkForm, setNewLinkForm] = useState(false);
+
   //getting options
 
   useEffect(() => {
@@ -109,6 +112,7 @@ export default function CreatePost({
         postTags.set([]);
         postContent.current.value = "";
         postType.set(0);
+        setNewLinkForm(false);
       } else {
         setPostMessage(res.message);
 
@@ -122,7 +126,7 @@ export default function CreatePost({
     }
   };
   // console.log(postType.get())
-  // console.log("postBrand", postBrand.get());
+  console.log("postBrand", postBrand.get());
   return (
     <div className="account-content__post">
       <div className="account-content__postWrapper">
@@ -130,7 +134,7 @@ export default function CreatePost({
           <div className="account-content__postInput">
             <div className="radio">
               <label>
-                <div >
+                <div>
                   <input
                     type="radio"
                     value="option1"
@@ -205,6 +209,17 @@ export default function CreatePost({
                     >
                       {eBrandMessage[0]}
                     </div>
+                  </div>
+                  <div className="account-content__newLinkWrapper">
+                    <div
+                      className="account-content__seeMore"
+                      onClick={() => setNewLinkForm(true)}
+                    >
+                      Add a new Link
+                    </div>
+                    {newLinkForm && (
+                      <AddBrand allBrands={allBrands} postBrand={postBrand} />
+                    )}
                   </div>
                 </div>
               </>
