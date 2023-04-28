@@ -7,6 +7,7 @@ import { useFetch } from "../../hooks/useFetch";
 import getOptionByKey from "../../functions/getOptionByKey/GetOptionByKey";
 import { UserContext } from "../../context/UserContext";
 import { langSetter } from "../../context functions/langCall";
+import styled from "styled-components";
 export default memo(function Topbar({
   setHomeContent,
   setShowAuth,
@@ -21,6 +22,16 @@ export default memo(function Topbar({
   const [option_header, setOption_header] = useState("");
   const [option_header_smartphone, setOption_header_smartphone] = useState("");
   const options = dataLangToArray(allLang);
+  const CustomTopBar = styled.div`
+    @media (max-width: 768px) {
+      background-color: ${getOptionByKey(
+        "01_bgcolor_header",
+        allOptions
+      )} !important;
+      color: ${getOptionByKey("01_color_header", allOptions)} !important;
+    }
+  `;
+
   function dataLangToArray(data) {
     const result = [];
 
@@ -82,8 +93,9 @@ export default memo(function Topbar({
       setShowAuth(true);
     }
   }
+
   return (
-    <div className="topbar">
+    <CustomTopBar className="topbar">
       <div className="wrapper">
         <div className="heading-left">
           <p
@@ -124,6 +136,6 @@ export default memo(function Topbar({
           />
         </div>
       </div>
-    </div>
+    </CustomTopBar>
   );
 });

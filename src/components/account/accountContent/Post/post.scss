@@ -57,20 +57,19 @@
   width: 100%;
   white-space: pre-line;
   resize: none;
-  &:first-child{
+  &:first-child {
     margin: 1rem 0;
   }
-  .radio{
+  .radio {
     font-size: 14px;
-    label{
+    label {
       display: flex;
       flex-direction: column;
-      span{
+      span {
         color: $retro;
         margin-left: 19px;
       }
     }
-
   }
 }
 
@@ -83,7 +82,7 @@
   color: $tertiary;
   width: 100%;
   margin-left: 0;
-  opacity: 0.3
+  opacity: 0.3;
 }
 
 .account-content__postBottom {
@@ -131,7 +130,7 @@
   flex-wrap: wrap;
 
   &.red {
-    color: $delete
+    color: $delete;
   }
 
   &.blue {
@@ -184,7 +183,6 @@
 .account-content__postImgContainer {
   padding: 10px 10px 20px;
   position: relative;
-
 }
 
 .account-content__postImg {
@@ -219,7 +217,7 @@
     margin: 1rem auto;
     padding: 1rem;
 
-    .account-content__post-label-type{
+    .account-content__post-label-type {
       width: 100%;
       text-align: center;
       color: $tertiary;
@@ -283,7 +281,7 @@
             margin-right: 1rem;
 
             cursor: pointer;
-            transition: all 100ms ease-in-out;;
+            transition: all 100ms ease-in-out;
             text-transform: uppercase;
             padding: 0.2rem;
 
@@ -310,7 +308,6 @@
               color: $primary;
             }
           }
-
         }
       }
     }
@@ -326,7 +323,6 @@
         svg.green {
           color: $validate;
         }
-
       }
 
       .tag {
@@ -352,7 +348,7 @@
         display: flex;
         align-items: center;
         margin-top: 10px;
-        max-height: 45px;;
+        max-height: 45px;
       }
 
       .account-content__postTagContainer {
@@ -373,20 +369,26 @@
   align-items: center;
   margin-top: 2rem;
 }
-.account-content__newLinkWrapper{
+.account-content__newLinkWrapper {
   margin-left: 33px;
-  .account-content__seeMore{
+  .account-content__seeMore {
     color: $retro;
     position: relative;
     width: max-content;
-    &::after{
+    &::after {
       position: absolute;
-      content: '';
-      bottom:-2px;
+      content: "";
+      bottom: -2px;
       left: 0;
       height: 1px;
       width: 100%;
       background-color: $retro;
+    }
+  }
+  @include mobile {
+    margin-left: 0;
+    input {
+      max-width: 100%;
     }
   }
 }

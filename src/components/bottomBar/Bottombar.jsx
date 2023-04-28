@@ -2,12 +2,13 @@ import "./bottombar.scss";
 
 import { useContext, useEffect, useState } from "react";
 import getOptionByKey from "../../functions/getOptionByKey/GetOptionByKey";
-import {Favorite, Home, Person, Search} from "@material-ui/icons";
+import { Favorite, Home, Person, Search } from "@material-ui/icons";
 import { UserContext } from "../../context/UserContext";
+import styled from "styled-components";
 
 export default function Bottombar({
   mainMenuOpen,
-    homeContent,
+  homeContent,
   setMainMenuOpen,
   setHomeContent,
   allOptions,
@@ -21,7 +22,15 @@ export default function Bottombar({
   const [option_faq, setOption_faq] = useState("");
   const [option_join, setOption_join] = useState("");
   const [option_header, setOption_header] = useState("");
-
+  const CustomBottomBar = styled.div`
+    @media (max-width: 768px) {
+      background-color: ${getOptionByKey(
+        "01_bgcolor_header",
+        allOptions
+      )} !important;
+      color: ${getOptionByKey("01_color_header", allOptions)} !important;
+    }
+  `;
   useEffect(() => {
     setOption_moreabout(getOptionByKey("05_more_about", allOptions));
     setOption_faq(getOptionByKey("05_faq", allOptions));
@@ -41,41 +50,41 @@ export default function Bottombar({
       setShowAuth(true);
     }
   }
-    const handleClickHome = (e) => {
-        if(homeContent === "0"){
-            window[`scrollTo`]({ top: 0, behavior: `smooth` });
-        }else{
-            changeContent(e)
-        }
+  const handleClickHome = (e) => {
+    if (homeContent === "0") {
+      window[`scrollTo`]({ top: 0, behavior: `smooth` });
+    } else {
+      changeContent(e);
     }
-    const handleClickFavorites = (e) => {
-        if(homeContent !== "0"){
-            let target = document.getElementById("menu-read")
-            setHomeContent("0")
-            if (target){
-                target.scrollIntoView({ behavior: "smooth",block: "center" });
-            }
-        }
-        let target = document.getElementById("menu-read")
-        if (target){
-            target.scrollIntoView({ behavior: "smooth",block: "center" });
-        }
-    }
-    const handleClickReadByTag = ()=>{
-      if(homeContent !== "0"){
-          let target = document.getElementById("menu-read")
-          setHomeContent("0")
-          if (target){
-              target.scrollIntoView({ behavior: "smooth",block: "center" });
-          }
+  };
+  const handleClickFavorites = (e) => {
+    if (homeContent !== "0") {
+      let target = document.getElementById("menu-read");
+      setHomeContent("0");
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth", block: "center" });
       }
-      let target = document.getElementById("menu-read")
-        if (target){
-        target.scrollIntoView({ behavior: "smooth",block: "center" });
-        }
     }
+    let target = document.getElementById("menu-read");
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  };
+  const handleClickReadByTag = () => {
+    if (homeContent !== "0") {
+      let target = document.getElementById("menu-read");
+      setHomeContent("0");
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    }
+    let target = document.getElementById("menu-read");
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  };
   return (
-    <div className={"bottombar " + (mainMenuOpen && " active")}>
+    <CustomBottomBar className={"bottombar " + (mainMenuOpen && " active")}>
       <div
         className="bottombar__item"
         onClick={(e) => changeContent(e)}
@@ -103,10 +112,10 @@ export default function Bottombar({
       <div className="home" onClick={(e) => handleClickHome(e)} id="0">
         <Home />
       </div>
-        {/*<div className="search" onClick={handleClickReadByTag}>*/}
-        {/*    <Search />*/}
-        {/*</div>*/}
-      <div className="hamburger" onClick={ () =>setMainMenuOpen(!mainMenuOpen)}>
+      {/*<div className="search" onClick={handleClickReadByTag}>*/}
+      {/*    <Search />*/}
+      {/*</div>*/}
+      <div className="hamburger" onClick={() => setMainMenuOpen(!mainMenuOpen)}>
         <span className="line1"></span>
         <span className="line2"></span>
         <span className="line3"></span>
@@ -114,9 +123,9 @@ export default function Bottombar({
       <div className="account" onClick={() => openLoginInterface()}>
         <Person />
       </div>
-        {/*<div className="account" onClick={() => handleClickFavorites()}>*/}
-        {/*    <Favorite />*/}
-        {/*</div>*/}
-    </div>
+      {/*<div className="account" onClick={() => handleClickFavorites()}>*/}
+      {/*    <Favorite />*/}
+      {/*</div>*/}
+    </CustomBottomBar>
   );
 }
